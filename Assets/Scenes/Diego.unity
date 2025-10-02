@@ -275,23 +275,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9b87e799ee77204e948fcd928d0b224, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  UnlockedSpells: 
   _castle: {fileID: 1691865040}
   _rounds:
   - EnemiesInRound:
     - EnemyUnit: {fileID: 7685138834005623286, guid: db4d3d4d874e18f4593a39341d41ac09, type: 3}
-      Probability: 0.4
+      Probability: 0.5
     - EnemyUnit: {fileID: 6345436546058429017, guid: 37bac6987c8960843beecb0b5e0be348, type: 3}
-      Probability: 0.4
+      Probability: 0.25
     - EnemyUnit: {fileID: 6345436546058429017, guid: cb950e8e25b431f44b1eae7c8151f505, type: 3}
-      Probability: 0.2
-    TotalEnemies: 10
+      Probability: 0.1
+    - EnemyUnit: {fileID: 6345436546058429017, guid: 20dc24c2a8ee40a4b8a5c49b3ee9c081, type: 3}
+      Probability: 0.1
+    - EnemyUnit: {fileID: 9222116472314578326, guid: 96ffdf476034ee648a86ca433d2e0846, type: 3}
+      Probability: 0.05
+    TotalEnemies: 15
   - EnemiesInRound:
     - EnemyUnit: {fileID: 7685138834005623286, guid: db4d3d4d874e18f4593a39341d41ac09, type: 3}
-      Probability: 0.34
+      Probability: 0
     - EnemyUnit: {fileID: 6345436546058429017, guid: 37bac6987c8960843beecb0b5e0be348, type: 3}
-      Probability: 0.33
-    - EnemyUnit: {fileID: 6345436546058429017, guid: cb950e8e25b431f44b1eae7c8151f505, type: 3}
-      Probability: 0.33
+      Probability: 0
+    - EnemyUnit: {fileID: 9222116472314578326, guid: 96ffdf476034ee648a86ca433d2e0846, type: 3}
+      Probability: 1
     TotalEnemies: 10
   _maxBodies: 5
   _maxBlood: 20

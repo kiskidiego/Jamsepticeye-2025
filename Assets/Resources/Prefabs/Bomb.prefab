@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3656066758015215951}
-  - component: {fileID: 3519205912370290149}
+  - component: {fileID: -6575079870067616868}
   m_Layer: 0
-  m_Name: TestProjectile
+  m_Name: Bomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 8773063601089112489}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3519205912370290149
+--- !u!114 &-6575079870067616868
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,12 +42,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 5855548668255424474}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ecb99a1540261f449ca06d69cffbd6d, type: 3}
+  m_Script: {fileID: 11500000, guid: c5f4d10c560a61c408fe3647680bc117, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Projectile
+  m_EditorClassIdentifier: Assembly-CSharp::ExplosiveProjectile
   target: {fileID: 0}
-  _speed: 20
+  targetSize: 0
+  _speed: 15
   _size: 0.5
+  isAlly: 0
+  _explosionRadius: 7
+  _arcHeight: 5
 --- !u!1 &6132255020565134286
 GameObject:
   m_ObjectHideFlags: 0

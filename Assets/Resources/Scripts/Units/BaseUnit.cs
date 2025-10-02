@@ -13,7 +13,7 @@ public class BaseUnit : Hittable
     [SerializeField] protected TargetingPriorities _targetingPriority;
     [SerializeField] int _bodyReward;
     [SerializeField] int _bloodReward;
-    [SerializeField] bool _isAlly; // True if the unit is an ally, false if it's an enemy
+    [SerializeField] protected bool _isAlly; // True if the unit is an ally, false if it's an enemy
     protected Hittable _target;
     protected float _rangeSquared;
     protected float _attackCooldown; // Time between attacks

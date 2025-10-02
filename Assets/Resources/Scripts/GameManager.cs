@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns the closest allied unit to the given position. Not implemented yet.
+    /// Returns the closest allied unit to the given position.
     /// </summary>
     /// <param name="position"></param>
     /// <returns></returns>
@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns the closest enemy unit to the given position. Not implemented yet.
+    /// Returns the closest enemy unit to the given position.
     /// </summary>
     /// <param name="position"></param>
     /// <returns></returns>
@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns the closest tower to the given position. Not implemented yet.
+    /// Returns the closest tower to the given position.
     /// </summary>
     /// <param name="position"></param>
     /// <returns></returns>
@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns the allied unit with the highest max health. Not implemented yet.
+    /// Returns the allied unit with the highest max health.
     /// </summary>
     public BaseUnit GetHighestHealthAllyUnit()
     {
@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns the enemy unit with the highest max health. Not implemented yet.
+    /// Returns the enemy unit with the highest max health.
     /// </summary>
     /// <param name="position"></param>
     /// <returns></returns>
@@ -143,7 +143,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns all enemies in range of the given position. Not implemented yet.
+    /// Returns all enemies in range of the given position.
     /// </summary>
     /// <param name="position"></param>
     /// <returns></returns>
@@ -163,7 +163,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns all allied hittables (units, towers and castle) in range of the given position. Not implemented yet.
+    /// Returns all allied hittables (units, towers and castle) in range of the given position.
     /// </summary>
     /// <param name="position"></param>
     /// <param name="range"></param>

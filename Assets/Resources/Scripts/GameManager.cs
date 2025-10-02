@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            for (int i = 0; i < 110; i++)
+            for (int i = 0; i < 10; i++)
                 _alliedUnits.Add(Instantiate(
                     _testAlly,
                     _allySpawnPoint.position + new Vector3(Random.Range(-_allySpawnSize.x, _allySpawnSize.x), 0, Random.Range(-_allySpawnSize.y, _allySpawnSize.y)),

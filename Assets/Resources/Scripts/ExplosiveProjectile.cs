@@ -2,12 +2,16 @@ using UnityEngine;
 
 public class ExplosiveProjectile : Projectile
 {
+    [HideInInspector] public bool isAlly;
     [SerializeField] float _explosionRadius = 5f;
     [SerializeField] float _arcHeight = 5f;
     float a, b, c; // Variables for parabolic equation
     Vector3 startPosition;
     Vector3 targetPosition;
-    public bool isAlly;
+    
+    /// <summary>
+    /// Initializes the projectile's size squared and calculates the parabolic trajectory coefficients. Can be overridden by derived classes.
+    /// </summary>
     protected override void Start()
     {
         base.Start();
@@ -19,6 +23,10 @@ public class ExplosiveProjectile : Projectile
         CalculateParabolaCoefficients(transform.position.y, middle, end);
     }
 
+    /// <summary>
+    /// Calculates the coefficients a, b, and c for the parabolic equation y = ax^2 + bx + c
+    /// given three points: the start point, a middle point, and the end point.
+    /// </summary>
     void CalculateParabolaCoefficients(float startY, Vector2 middle, Vector2 end)
     {
         float denom = middle.x * middle.x * end.x - end.x * end.x * middle.x;
@@ -33,6 +41,9 @@ public class ExplosiveProjectile : Projectile
         c = startY;
     }
 
+    /// <summary>
+    /// Moves the projectile towards its target in a parabolic arc. If it reaches the target, it calls Hit(). Can be overridden by derived classes for custom movement behavior.
+    /// </summary>
     protected override void Update()
     {
         if (target == null)
@@ -55,6 +66,9 @@ public class ExplosiveProjectile : Projectile
         }
     }
 
+    /// <summary>
+    /// Called when the projectile hits its target. Deals area damage to all Hittable objects within the explosion radius, then destroys the projectile. Can be overridden by derived classes for custom hit behavior.
+    /// </summary>
     protected override void Hit()
     {
         if (isAlly)
@@ -73,5 +87,6 @@ public class ExplosiveProjectile : Projectile
                 hittable.TakeDamage(_damage);
             }
         }
+        Destroy(gameObject);
     }
 }

@@ -155,7 +155,7 @@ GameObject:
   - component: {fileID: 3048664500812532442}
   - component: {fileID: 6345436546058429017}
   m_Layer: 0
-  m_Name: TestRangedUnit
+  m_Name: TestExplosiveUnit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -193,12 +193,12 @@ MonoBehaviour:
   _maxHealth: 10
   _size: 0.5
   _damage: 3
-  _attackSpeed: 1
+  _attackSpeed: 0.6
   _movementSpeed: 5
-  _range: 20
+  _range: 10
   _targetingPriority: 0
   _bodyReward: 1
   _bloodReward: 12
   _isAlly: 0
-  _projectilePrefab: {fileID: 3519205912370290149, guid: d79bfdd9512a33e48abd717f27409cdd, type: 3}
+  _projectilePrefab: {fileID: -6575079870067616868, guid: 54b2b814ed41d634fb9b00046da5fd50, type: 3}
   _projectileSpawnPoint: {fileID: 7188822983357739112}

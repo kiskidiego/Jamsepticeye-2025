@@ -6,6 +6,9 @@ public class RangedUnit : BaseUnit
     [SerializeField] Projectile _projectilePrefab;
     [SerializeField] Transform _projectileSpawnPoint;
 
+    /// <summary>
+    /// Launches a projectile towards the target.
+    /// </summary>
     protected override void Attack()
     {
         if (_target == null) return;

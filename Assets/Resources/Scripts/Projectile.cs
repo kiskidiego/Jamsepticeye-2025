@@ -1,18 +1,25 @@
+using System;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public Transform target;
+    [HideInInspector] public Transform target;
     [SerializeField] protected float _speed = 10f;
     [SerializeField] protected float _size = 0.5f;
     protected float _sizeSqr;
     protected float _damage = 10f;
 
+    /// <summary>
+    /// Initializes the projectile's size squared for distance calculations. Can be overridden by derived classes.
+    /// </summary>
     protected virtual void Start()
     {
         _sizeSqr = _size * _size;
     }
 
+    /// <summary>
+    /// Moves the projectile towards its target. If it reaches the target, it calls Hit(). Can be overridden by derived classes for custom movement behavior.
+    /// </summary>
     protected virtual void Update()
     {
         if (target == null)
@@ -28,6 +35,9 @@ public class Projectile : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Called when the projectile hits its target. Deals damage to the target if it has a Hittable component, then destroys the projectile. Can be overridden by derived classes for custom hit behavior.
+    /// </summary>
     protected virtual void Hit()
     {
         Hittable hittable = target.GetComponent<Hittable>();

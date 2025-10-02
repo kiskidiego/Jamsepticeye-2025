@@ -1,17 +1,33 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; } // Singleton instance, new game managers will override old ones
     public Hittable Castle { get; private set; }
+    [HideInInspector] public bool[] UnlockedSpells;
+    public PhaseEnum CurrentPhase => _currentPhase;
     [SerializeField] private Hittable _castle;
     [SerializeField] private Tile _tilePrefab;
     [SerializeField] private int _mapWidth = 10;
     [SerializeField] private int _mapHeight = 10;
-    BaseUnit[] _alliedUnits;
-    BaseUnit[] _enemyUnits;
-    BaseTower[] _towers;
+    [SerializeField] Round[] _rounds;
+    [SerializeField] int _maxBodies = 5;
+    [SerializeField] int _maxBlood = 20;
+    [SerializeField] BaseUnit _testAlly;
+    [SerializeField] Transform _allySpawnPoint;
+    [SerializeField] Vector2 _allySpawnSize = new Vector2(40f, 20f);
+    [SerializeField] Transform _enemySpawnPoint;
+    [SerializeField] Vector2 _enemySpawnSize = new Vector2(40f, 20f);
+    List<BaseUnit> _alliedUnits = new List<BaseUnit>();
+    List<BaseUnit> _enemyUnits = new List<BaseUnit>();
+    List<BaseTower> _towers = new List<BaseTower>();
+    int _currentRound = 0;
+    int _blood = 0;
+    int _bodies = 0;
+    PhaseEnum _currentPhase = PhaseEnum.Build;
     Tile[] _tiles;
     void Awake()
     {
@@ -29,6 +45,34 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
         //Castle = _castle;
+        UnlockedSpells = new bool[1];
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            for (int i = 0; i < 10; i++)
+                _alliedUnits.Add(Instantiate(
+                    _testAlly,
+                    _allySpawnPoint.position + new Vector3(Random.Range(-_allySpawnSize.x, _allySpawnSize.x), 0, Random.Range(-_allySpawnSize.y, _allySpawnSize.y)),
+                    Quaternion.identity
+                ));
+        }
+        if (_currentPhase == PhaseEnum.Build)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                StartCoroutine(StartRoundCoroutine());
+            }
+        }
+        else if (_currentPhase == PhaseEnum.Combat)
+        {
+            if (_enemyUnits.Count == 0)
+            {
+                EndRound();
+            }
+        }
     }
 
     void OnDestroy()
@@ -62,18 +106,98 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns the closest allied unit to the given position. Not implemented yet.
+    /// Prepares the next round by clearing existing enemies and spawning new ones based on defined probabilities.
+    /// </summary>
+    void PrepareRound()
+    {
+        Round round = _rounds[_currentRound];
+        for (int i = 0; i < round.TotalEnemies; i++)
+        {
+            float rand = Random.Range(0f, 1f);
+            float cumulativeProbability = 0f;
+            foreach (RoundEnemy roundEnemy in round.EnemiesInRound)
+            {
+                cumulativeProbability += roundEnemy.Probability;
+                if (rand <= cumulativeProbability)
+                {
+                    _enemyUnits.Add(Instantiate(
+                        roundEnemy.EnemyUnit,
+                        _enemySpawnPoint.position + new Vector3(Random.Range(-_enemySpawnSize.x, _enemySpawnSize.x), 0, Random.Range(-_enemySpawnSize.y, _enemySpawnSize.y)),
+                        Quaternion.identity
+                    ));
+                    break;
+                }
+            }
+        }
+        _currentPhase = PhaseEnum.Combat;
+    }
+
+    /// <summary>
+    /// Starts the round by unpausing all units.
+    /// </summary>
+    void StartRound()
+    {
+        foreach (BaseUnit unit in _enemyUnits)
+        {
+            unit.Unpause();
+        }
+        foreach (BaseUnit unit in _alliedUnits)
+        {
+            unit.Unpause();
+        }
+    }
+
+    /// <summary>
+    /// Ends the round by rewarding the player and cleaning up units.
+    /// </summary>
+    void EndRound()
+    {
+        foreach (BaseUnit unit in _enemyUnits)
+        {
+            _bodies += unit.BodyReward;
+            _blood += unit.BloodReward;
+            if (_bodies > _maxBodies) _bodies = _maxBodies;
+            if (_blood > _maxBlood) _blood = _maxBlood;
+            Destroy(unit.gameObject);
+        }
+        _enemyUnits.Clear();
+
+        Debug.Log($"Round {_currentRound + 1} completed! Rewards: {_bodies} bodies, {_blood} blood.");
+
+        foreach (BaseUnit unit in _alliedUnits)
+        {
+            unit.Pause();
+            unit.Reset();
+            unit.transform.position = _allySpawnPoint.position + new Vector3(Random.Range(-_allySpawnSize.x, _allySpawnSize.x), 0, Random.Range(-_allySpawnSize.y, _allySpawnSize.y));
+            if (unit.Dead)
+            {
+                Destroy(unit.gameObject);
+            }
+        }
+        _alliedUnits.RemoveAll(unit => unit.Dead);
+        _currentRound++;
+        if (_currentRound < _rounds.Length)
+        {
+            Debug.Log("All rounds completed!");
+        }
+        _currentPhase = PhaseEnum.Build;
+    }
+
+    /// <summary>
+    /// Returns the closest allied unit to the given position. If no allied units exist, returns the closest tower. If no towers exist, returns the castle.
     /// </summary>
     /// <param name="position"></param>
     /// <returns></returns>
-    public BaseUnit GetClosestAllyUnit(Vector3 position)
+    public Hittable GetClosestAllyUnit(Vector3 position)
     {
-        BaseUnit closestUnit = null;
+        if (_alliedUnits.Count == 0) return GetClosestTower(position); // If no allied units, return closest tower
+
+        Hittable closestUnit = null;
         float closestDistance = Mathf.Infinity;
 
         foreach (BaseUnit unit in _alliedUnits)
         {
-            if (unit == null) continue;
+            if (unit.Dead) continue;
 
             float distanceSqr = Vector3.SqrMagnitude(position - unit.transform.position);
             if (distanceSqr < closestDistance)
@@ -83,22 +207,30 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        if (closestUnit == null) return GetClosestTower(position); // If all allied units are dead, return closest tower
+
         return closestUnit;
     }
 
     /// <summary>
-    /// Returns the closest enemy unit to the given position. Not implemented yet.
+    /// Returns the closest enemy unit to the given position. If no enemies exist, ends the round and returns null.
     /// </summary>
     /// <param name="position"></param>
     /// <returns></returns>
-    public BaseUnit GetClosestEnemy(Vector3 position)
+    public Hittable GetClosestEnemy(Vector3 position)
     {
-        BaseUnit closestUnit = null;
+        if (_enemyUnits.Count == 0)
+        {
+            EndRound();
+            return null;
+        }
+
+        Hittable closestUnit = null;
         float closestDistance = Mathf.Infinity;
 
         foreach (BaseUnit unit in _enemyUnits)
         {
-            if (unit == null) continue;
+            if (unit.Dead) continue;
 
             float distanceSqr = Vector3.SqrMagnitude(position - unit.transform.position);
             if (distanceSqr < closestDistance)
@@ -108,23 +240,29 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        if (closestUnit == null)
+        {
+            EndRound();
+            return null;
+        }
+
         return closestUnit;
     }
 
     /// <summary>
-    /// Returns the closest tower to the given position. Not implemented yet.
+    /// Returns the closest tower to the given position. If no towers exist, returns the castle.
     /// </summary>
     /// <param name="position"></param>
     /// <returns></returns>
-    public BaseTower GetClosestTower(Vector3 position)
+    public Hittable GetClosestTower(Vector3 position)
     {
-        BaseTower closestTower = null;
+        if (_towers.Count == 0) return _castle; // If no towers, return castle
+
+        Hittable closestTower = null;
         float closestDistance = Mathf.Infinity;
 
         foreach (BaseTower tower in _towers)
         {
-            if (tower == null) continue;
-
             float distanceSqr = Vector3.SqrMagnitude(position - tower.transform.position);
             if (distanceSqr < closestDistance)
             {
@@ -133,19 +271,23 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        if (closestTower == null) return _castle; // If all towers are destroyed, return castle
+
         return closestTower;
     }
 
     /// <summary>
-    /// Returns the allied unit with the highest max health. Not implemented yet.
+    /// Returns the allied unit with the highest max health. If no allied units exist, returns the closest tower.
     /// </summary>
-    public BaseUnit GetHighestHealthAllyUnit()
+    public Hittable GetHighestHealthAllyUnit(Vector3 position)
     {
-        BaseUnit highestHealthUnit = null;
+        if (_alliedUnits.Count == 0) return GetClosestTower(position);
+
+        Hittable highestHealthUnit = null;
         float highestHealth = -Mathf.Infinity;
         foreach (BaseUnit unit in _alliedUnits)
         {
-            if (unit == null) continue;
+            if (unit.Dead) continue;
 
             if (unit.MaxHealth > highestHealth)
             {
@@ -153,38 +295,171 @@ public class GameManager : MonoBehaviour
                 highestHealthUnit = unit;
             }
         }
+
+        if (highestHealthUnit == null) return GetClosestTower(position);
+
         return highestHealthUnit;
     }
 
     /// <summary>
-    /// Returns the enemy unit with the highest max health. Not implemented yet.
+    /// Returns the enemy unit with the highest max health. If no enemies exist, ends the round and returns null.
     /// </summary>
     /// <param name="position"></param>
     /// <returns></returns>
-    public BaseUnit GetHighestHealthEnemy()
+    public Hittable GetHighestHealthEnemy()
     {
-        throw new System.NotImplementedException("Need to implement a way to track units first.");
+        if (_enemyUnits.Count == 0)
+        {
+            EndRound();
+            return null;
+        }
+
+        Hittable highestHealthUnit = null;
+        float highestHealth = -Mathf.Infinity;
+        foreach (BaseUnit unit in _enemyUnits)
+        {
+            if (unit.Dead) continue;
+
+            if (unit.MaxHealth > highestHealth)
+            {
+                highestHealth = unit.MaxHealth;
+                highestHealthUnit = unit;
+            }
+        }
+
+        if (highestHealthUnit == null)
+        {
+            EndRound();
+            return null;
+        }
+
+        return highestHealthUnit;
     }
 
     /// <summary>
-    /// Returns all enemies in range of the given position. Not implemented yet.
+    /// Returns all enemies in range of the given position. If no enemies exist, ends the round and returns null.
     /// </summary>
     /// <param name="position"></param>
     /// <returns></returns>
-    public BaseUnit[] GetAllEnemiesInRange(Vector3 position, float range)
+    public Hittable[] GetAllEnemiesInRange(Vector3 position, float range)
     {
-        throw new System.NotImplementedException("Need to implement a way to track hittables first.");
+        if (_enemyUnits.Count == 0)
+        {
+            EndRound();
+            return null;
+        }
+
+        float rangeSquared = range * range;
+        List<Hittable> enemiesInRange = new List<Hittable>();
+        foreach (BaseUnit unit in _enemyUnits)
+        {
+            if (unit.Dead) continue;
+
+            float distanceSqr = Vector3.SqrMagnitude(position - unit.transform.position);
+            if (distanceSqr <= rangeSquared)
+            {
+                enemiesInRange.Add(unit);
+            }
+        }
+
+        if (enemiesInRange.Count == 0)
+        {
+            EndRound();
+            return null;
+        }
+
+        return enemiesInRange.ToArray();
     }
 
     /// <summary>
-    /// Returns all allied hittables (units, towers and castle) in range of the given position. Not implemented yet.
+    /// Returns all allied hittables (units, towers and castle) in range of the given position.
     /// </summary>
     /// <param name="position"></param>
     /// <param name="range"></param>
     /// <returns></returns>
     public Hittable[] GetAllAlliesInRange(Vector3 position, float range)
     {
-        throw new System.NotImplementedException("Need to implement a way to track hittables first.");
+        float rangeSquared = range * range;
+        List<Hittable> alliesInRange = new List<Hittable>();
+        foreach (BaseUnit unit in _alliedUnits)
+        {
+            if (unit.Dead) continue;
+
+            float distanceSqr = Vector3.SqrMagnitude(position - unit.transform.position);
+            if (distanceSqr <= rangeSquared)
+            {
+                alliesInRange.Add(unit);
+            }
+        }
+        foreach (BaseTower tower in _towers)
+        {
+            float distanceSqr = Vector3.SqrMagnitude(position - tower.transform.position);
+            if (distanceSqr <= rangeSquared)
+            {
+                alliesInRange.Add(tower);
+            }
+        }
+        float castleDistanceSqr = Vector3.SqrMagnitude(position - _castle.transform.position);
+        if (castleDistanceSqr <= rangeSquared)
+        {
+            alliesInRange.Add(_castle);
+        }
+        return alliesInRange.ToArray();
+    }
+
+    public void AddBodies(int amount)
+    {
+        _bodies += amount;
+        if (_bodies > _maxBodies) _bodies = _maxBodies;
+    }
+
+    public void EndGame()
+    {
+        Debug.Log($"Castle is destroyed! You survived {_currentRound} rounds.");
+    }
+    
+    public void AddBlood(int amount)
+    {
+        _blood += amount;
+        if (_blood > _maxBlood) _blood = _maxBlood;
+    }
+
+    public int GetBodies()
+    {
+        return _bodies;
+    }
+
+    public int GetBlood()
+    {
+        return _blood;
+    }
+
+    IEnumerator StartRoundCoroutine()
+    {
+        PrepareRound();
+        yield return new WaitForSeconds(3f); // Wait for 3 seconds before starting the round
+        StartRound();
+    }
+
+    public void AddMaxBodies(int numberBodies)
+    {
+        _maxBodies += numberBodies;
+        if (_bodies > _maxBodies) _bodies = _maxBodies;
+    }
+    
+    public void AddMaxBlood(int numberBlood)
+    {
+        _maxBlood += numberBlood;
+        if (_blood > _maxBlood) _blood = _maxBlood;
+    }
+
+    private IEnumerator MapSpawnAnimation()
+    {
+        foreach (Tile tile in _tiles)
+        {
+            tile.SpawnTileAnimation();
+            yield return new WaitForSeconds(0.02f);
+        }
     }
 
     private IEnumerator MapSpawnAnimation()

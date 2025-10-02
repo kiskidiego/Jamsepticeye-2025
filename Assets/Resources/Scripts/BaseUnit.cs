@@ -22,7 +22,7 @@ public abstract class BaseUnit : Hittable
             FindTarget();
             return;
         }
-        if (Vector3.Distance(transform.position, target.transform.position) > _range)
+        if (Vector3.SqrMagnitude(transform.position - target.transform.position) > _range * _range)
         {
             MoveToTarget();
         }

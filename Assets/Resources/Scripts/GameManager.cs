@@ -62,19 +62,19 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns the strongest allied unit to the given position. Not implemented yet.
+    /// Returns the allied unit with the highest max health. Not implemented yet.
     /// </summary>
-    public BaseUnit GetStrongestFollower()
+    public BaseUnit GetHighestHealthFollower()
     {
         throw new System.NotImplementedException("Need to implement a way to track units first.");
     }
 
     /// <summary>
-    /// Returns the strongest enemy unit to the given position. Not implemented yet.
+    /// Returns the enemy unit with the highest max health. Not implemented yet.
     /// </summary>
     /// <param name="position"></param>
     /// <returns></returns>
-    public BaseUnit GetStrongestEnemy()
+    public BaseUnit GetHighestHealthEnemy()
     {
         throw new System.NotImplementedException("Need to implement a way to track units first.");
     }

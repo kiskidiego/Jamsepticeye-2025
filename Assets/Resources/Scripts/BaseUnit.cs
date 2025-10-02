@@ -102,9 +102,8 @@ public abstract class BaseUnit : Hittable
                     throw new System.Exception("Allies cannot target towers.");
                 case TargetingPriorities.Castle:
                     throw new System.Exception("Allies cannot target the castle.");
-                case TargetingPriorities.Strongest:
-                    // Not implemented yet
-                    _target = GameManager.Instance.GetStrongestEnemy();
+                case TargetingPriorities.HighestHealth:
+                    _target = GameManager.Instance.GetHighestHealthEnemy();
                     break;
                 default:
                     throw new System.Exception("Invalid targeting priority.");
@@ -123,9 +122,8 @@ public abstract class BaseUnit : Hittable
                 case TargetingPriorities.Castle:
                     _target = GameManager.Instance.Castle;
                     break;
-                case TargetingPriorities.Strongest:
-                    // Not implemented yet
-                    _target = GameManager.Instance.GetStrongestFollower();
+                case TargetingPriorities.HighestHealth:
+                    _target = GameManager.Instance.GetHighestHealthFollower();
                     break;
                 default:
                     throw new System.Exception("Invalid targeting priority.");

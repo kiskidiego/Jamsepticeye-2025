@@ -82,10 +82,32 @@ public abstract class BaseUnit : Hittable
     }
 
     /// <summary>
-    /// Finds a target based on the unit's targeting priority. To be implemented.
+    /// Finds a target based on the unit's targeting priority.
     /// </summary>
     protected virtual void FindTarget()
     {
-        throw new System.NotImplementedException("Need to implement a game manager first.");
+        if (GameManager.Instance == null)
+        {
+            throw new System.Exception("GameManager instance is null. Cannot find target.");
+        }
+        switch (_targetingPriority)
+        {
+            case TargetingPriorities.Units:
+                _target = GameManager.Instance.GetClosestUnit(transform.position);
+                break;
+            case TargetingPriorities.Towers:
+                _target = GameManager.Instance.GetClosestTower(transform.position);
+                break;
+            case TargetingPriorities.Castle:
+                _target = GameManager.Instance.Castle;
+                break;
+            case TargetingPriorities.Strongest:
+                throw new System.NotImplementedException("Strongest targeting priority not implemented yet.");
+            case TargetingPriorities.Closest:
+                _target = GameManager.Instance.GetClosestHittable(transform.position);
+                break;
+            default:
+                throw new System.Exception("Unknown targeting priority.");
+        }
     }
 }

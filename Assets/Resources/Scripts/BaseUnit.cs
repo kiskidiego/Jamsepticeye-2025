@@ -84,5 +84,8 @@ public abstract class BaseUnit : Hittable
     /// <summary>
     /// Finds a target based on the unit's targeting priority. To be implemented.
     /// </summary>
-    protected abstract void FindTarget();
+    protected virtual void FindTarget()
+    {
+        throw new System.NotImplementedException("Need to implement a game manager first.");
+    }
 }

@@ -25,6 +25,11 @@ public class Projectile : MonoBehaviour
     /// </summary>
     protected virtual void Update()
     {
+        if (GameManager.Instance.CurrentPhase != PhaseEnum.Combat)
+        {
+            Destroy(gameObject);
+            return;
+        }
         if (target == null)
         {
             Destroy(gameObject);

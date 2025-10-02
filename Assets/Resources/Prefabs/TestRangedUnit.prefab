@@ -194,9 +194,9 @@ MonoBehaviour:
   _size: 0.5
   _damage: 3
   _attackSpeed: 1
-  _movementSpeed: 5
+  _movementSpeed: 10
   _range: 20
-  _targetingPriority: 0
+  _targetingPriority: 2
   _bodyReward: 1
   _bloodReward: 12
   _isAlly: 0

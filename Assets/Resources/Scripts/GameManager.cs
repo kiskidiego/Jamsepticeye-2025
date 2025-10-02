@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; } // Singleton instance, new game managers will override old ones
     public Hittable Castle { get; private set; }
+    public PhaseEnum CurrentPhase => _currentPhase;
     [SerializeField] private Hittable _castle;
     [SerializeField] Round[] _rounds;
     [SerializeField] int _maxBodies = 5;

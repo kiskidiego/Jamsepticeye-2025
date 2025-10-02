@@ -5,13 +5,16 @@ public abstract class Hittable : MonoBehaviour
 {
     [SerializeField] protected float _maxHealth;
     [SerializeField] protected float _currentHealth;
+    [SerializeField] protected float _size; //Radius of the object for range calculations
+    protected float _sizeSquared;
 
     /// <summary>
-    /// Initializes the object's current health to its maximum health. Can be overriden by derived classes.
+    /// Initializes the object's current health to its maximum health, and its squared size. Can be overriden by derived classes.
     /// </summary>
     protected virtual void Start()
     {
         _currentHealth = _maxHealth;
+        _sizeSquared = _size * _size;
     }
 
     /// <summary>
@@ -32,4 +35,12 @@ public abstract class Hittable : MonoBehaviour
     /// Handles the death of the object. To be implemented by derived classes.
     /// </summary>
     protected abstract void Die();
+
+    /// <summary>
+    /// Returns the size of the unit.
+    /// </summary>
+    public float GetSizeSquared()
+    {
+        return _sizeSquared;
+    }
 }

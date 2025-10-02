@@ -3,26 +3,34 @@ using UnityEngine;
 // Base class for all units, enemy and ally
 public abstract class BaseUnit : Hittable
 {
-    
+
     [SerializeField] protected float _damage;
     [SerializeField] protected float _attackSpeed;
     [SerializeField] protected float _movementSpeed;
     [SerializeField] protected float _range;
-    [SerializeField] protected float _size;
     [SerializeField] protected TargetingPriorities _targetingPriority;
-    protected Hittable target;
+    protected Hittable _target;
+    protected float _rangeSquared;
 
+    /// <summary>
+    /// Initializes the unit's current health, its squared size and its squared range. Can be overriden by derived classes.
+    /// </summary>
+    protected override void Start()
+    {
+        base.Start();
+        _rangeSquared = _range * _range;
+    }
     /// <summary>
     /// Default Unit behavior. Finds a target and attacks it if in range. Can be overriden by derived classes.
     /// </summary>
     protected virtual void Update()
     {
-        if (target == null)
+        if (_target == null)
         {
             FindTarget();
             return;
         }
-        if (Vector3.SqrMagnitude(transform.position - target.transform.position) > _range * _range)
+        if (Vector3.SqrMagnitude(transform.position - _target.transform.position) - _sizeSquared - _target.GetSizeSquared() > _rangeSquared)
         {
             MoveToTarget();
         }
@@ -37,9 +45,9 @@ public abstract class BaseUnit : Hittable
     /// </summary>
     protected virtual void MoveToTarget()
     {
-        if (target != null)
+        if (_target != null)
         {
-            transform.position = Vector3.MoveTowards(transform.position, target.transform.position, _movementSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, _target.transform.position, _movementSpeed * Time.deltaTime);
         }
     }
 
@@ -48,9 +56,9 @@ public abstract class BaseUnit : Hittable
     /// </summary>
     protected virtual void Attack()
     {
-        if (target != null)
+        if (_target != null)
         {
-            target.TakeDamage(_damage);
+            _target.TakeDamage(_damage);
         }
     }
 

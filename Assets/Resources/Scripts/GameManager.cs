@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Returns the allied unit with the highest max health. Not implemented yet.
     /// </summary>
-    public BaseUnit GetHighestHealthFollower()
+    public BaseUnit GetHighestHealthSubject()
     {
         throw new System.NotImplementedException("Need to implement a way to track units first.");
     }

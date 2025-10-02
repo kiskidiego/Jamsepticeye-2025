@@ -123,7 +123,7 @@ public abstract class BaseUnit : Hittable
                     _target = GameManager.Instance.Castle;
                     break;
                 case TargetingPriorities.HighestHealth:
-                    _target = GameManager.Instance.GetHighestHealthFollower();
+                    _target = GameManager.Instance.GetHighestHealthSubject();
                     break;
                 default:
                     throw new System.Exception("Invalid targeting priority.");

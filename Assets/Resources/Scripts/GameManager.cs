@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -46,8 +47,6 @@ public class GameManager : MonoBehaviour
 
         foreach (BaseUnit unit in _alliedUnits)
         {
-            if (unit == null) continue;
-
             float distanceSqr = Vector3.SqrMagnitude(position - unit.transform.position);
             if (distanceSqr < closestDistance)
             {
@@ -71,8 +70,6 @@ public class GameManager : MonoBehaviour
 
         foreach (BaseUnit unit in _enemyUnits)
         {
-            if (unit == null) continue;
-
             float distanceSqr = Vector3.SqrMagnitude(position - unit.transform.position);
             if (distanceSqr < closestDistance)
             {
@@ -96,8 +93,6 @@ public class GameManager : MonoBehaviour
 
         foreach (BaseTower tower in _towers)
         {
-            if (tower == null) continue;
-
             float distanceSqr = Vector3.SqrMagnitude(position - tower.transform.position);
             if (distanceSqr < closestDistance)
             {
@@ -118,8 +113,6 @@ public class GameManager : MonoBehaviour
         float highestHealth = -Mathf.Infinity;
         foreach (BaseUnit unit in _alliedUnits)
         {
-            if (unit == null) continue;
-
             if (unit.MaxHealth > highestHealth)
             {
                 highestHealth = unit.MaxHealth;
@@ -136,7 +129,17 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     public BaseUnit GetHighestHealthEnemy()
     {
-        throw new System.NotImplementedException("Need to implement a way to track units first.");
+        BaseUnit highestHealthUnit = null;
+        float highestHealth = -Mathf.Infinity;
+        foreach (BaseUnit unit in _enemyUnits)
+        {
+            if (unit.MaxHealth > highestHealth)
+            {
+                highestHealth = unit.MaxHealth;
+                highestHealthUnit = unit;
+            }
+        }
+        return highestHealthUnit;
     }
 
     /// <summary>
@@ -146,7 +149,17 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     public BaseUnit[] GetAllEnemiesInRange(Vector3 position, float range)
     {
-        throw new System.NotImplementedException("Need to implement a way to track hittables first.");
+        float rangeSquared = range * range;
+        List<BaseUnit> enemiesInRange = new List<BaseUnit>();
+        foreach (BaseUnit unit in _enemyUnits)
+        {
+            float distanceSqr = Vector3.SqrMagnitude(position - unit.transform.position);
+            if (distanceSqr <= rangeSquared)
+            {
+                enemiesInRange.Add(unit);
+            }
+        }
+        return enemiesInRange.ToArray();
     }
 
     /// <summary>
@@ -157,6 +170,24 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     public Hittable[] GetAllAlliesInRange(Vector3 position, float range)
     {
-        throw new System.NotImplementedException("Need to implement a way to track hittables first.");
+        float rangeSquared = range * range;
+        List<Hittable> alliesInRange = new List<Hittable>();
+        foreach (BaseUnit unit in _alliedUnits)
+        {
+            float distanceSqr = Vector3.SqrMagnitude(position - unit.transform.position);
+            if (distanceSqr <= rangeSquared)
+            {
+                alliesInRange.Add(unit);
+            }
+        }
+        foreach (BaseTower tower in _towers)
+        {
+            float distanceSqr = Vector3.SqrMagnitude(position - tower.transform.position);
+            if (distanceSqr <= rangeSquared)
+            {
+                alliesInRange.Add(tower);
+            }
+        }
+        return alliesInRange.ToArray();
     }
 }

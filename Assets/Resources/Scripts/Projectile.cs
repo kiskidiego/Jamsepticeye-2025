@@ -4,10 +4,12 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [HideInInspector] public Transform target;
+    [HideInInspector] public float targetSize;
     [SerializeField] protected float _speed = 10f;
     [SerializeField] protected float _size = 0.5f;
     protected float _sizeSqr;
     protected float _damage = 10f;
+    protected float _targetSizeSqr;
 
     /// <summary>
     /// Initializes the projectile's size squared for distance calculations. Can be overridden by derived classes.
@@ -15,6 +17,7 @@ public class Projectile : MonoBehaviour
     protected virtual void Start()
     {
         _sizeSqr = _size * _size;
+        _targetSizeSqr = targetSize * targetSize;
     }
 
     /// <summary>
@@ -29,7 +32,7 @@ public class Projectile : MonoBehaviour
         }
         transform.position = Vector3.MoveTowards(transform.position, target.position, _speed * Time.deltaTime);
         transform.LookAt(target);
-        if (Vector3.SqrMagnitude(transform.position - target.position) < _sizeSqr)
+        if (Vector3.SqrMagnitude(transform.position - target.position) < _sizeSqr + _targetSizeSqr)
         {
             Hit();
         }

@@ -46,11 +46,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplosiveProjectile
   target: {fileID: 0}
-  _speed: 10
+  targetSize: 0
+  _speed: 15
   _size: 0.5
-  _explosionRadius: 5
-  _arcHeight: 5
   isAlly: 0
+  _explosionRadius: 7
+  _arcHeight: 5
 --- !u!1 &6132255020565134286
 GameObject:
   m_ObjectHideFlags: 0

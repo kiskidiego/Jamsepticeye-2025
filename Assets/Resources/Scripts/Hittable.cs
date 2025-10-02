@@ -42,6 +42,11 @@ public class Hittable : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public float GetSize()
+    {
+        return _size;
+    }
+
     /// <summary>
     /// Returns the size of the unit.
     /// </summary>

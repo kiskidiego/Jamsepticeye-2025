@@ -17,6 +17,10 @@ public class ExplosiveProjectile : Projectile
         base.Start();
         startPosition = transform.position;
         targetPosition = target.position;
+
+        Vector3 direction = (targetPosition - startPosition).normalized;
+        targetPosition -= direction * targetSize; // Adjust target position to hit the edge of the target
+
         // Calculate coefficients for parabolic trajectory
         Vector2 end = new Vector2(Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(targetPosition.x, 0, targetPosition.z)), targetPosition.y);
         Vector2 middle = new Vector2(end.x / 2, Mathf.Max(transform.position.y, targetPosition.y) + _arcHeight);

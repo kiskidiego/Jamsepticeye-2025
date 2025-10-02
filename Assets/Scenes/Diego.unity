@@ -281,17 +281,17 @@ MonoBehaviour:
     - EnemyUnit: {fileID: 7685138834005623286, guid: db4d3d4d874e18f4593a39341d41ac09, type: 3}
       Probability: 0
     - EnemyUnit: {fileID: 6345436546058429017, guid: 37bac6987c8960843beecb0b5e0be348, type: 3}
-      Probability: 1
-    - EnemyUnit: {fileID: 6345436546058429017, guid: cb950e8e25b431f44b1eae7c8151f505, type: 3}
       Probability: 0
+    - EnemyUnit: {fileID: 6345436546058429017, guid: cb950e8e25b431f44b1eae7c8151f505, type: 3}
+      Probability: 1
     TotalEnemies: 10
   - EnemiesInRound:
     - EnemyUnit: {fileID: 7685138834005623286, guid: db4d3d4d874e18f4593a39341d41ac09, type: 3}
-      Probability: 0
+      Probability: 0.34
     - EnemyUnit: {fileID: 6345436546058429017, guid: 37bac6987c8960843beecb0b5e0be348, type: 3}
-      Probability: 0
+      Probability: 0.33
     - EnemyUnit: {fileID: 6345436546058429017, guid: cb950e8e25b431f44b1eae7c8151f505, type: 3}
-      Probability: 1
+      Probability: 0.33
     TotalEnemies: 10
   _maxBodies: 5
   _maxBlood: 20
@@ -618,7 +618,7 @@ Transform:
   m_GameObject: {fileID: 1691865039}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 6.07, z: -29.08}
+  m_LocalPosition: {x: 0, y: 0, z: -29.08}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 1
   m_Children: []

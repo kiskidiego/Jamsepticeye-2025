@@ -42,7 +42,8 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            _alliedUnits.Add(Instantiate(_testAlly, new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-10f, -5f)), Quaternion.identity)); // Replace Vector3.zero with spawn point
+            for (int i = 0; i < 110; i++)
+                _alliedUnits.Add(Instantiate(_testAlly, new Vector3(Random.Range(-20f, 20f), 0, Random.Range(-10f, -5f)), Quaternion.identity)); // Replace Vector3.zero with spawn point
         }
         if (_currentPhase == PhaseEnum.Build)
         {
@@ -84,7 +85,7 @@ public class GameManager : MonoBehaviour
                 cumulativeProbability += roundEnemy.Probability;
                 if (rand <= cumulativeProbability)
                 {
-                    _enemyUnits.Add(Instantiate(roundEnemy.EnemyUnit, new Vector3(Random.Range(-5f, 5f), 0, Random.Range(5f, -5f)), Quaternion.identity)); // Replace Vector3.zero with spawn point
+                    _enemyUnits.Add(Instantiate(roundEnemy.EnemyUnit, new Vector3(Random.Range(-20f, 20f), 0, Random.Range(-5f, 5f)), Quaternion.identity)); // Replace Vector3.zero with spawn point
                     break;
                 }
             }
@@ -126,6 +127,7 @@ public class GameManager : MonoBehaviour
         {
             unit.Pause();
             unit.Reset();
+            unit.transform.position = new Vector3(Random.Range(-20f, 20f), 0, Random.Range(-10f, -5f)); // Replace with spawn point
             if (unit.Dead)
             {
                 Destroy(unit.gameObject);

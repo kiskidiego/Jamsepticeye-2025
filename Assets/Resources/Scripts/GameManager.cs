@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; } // Singleton instance, new game managers will override old ones
     public Hittable Castle { get; private set; }
+    [HideInInspector] public bool[] UnlockedSpells;
     public PhaseEnum CurrentPhase => _currentPhase;
     [SerializeField] private Hittable _castle;
     [SerializeField] Round[] _rounds;
@@ -39,6 +40,7 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
         Castle = _castle;
+        UnlockedSpells = new bool[1];
     }
 
     void Update()
@@ -383,6 +385,11 @@ public class GameManager : MonoBehaviour
         _bodies += amount;
         if (_bodies > _maxBodies) _bodies = _maxBodies;
     }
+
+    public void EndGame()
+    {
+        Debug.Log($"Castle is destroyed! You survived {_currentRound} rounds.");
+    }
     
     public void AddBlood(int amount)
     {
@@ -405,5 +412,17 @@ public class GameManager : MonoBehaviour
         PrepareRound();
         yield return new WaitForSeconds(3f); // Wait for 3 seconds before starting the round
         StartRound();
+    }
+
+    public void AddMaxBodies(int numberBodies)
+    {
+        _maxBodies += numberBodies;
+        if (_bodies > _maxBodies) _bodies = _maxBodies;
+    }
+    
+    public void AddMaxBlood(int numberBlood)
+    {
+        _maxBlood += numberBlood;
+        if (_blood > _maxBlood) _blood = _maxBlood;
     }
 }

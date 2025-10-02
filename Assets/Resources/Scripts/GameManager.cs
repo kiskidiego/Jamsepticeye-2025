@@ -92,12 +92,23 @@ public class GameManager : MonoBehaviour
             for (int y = 0; y < _mapHeight; y++)
             {
                 Tile newTile = Instantiate(_tilePrefab, new Vector3(x * _tileSize, 0, y * _tileSize), Quaternion.identity);
-                if (x == 0 || y == 0 || x == _mapWidth - 1 || y == _mapHeight - 1)
+                if (x <= 5 || y <= 4 || x >= 9 || y >= _mapHeight - 7)
+                {
+                    if (y <= 4 || y >= _mapHeight - 7 || x <= 2)
+                    {
+                        Instantiate(treePrefab, new Vector3(x * _tileSize, 0, y * _tileSize), Quaternion.identity, newTile.transform);
+                    }
+                    if (x <= 5 && (y <= 7 || y >= _mapHeight - 12))
+                    {
+                        Instantiate(treePrefab, new Vector3(x * _tileSize, 0, y * _tileSize), Quaternion.identity, newTile.transform);
+                    }
+                    newTile.InitializeTile(Tile.TileState.Battlefield);
+                }
+                else if (y <= 7 || y >= _mapHeight - 12)
                 {
                     GameObject tree = Instantiate(treePrefab, new Vector3(x * _tileSize, 0, y * _tileSize), Quaternion.identity, newTile.transform);
                     newTile.InitializeTile(Tile.TileState.Occupied, tree);
                 }
-                else if (x > 3) newTile.InitializeTile(Tile.TileState.Battlefield);
                 else newTile.InitializeTile(Tile.TileState.Buildable);
                 _tiles[x + y * _mapWidth] = newTile;
             }
@@ -428,7 +439,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log($"Castle is destroyed! You survived {_currentRound} rounds.");
     }
-    
+
     public void AddBlood(int amount)
     {
         _blood += amount;
@@ -457,7 +468,7 @@ public class GameManager : MonoBehaviour
         _maxBodies += numberBodies;
         if (_bodies > _maxBodies) _bodies = _maxBodies;
     }
-    
+
     public void AddMaxBlood(int numberBlood)
     {
         _maxBlood += numberBlood;
@@ -466,10 +477,18 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator MapSpawnAnimation()
     {
-        foreach (Tile tile in _tiles)
+        for (int i = 0; i < _mapWidth; i++)
         {
-            tile.SpawnTileAnimation();
-            yield return new WaitForSeconds(0.02f);
+            StartCoroutine(TileRowAnimation(i));
+            yield return new WaitForSeconds(0.15f);
+        }
+    }
+    private IEnumerator TileRowAnimation(int row)
+    {
+        for (int i = 0; i < _mapHeight; i++)
+        {
+            _tiles[i + row * _mapWidth].SpawnTileAnimation();
+            yield return new WaitForSeconds(0.05f);
         }
     }
 }

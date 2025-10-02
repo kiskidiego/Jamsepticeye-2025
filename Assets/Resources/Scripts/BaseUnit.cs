@@ -145,7 +145,6 @@ public class BaseUnit : Hittable
     protected override void Die()
     {
         _dead = true;
-
     }
 
     /// <summary>

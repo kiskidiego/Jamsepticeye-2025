@@ -33,11 +33,6 @@ public class GameManager : MonoBehaviour
         Castle = _castle;
     }
 
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.A))

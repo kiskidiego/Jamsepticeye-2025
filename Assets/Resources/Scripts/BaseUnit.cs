@@ -1,7 +1,7 @@
 using UnityEngine;
 
 // Base class for all units, enemy and ally
-public abstract class BaseUnit : Hittable
+public class BaseUnit : Hittable
 {
     public int BodyReward => _bodyReward;
     public int BloodReward => _bloodReward;
@@ -37,7 +37,9 @@ public abstract class BaseUnit : Hittable
     {
         if (_paused) return;
 
-        if (_target == null)
+        if (_dead) return;
+
+        if (_target == null || (_target is BaseUnit && (_target as BaseUnit).Dead))
         {
             FindTarget();
             return;
@@ -142,6 +144,7 @@ public abstract class BaseUnit : Hittable
     protected override void Die()
     {
         _dead = true;
+
     }
 
     /// <summary>

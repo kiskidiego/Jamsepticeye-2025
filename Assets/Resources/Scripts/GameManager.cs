@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public Hittable Castle { get; private set; }
     [SerializeField] private Hittable _castle;
     [SerializeField] Round[] _rounds;
+    [SerializeField] BaseUnit _testAlly;
     List<BaseUnit> _alliedUnits = new List<BaseUnit>();
     List<BaseUnit> _enemyUnits = new List<BaseUnit>();
     List<BaseTower> _towers = new List<BaseTower>();
@@ -37,6 +38,29 @@ public class GameManager : MonoBehaviour
         
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            _alliedUnits.Add(Instantiate(_testAlly, new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-10f, -5f)), Quaternion.identity)); // Replace Vector3.zero with spawn point
+        }
+        if (_currentPhase == PhaseEnum.Build)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                PrepareRound();
+                StartRound();
+            }
+        }
+        else if (_currentPhase == PhaseEnum.Combat)
+        {
+            if (_enemyUnits.Count == 0)
+            {
+                EndRound();
+            }
+        }
+    }
+
     void OnDestroy()
     {
         if (Instance == this)
@@ -60,7 +84,7 @@ public class GameManager : MonoBehaviour
                 cumulativeProbability += roundEnemy.Probability;
                 if (rand <= cumulativeProbability)
                 {
-                    _enemyUnits.Add(Instantiate(roundEnemy.EnemyUnit, Vector3.zero, Quaternion.identity)); // Replace Vector3.zero with spawn point
+                    _enemyUnits.Add(Instantiate(roundEnemy.EnemyUnit, new Vector3(Random.Range(-5f, 5f), 0, Random.Range(5f, -5f)), Quaternion.identity)); // Replace Vector3.zero with spawn point
                     break;
                 }
             }
@@ -95,6 +119,9 @@ public class GameManager : MonoBehaviour
             Destroy(unit.gameObject);
         }
         _enemyUnits.Clear();
+
+        Debug.Log($"Round {_currentRound + 1} completed! Rewards: {_bodies} bodies, {_blood} blood.");
+
         foreach (BaseUnit unit in _alliedUnits)
         {
             unit.Pause();
@@ -104,6 +131,7 @@ public class GameManager : MonoBehaviour
                 Destroy(unit.gameObject);
             }
         }
+        _alliedUnits.RemoveAll(unit => unit.Dead);
         _currentRound++;
         if (_currentRound < _rounds.Length)
         {
@@ -126,6 +154,8 @@ public class GameManager : MonoBehaviour
 
         foreach (BaseUnit unit in _alliedUnits)
         {
+            if (unit.Dead) continue;
+
             float distanceSqr = Vector3.SqrMagnitude(position - unit.transform.position);
             if (distanceSqr < closestDistance)
             {
@@ -133,6 +163,8 @@ public class GameManager : MonoBehaviour
                 closestUnit = unit;
             }
         }
+        
+        if (closestUnit == null) return GetClosestTower(position); // If all allied units are dead, return closest tower
 
         return closestUnit;
     }
@@ -155,12 +187,20 @@ public class GameManager : MonoBehaviour
 
         foreach (BaseUnit unit in _enemyUnits)
         {
+            if (unit.Dead) continue;
+
             float distanceSqr = Vector3.SqrMagnitude(position - unit.transform.position);
             if (distanceSqr < closestDistance)
             {
                 closestDistance = distanceSqr;
                 closestUnit = unit;
             }
+        }
+
+        if (closestUnit == null)
+        {
+            EndRound();
+            return null;
         }
 
         return closestUnit;
@@ -179,7 +219,7 @@ public class GameManager : MonoBehaviour
         float closestDistance = Mathf.Infinity;
 
         foreach (BaseTower tower in _towers)
-        {
+        {            
             float distanceSqr = Vector3.SqrMagnitude(position - tower.transform.position);
             if (distanceSqr < closestDistance)
             {
@@ -187,6 +227,8 @@ public class GameManager : MonoBehaviour
                 closestTower = tower;
             }
         }
+
+        if (closestTower == null) return _castle; // If all towers are destroyed, return castle
 
         return closestTower;
     }
@@ -202,12 +244,17 @@ public class GameManager : MonoBehaviour
         float highestHealth = -Mathf.Infinity;
         foreach (BaseUnit unit in _alliedUnits)
         {
+            if (unit.Dead) continue;
+
             if (unit.MaxHealth > highestHealth)
             {
                 highestHealth = unit.MaxHealth;
                 highestHealthUnit = unit;
             }
         }
+
+        if (highestHealthUnit == null) return GetClosestTower(position);
+
         return highestHealthUnit;
     }
 
@@ -228,12 +275,21 @@ public class GameManager : MonoBehaviour
         float highestHealth = -Mathf.Infinity;
         foreach (BaseUnit unit in _enemyUnits)
         {
+            if (unit.Dead) continue;
+
             if (unit.MaxHealth > highestHealth)
             {
                 highestHealth = unit.MaxHealth;
                 highestHealthUnit = unit;
             }
         }
+
+        if (highestHealthUnit == null)
+        {
+            EndRound();
+            return null;
+        }
+
         return highestHealthUnit;
     }
 
@@ -254,12 +310,21 @@ public class GameManager : MonoBehaviour
         List<Hittable> enemiesInRange = new List<Hittable>();
         foreach (BaseUnit unit in _enemyUnits)
         {
+            if (unit.Dead) continue;
+
             float distanceSqr = Vector3.SqrMagnitude(position - unit.transform.position);
             if (distanceSqr <= rangeSquared)
             {
                 enemiesInRange.Add(unit);
             }
         }
+
+        if (enemiesInRange.Count == 0)
+        {
+            EndRound();
+            return null;
+        }
+
         return enemiesInRange.ToArray();
     }
 
@@ -275,6 +340,8 @@ public class GameManager : MonoBehaviour
         List<Hittable> alliesInRange = new List<Hittable>();
         foreach (BaseUnit unit in _alliedUnits)
         {
+            if (unit.Dead) continue;
+
             float distanceSqr = Vector3.SqrMagnitude(position - unit.transform.position);
             if (distanceSqr <= rangeSquared)
             {

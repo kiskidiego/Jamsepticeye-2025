@@ -285,7 +285,13 @@ MonoBehaviour:
     - EnemyUnit: {fileID: 7685138834005623286, guid: db4d3d4d874e18f4593a39341d41ac09, type: 3}
       Probability: 1
     TotalEnemies: 500
+  _maxBodies: 5
+  _maxBlood: 20
   _testAlly: {fileID: 7685138834005623286, guid: a343a85fa5da0ab449f1537b5171dbf5, type: 3}
+  _allySpawnPoint: {fileID: 1335615758}
+  _allySpawnSize: {x: 30, y: 10}
+  _enemySpawnPoint: {fileID: 1065474516}
+  _enemySpawnSize: {x: 30, y: 10}
 --- !u!4 &367930016
 Transform:
   m_ObjectHideFlags: 0
@@ -438,6 +444,68 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!1 &1065474515
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1065474516}
+  m_Layer: 0
+  m_Name: EnemySpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1065474516
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1065474515}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 25}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1335615757
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1335615758}
+  m_Layer: 0
+  m_Name: AllySpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1335615758
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1335615757}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1691865039
 GameObject:
   m_ObjectHideFlags: 0
@@ -449,7 +517,6 @@ GameObject:
   - component: {fileID: 1691865044}
   - component: {fileID: 1691865043}
   - component: {fileID: 1691865042}
-  - component: {fileID: 1691865041}
   - component: {fileID: 1691865040}
   m_Layer: 0
   m_Name: Castle
@@ -472,29 +539,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Hittable
   _maxHealth: 100
   _size: 5
---- !u!136 &1691865041
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1691865039}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1691865042
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -560,7 +604,7 @@ Transform:
   m_GameObject: {fileID: 1691865039}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.32767, y: 0.22937, z: -29.08}
+  m_LocalPosition: {x: 0, y: 6.07, z: -29.08}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -574,3 +618,5 @@ SceneRoots:
   - {fileID: 48980010}
   - {fileID: 367930016}
   - {fileID: 1691865044}
+  - {fileID: 1335615758}
+  - {fileID: 1065474516}

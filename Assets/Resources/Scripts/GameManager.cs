@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     public Hittable Castle { get; private set; }
     [SerializeField] private Hittable _castle;
     [SerializeField] Round[] _rounds;
+    [SerializeField] int _maxBodies = 5;
+    [SerializeField] int _maxBlood = 20;
     [SerializeField] BaseUnit _testAlly;
     List<BaseUnit> _alliedUnits = new List<BaseUnit>();
     List<BaseUnit> _enemyUnits = new List<BaseUnit>();
@@ -112,6 +114,8 @@ public class GameManager : MonoBehaviour
         {
             _bodies += unit.BodyReward;
             _blood += unit.BloodReward;
+            if (_bodies > _maxBodies) _bodies = _maxBodies;
+            if (_blood > _maxBlood) _blood = _maxBlood;
             Destroy(unit.gameObject);
         }
         _enemyUnits.Clear();
@@ -360,7 +364,29 @@ public class GameManager : MonoBehaviour
         }
         return alliesInRange.ToArray();
     }
+
+    public void AddBodies(int amount)
+    {
+        _bodies += amount;
+        if (_bodies > _maxBodies) _bodies = _maxBodies;
+    }
     
+    public void AddBlood(int amount)
+    {
+        _blood += amount;
+        if (_blood > _maxBlood) _blood = _maxBlood;
+    }
+
+    public int GetBodies()
+    {
+        return _bodies;
+    }
+
+    public int GetBlood()
+    {
+        return _blood;
+    }
+
     IEnumerator StartRoundCoroutine()
     {
         PrepareRound();

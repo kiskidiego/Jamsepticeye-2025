@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public PhaseEnum CurrentPhase => _currentPhase;
     [SerializeField] private Hittable _castle;
     [SerializeField] private Tile _tilePrefab;
+    [SerializeField] private float _tileSize = 10f;
     [SerializeField] private int _mapWidth = 10;
     [SerializeField] private int _mapHeight = 10;
     [SerializeField] Round[] _rounds;
@@ -90,10 +91,10 @@ public class GameManager : MonoBehaviour
         {
             for (int y = 0; y < _mapHeight; y++)
             {
-                Tile newTile = Instantiate(_tilePrefab, new Vector3(x, 0, y), Quaternion.identity);
+                Tile newTile = Instantiate(_tilePrefab, new Vector3(x * _tileSize, 0, y * _tileSize), Quaternion.identity);
                 if (x == 0 || y == 0 || x == _mapWidth - 1 || y == _mapHeight - 1)
                 {
-                    GameObject tree = Instantiate(treePrefab, new Vector3(x, 0, y), Quaternion.identity, newTile.transform);
+                    GameObject tree = Instantiate(treePrefab, new Vector3(x * _tileSize, 0, y * _tileSize), Quaternion.identity, newTile.transform);
                     newTile.InitializeTile(Tile.TileState.Occupied, tree);
                 }
                 else if (x > 3) newTile.InitializeTile(Tile.TileState.Battlefield);

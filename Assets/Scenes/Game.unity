@@ -148,10 +148,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9b87e799ee77204e948fcd928d0b224, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  UnlockedSpells: 
   _castle: {fileID: 0}
   _tilePrefab: {fileID: 7562894851678332238, guid: 8ed5b9d31768877409b23bc26bd753f5, type: 3}
+  _tileSize: 10
   _mapWidth: 10
   _mapHeight: 10
+  _rounds: []
+  _maxBodies: 5
+  _maxBlood: 20
+  _testAlly: {fileID: 0}
+  _allySpawnPoint: {fileID: 0}
+  _allySpawnSize: {x: 40, y: 20}
+  _enemySpawnPoint: {fileID: 0}
+  _enemySpawnSize: {x: 40, y: 20}
 --- !u!4 &771793857
 Transform:
   m_ObjectHideFlags: 0
@@ -372,15 +382,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 726155113837991295, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 18.477066
+      value: 96
       objectReference: {fileID: 0}
     - target: {fileID: 726155113837991295, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 20
+      value: 73.6
       objectReference: {fileID: 0}
     - target: {fileID: 726155113837991295, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -8.895143
+      value: -9.5
       objectReference: {fileID: 0}
     - target: {fileID: 726155113837991295, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
       propertyPath: m_LocalRotation.w
@@ -409,6 +419,10 @@ PrefabInstance:
     - target: {fileID: 726155113837991295, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4423356806726561634, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
+      propertyPath: orthographic size
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 8699030292855443731, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
       propertyPath: m_Name

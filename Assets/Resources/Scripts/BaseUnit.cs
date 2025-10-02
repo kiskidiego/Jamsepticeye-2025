@@ -9,6 +9,7 @@ public abstract class BaseUnit : Hittable
     [SerializeField] protected float _movementSpeed;
     [SerializeField] protected float _range;
     [SerializeField] protected TargetingPriorities _targetingPriority;
+    [SerializeField] bool _isAlly; // True if the unit is an ally, false if it's an enemy
     protected Hittable _target;
     protected float _rangeSquared;
     protected float _attackCooldown; // Time between attacks
@@ -90,24 +91,45 @@ public abstract class BaseUnit : Hittable
         {
             throw new System.Exception("GameManager instance is null. Cannot find target.");
         }
-        switch (_targetingPriority)
+        if (_isAlly)
         {
-            case TargetingPriorities.Units:
-                _target = GameManager.Instance.GetClosestUnit(transform.position);
-                break;
-            case TargetingPriorities.Towers:
-                _target = GameManager.Instance.GetClosestTower(transform.position);
-                break;
-            case TargetingPriorities.Castle:
-                _target = GameManager.Instance.Castle;
-                break;
-            case TargetingPriorities.Strongest:
-                throw new System.NotImplementedException("Strongest targeting priority not implemented yet.");
-            case TargetingPriorities.Closest:
-                _target = GameManager.Instance.GetClosestHittable(transform.position);
-                break;
-            default:
-                throw new System.Exception("Unknown targeting priority.");
+            switch (_targetingPriority)
+            {
+                case TargetingPriorities.Units:
+                    _target = GameManager.Instance.GetClosestEnemy(transform.position);
+                    break;
+                case TargetingPriorities.Towers:
+                    throw new System.Exception("Allies cannot target towers.");
+                case TargetingPriorities.Castle:
+                    throw new System.Exception("Allies cannot target the castle.");
+                case TargetingPriorities.Strongest:
+                    // Not implemented yet
+                    _target = GameManager.Instance.GetStrongestEnemy();
+                    break;
+                default:
+                    throw new System.Exception("Invalid targeting priority.");
+            }
+        }
+        else
+        {
+            switch (_targetingPriority)
+            {
+                case TargetingPriorities.Units:
+                    _target = GameManager.Instance.GetClosestSubject(transform.position);
+                    break;
+                case TargetingPriorities.Towers:
+                    _target = GameManager.Instance.GetClosestTower(transform.position);
+                    break;
+                case TargetingPriorities.Castle:
+                    _target = GameManager.Instance.Castle;
+                    break;
+                case TargetingPriorities.Strongest:
+                    // Not implemented yet
+                    _target = GameManager.Instance.GetStrongestFollower();
+                    break;
+                default:
+                    throw new System.Exception("Invalid targeting priority.");
+            }
         }
     }
 }

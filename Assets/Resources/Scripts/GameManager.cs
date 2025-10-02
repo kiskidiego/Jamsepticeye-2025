@@ -31,22 +31,71 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public BaseUnit GetClosestUnit(Vector3 position)
+    /// <summary>
+    /// Returns the closest allied unit to the given position. Not implemented yet.
+    /// </summary>
+    /// <param name="position"></param>
+    /// <returns></returns>
+    public BaseUnit GetClosestSubject(Vector3 position)
     {
         throw new System.NotImplementedException("Need to implement a way to track units first.");
     }
 
+    /// <summary>
+    /// Returns the closest enemy unit to the given position. Not implemented yet.
+    /// </summary>
+    /// <param name="position"></param>
+    /// <returns></returns>
+    public BaseUnit GetClosestEnemy(Vector3 position)
+    {
+        throw new System.NotImplementedException("Need to implement a way to track units first.");
+    }
+
+    /// <summary>
+    /// Returns the closest tower to the given position. Not implemented yet.
+    /// </summary>
+    /// <param name="position"></param>
+    /// <returns></returns>
     public BaseTower GetClosestTower(Vector3 position)
     {
         throw new System.NotImplementedException("Need to implement a way to track towers first.");
     }
 
-    public BaseUnit GetStrongestUnit(Vector3 position)
+    /// <summary>
+    /// Returns the strongest allied unit to the given position. Not implemented yet.
+    /// </summary>
+    public BaseUnit GetStrongestFollower()
     {
         throw new System.NotImplementedException("Need to implement a way to track units first.");
     }
 
-    public Hittable GetClosestHittable(Vector3 position)
+    /// <summary>
+    /// Returns the strongest enemy unit to the given position. Not implemented yet.
+    /// </summary>
+    /// <param name="position"></param>
+    /// <returns></returns>
+    public BaseUnit GetStrongestEnemy()
+    {
+        throw new System.NotImplementedException("Need to implement a way to track units first.");
+    }
+
+    /// <summary>
+    /// Returns all enemies in range of the given position. Not implemented yet.
+    /// </summary>
+    /// <param name="position"></param>
+    /// <returns></returns>
+    public BaseUnit[] GetAllEnemiesInRange(Vector3 position, float range)
+    {
+        throw new System.NotImplementedException("Need to implement a way to track hittables first.");
+    }
+
+    /// <summary>
+    /// Returns all allied hittables (units, towers and castle) in range of the given position. Not implemented yet.
+    /// </summary>
+    /// <param name="position"></param>
+    /// <param name="range"></param>
+    /// <returns></returns>
+    public Hittable[] GetAllAlliesInRange(Vector3 position, float range)
     {
         throw new System.NotImplementedException("Need to implement a way to track hittables first.");
     }

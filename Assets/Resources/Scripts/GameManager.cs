@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -5,9 +6,13 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; } // Singleton instance, new game managers will override old ones
     public Hittable Castle { get; private set; }
     [SerializeField] private Hittable _castle;
+    [SerializeField] private Tile _tilePrefab;
+    [SerializeField] private int _mapWidth = 10;
+    [SerializeField] private int _mapHeight = 10;
     BaseUnit[] _alliedUnits;
     BaseUnit[] _enemyUnits;
     BaseTower[] _towers;
+    Tile[] _tiles;
     void Awake()
     {
         if (Instance == null)
@@ -23,7 +28,7 @@ public class GameManager : MonoBehaviour
 
             Instance = this;
         }
-        Castle = _castle;
+        //Castle = _castle;
     }
 
     void OnDestroy()
@@ -32,6 +37,21 @@ public class GameManager : MonoBehaviour
         {
             Instance = null;
         }
+    }
+
+    private void Start()
+    {
+        _tiles = new Tile[_mapWidth * _mapHeight];
+        for (int x = 0; x < _mapWidth; x++)
+        {
+            for (int y = 0; y < _mapHeight; y++)
+            {
+                Tile newTile = Instantiate(_tilePrefab, new Vector3(x, 0, y), Quaternion.identity);
+                newTile.InitializeTile(Tile.TileState.Buildable);
+                _tiles[x + y * _mapWidth] = newTile;
+            }
+        }
+        StartCoroutine(MapSpawnAnimation());
     }
 
     /// <summary>
@@ -158,5 +178,14 @@ public class GameManager : MonoBehaviour
     public Hittable[] GetAllAlliesInRange(Vector3 position, float range)
     {
         throw new System.NotImplementedException("Need to implement a way to track hittables first.");
+    }
+
+    private IEnumerator MapSpawnAnimation()
+    {
+        foreach (Tile tile in _tiles)
+        {
+            tile.SpawnTileAnimation();
+            yield return new WaitForSeconds(0.02f);
+        }
     }
 }

@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
                 cumulativeProbability += roundEnemy.Probability;
                 if (rand <= cumulativeProbability)
                 {
-                    _enemyUnits.Add(Instantiate(roundEnemy.EnemyUnit, new Vector3(Random.Range(-20f, 20f), 0, Random.Range(-5f, 5f)), Quaternion.identity)); // Replace Vector3.zero with spawn point
+                    _enemyUnits.Add(Instantiate(roundEnemy.EnemyUnit, new Vector3(Random.Range(-20f, 20f), 0, Random.Range(15f, 5f)), Quaternion.identity)); // Replace Vector3.zero with spawn point
                     break;
                 }
             }

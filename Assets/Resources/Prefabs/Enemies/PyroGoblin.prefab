@@ -177,6 +177,13 @@ MonoBehaviour:
   _bodyReward: 1
   _bloodReward: 12
   _isAlly: 0
+  _attackSound:
+    Guid:
+      Data1: 223465363
+      Data2: 1234368518
+      Data3: -1616460625
+      Data4: -650137001
+    Path: event:/SpawnGoblin
   _projectilePrefab: {fileID: 3519205912370290149, guid: d79bfdd9512a33e48abd717f27409cdd, type: 3}
   _projectileSpawnPoint: {fileID: 7188822983357739112}
 --- !u!1 &8911670048369243032

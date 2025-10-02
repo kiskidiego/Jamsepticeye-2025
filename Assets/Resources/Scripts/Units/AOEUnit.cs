@@ -15,6 +15,8 @@ public class AOEUnit : BaseUnit
     {
         if (_target == null) return;
 
+        AudioManager.instance.PlayOneShot(_attackSound, transform.position);
+        
         if (_isAlly)
         {
             Hittable[] hittables = GameManager.Instance.GetAllEnemiesInRange(_target.transform.position, _aoeRadius);

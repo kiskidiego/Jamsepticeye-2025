@@ -13,6 +13,8 @@ public class RangedUnit : BaseUnit
     {
         if (_target == null) return;
 
+        AudioManager.instance.PlayOneShot(_attackSound, transform.position);
+        
         // Instantiate and launch the projectile towards the target
         Projectile projectile = Instantiate(_projectilePrefab, _projectileSpawnPoint.position, _projectileSpawnPoint.rotation);
         projectile.target = _target.transform;

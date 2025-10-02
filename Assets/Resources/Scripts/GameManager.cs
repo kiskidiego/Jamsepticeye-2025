@@ -111,11 +111,11 @@ public class GameManager : MonoBehaviour
     void PrepareRound()
     {
         Round round = _rounds[_currentRound];
-        for (int i = 0; i < round.TotalEnemies; i++)
+        for (int i = 0; i < round.TotalRandomEnemies; i++)
         {
             float rand = Random.Range(0f, 1f);
             float cumulativeProbability = 0f;
-            foreach (RoundEnemy roundEnemy in round.EnemiesInRound)
+            foreach (RandomRoundEnemy roundEnemy in round.RandomEnemiesInRound)
             {
                 cumulativeProbability += roundEnemy.Probability;
                 if (rand <= cumulativeProbability)
@@ -126,6 +126,17 @@ public class GameManager : MonoBehaviour
                         Quaternion.identity
                     ));
                     break;
+                }
+            }
+            foreach (FixedRoundEnemy fixedEnemy in round.FixedEnemiesInRound)
+            {
+                for (int j = 0; j < fixedEnemy.amount; j++)
+                {
+                    _enemyUnits.Add(Instantiate(
+                        fixedEnemy.EnemyUnit,
+                        _enemySpawnPoint.position + new Vector3(Random.Range(-_enemySpawnSize.x, _enemySpawnSize.x), 0, Random.Range(-_enemySpawnSize.y, _enemySpawnSize.y)),
+                        Quaternion.identity
+                    ));
                 }
             }
         }
@@ -451,15 +462,6 @@ public class GameManager : MonoBehaviour
     {
         _maxBlood += numberBlood;
         if (_blood > _maxBlood) _blood = _maxBlood;
-    }
-
-    private IEnumerator MapSpawnAnimation()
-    {
-        foreach (Tile tile in _tiles)
-        {
-            tile.SpawnTileAnimation();
-            yield return new WaitForSeconds(0.02f);
-        }
     }
 
     private IEnumerator MapSpawnAnimation()

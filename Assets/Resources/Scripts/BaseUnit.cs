@@ -62,6 +62,7 @@ public class BaseUnit : Hittable
         if (_target != null)
         {
             transform.position = Vector3.MoveTowards(transform.position, _target.transform.position, _movementSpeed * Time.deltaTime);
+            transform.LookAt(_target.transform);
         }
     }
 

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -44,8 +45,7 @@ public class GameManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                PrepareRound();
-                StartRound();
+                StartCoroutine(StartRoundCoroutine());
             }
         }
         else if (_currentPhase == PhaseEnum.Combat)
@@ -160,7 +160,7 @@ public class GameManager : MonoBehaviour
                 closestUnit = unit;
             }
         }
-        
+
         if (closestUnit == null) return GetClosestTower(position); // If all allied units are dead, return closest tower
 
         return closestUnit;
@@ -216,7 +216,7 @@ public class GameManager : MonoBehaviour
         float closestDistance = Mathf.Infinity;
 
         foreach (BaseTower tower in _towers)
-        {            
+        {
             float distanceSqr = Vector3.SqrMagnitude(position - tower.transform.position);
             if (distanceSqr < closestDistance)
             {
@@ -359,5 +359,12 @@ public class GameManager : MonoBehaviour
             alliesInRange.Add(_castle);
         }
         return alliesInRange.ToArray();
+    }
+    
+    IEnumerator StartRoundCoroutine()
+    {
+        PrepareRound();
+        yield return new WaitForSeconds(3f); // Wait for 3 seconds before starting the round
+        StartRound();
     }
 }

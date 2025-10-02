@@ -21,11 +21,11 @@ public class AudioManager : MonoBehaviour
     private Bus ambienceBus;
     private Bus sfxBus;
 
-    private List<EventInstance> eventInstances;
-    private List<StudioEventEmitter> eventEmitters;
+    private List<EventInstance> _eventInstances;
+    private List<StudioEventEmitter> _eventEmitters;
 
-    private EventInstance ambienceEventInstance;
-    private EventInstance musicEventInstance;
+    private EventInstance _ambienceEventInstance;
+    private EventInstance _musicEventInstance;
 
     [field: Header("Ambience")]
     [field: SerializeField] public EventReference ambience { get; private set; }
@@ -43,8 +43,8 @@ public class AudioManager : MonoBehaviour
         }
         instance = this;
 
-        eventInstances = new List<EventInstance>();
-        eventEmitters = new List<StudioEventEmitter>();
+        _eventInstances = new List<EventInstance>();
+        _eventEmitters = new List<StudioEventEmitter>();
 
         masterBus = RuntimeManager.GetBus("bus:/");
         musicBus = RuntimeManager.GetBus("bus:/Music");
@@ -68,24 +68,24 @@ public class AudioManager : MonoBehaviour
 
     private void InitializeAmbience(EventReference ambienceEventReference)
     {
-        ambienceEventInstance = CreateInstance(ambienceEventReference);
-        ambienceEventInstance.start();
+        _ambienceEventInstance = CreateInstance(ambienceEventReference);
+        _ambienceEventInstance.start();
     }
 
     private void InitializeMusic(EventReference musicEventReference)
     {
-        musicEventInstance = CreateInstance(musicEventReference);
-        musicEventInstance.start();
+        _musicEventInstance = CreateInstance(musicEventReference);
+        _musicEventInstance.start();
     }
 
     public void SetAmbienceParameter(string parameterName, float parameterValue)
     {
-        ambienceEventInstance.setParameterByName(parameterName, parameterValue);
+        _ambienceEventInstance.setParameterByName(parameterName, parameterValue);
     }
 
     public void SetMusicArea(MusicState area)
     {
-        musicEventInstance.setParameterByName("state", (float)area);
+        _musicEventInstance.setParameterByName("state", (float)area);
     }
 
     public void PlayOneShot(EventReference sound, Vector3 worldPos)
@@ -96,7 +96,7 @@ public class AudioManager : MonoBehaviour
     public EventInstance CreateInstance(EventReference eventReference)
     {
         EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
-        eventInstances.Add(eventInstance);
+        _eventInstances.Add(eventInstance);
         return eventInstance;
     }
 
@@ -104,20 +104,20 @@ public class AudioManager : MonoBehaviour
     {
         StudioEventEmitter emitter = emitterGameObject.GetComponent<StudioEventEmitter>();
         emitter.EventReference = eventReference;
-        eventEmitters.Add(emitter);
+        _eventEmitters.Add(emitter);
         return emitter;
     }
 
     private void CleanUp()
     {
         // stop and release any created instances
-        foreach (EventInstance eventInstance in eventInstances)
+        foreach (EventInstance eventInstance in _eventInstances)
         {
             eventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
             eventInstance.release();
         }
         // stop all of the event emitters, because if we don't they may hang around in other scenes
-        foreach (StudioEventEmitter emitter in eventEmitters)
+        foreach (StudioEventEmitter emitter in _eventEmitters)
         {
             emitter.Stop();
         }

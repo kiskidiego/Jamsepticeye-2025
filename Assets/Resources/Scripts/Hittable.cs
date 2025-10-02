@@ -32,9 +32,12 @@ public abstract class Hittable : MonoBehaviour
     }
 
     /// <summary>
-    /// Handles the death of the object. To be implemented by derived classes.
+    /// Handles the death of the object. By default, it destroys the game object. Can be overridden by derived classes for custom death behavior.
     /// </summary>
-    protected abstract void Die();
+    protected virtual void Die()
+    {
+        Destroy(gameObject);
+    }
 
     /// <summary>
     /// Returns the size of the unit.

@@ -9,7 +9,13 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool[] UnlockedSpells;
     [SerializeField] private Hittable _castle;
     [SerializeField] Round[] _rounds;
+    [SerializeField] int _maxBodies = 5;
+    [SerializeField] int _maxBlood = 20;
     [SerializeField] BaseUnit _testAlly;
+    [SerializeField] Transform _allySpawnPoint;
+    [SerializeField] Vector2 _allySpawnSize = new Vector2(40f, 20f);
+    [SerializeField] Transform _enemySpawnPoint;
+    [SerializeField] Vector2 _enemySpawnSize = new Vector2(40f, 20f);
     List<BaseUnit> _alliedUnits = new List<BaseUnit>();
     List<BaseUnit> _enemyUnits = new List<BaseUnit>();
     List<BaseTower> _towers = new List<BaseTower>();
@@ -40,8 +46,12 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            for (int i = 0; i < 110; i++)
-                _alliedUnits.Add(Instantiate(_testAlly, new Vector3(Random.Range(-20f, 20f), 0, Random.Range(-10f, -5f)), Quaternion.identity)); // Replace Vector3.zero with spawn point
+            for (int i = 0; i < 10; i++)
+                _alliedUnits.Add(Instantiate(
+                    _testAlly,
+                    _allySpawnPoint.position + new Vector3(Random.Range(-_allySpawnSize.x, _allySpawnSize.x), 0, Random.Range(-_allySpawnSize.y, _allySpawnSize.y)),
+                    Quaternion.identity
+                ));
         }
         if (_currentPhase == PhaseEnum.Build)
         {
@@ -82,11 +92,16 @@ public class GameManager : MonoBehaviour
                 cumulativeProbability += roundEnemy.Probability;
                 if (rand <= cumulativeProbability)
                 {
-                    _enemyUnits.Add(Instantiate(roundEnemy.EnemyUnit, new Vector3(Random.Range(-20f, 20f), 0, Random.Range(15f, 5f)), Quaternion.identity)); // Replace Vector3.zero with spawn point
+                    _enemyUnits.Add(Instantiate(
+                        roundEnemy.EnemyUnit,
+                        _enemySpawnPoint.position + new Vector3(Random.Range(-_enemySpawnSize.x, _enemySpawnSize.x), 0, Random.Range(-_enemySpawnSize.y, _enemySpawnSize.y)),
+                        Quaternion.identity
+                    ));
                     break;
                 }
             }
         }
+        _currentPhase = PhaseEnum.Combat;
     }
 
     /// <summary>
@@ -102,7 +117,6 @@ public class GameManager : MonoBehaviour
         {
             unit.Unpause();
         }
-        _currentPhase = PhaseEnum.Combat;
     }
 
     /// <summary>
@@ -114,6 +128,8 @@ public class GameManager : MonoBehaviour
         {
             _bodies += unit.BodyReward;
             _blood += unit.BloodReward;
+            if (_bodies > _maxBodies) _bodies = _maxBodies;
+            if (_blood > _maxBlood) _blood = _maxBlood;
             Destroy(unit.gameObject);
         }
         _enemyUnits.Clear();
@@ -124,7 +140,7 @@ public class GameManager : MonoBehaviour
         {
             unit.Pause();
             unit.Reset();
-            unit.transform.position = new Vector3(Random.Range(-20f, 20f), 0, Random.Range(-10f, -5f)); // Replace with spawn point
+            unit.transform.position = _allySpawnPoint.position + new Vector3(Random.Range(-_allySpawnSize.x, _allySpawnSize.x), 0, Random.Range(-_allySpawnSize.y, _allySpawnSize.y));
             if (unit.Dead)
             {
                 Destroy(unit.gameObject);
@@ -363,11 +379,33 @@ public class GameManager : MonoBehaviour
         return alliesInRange.ToArray();
     }
 
+    public void AddBodies(int amount)
+    {
+        _bodies += amount;
+        if (_bodies > _maxBodies) _bodies = _maxBodies;
+    }
+
     public void EndGame()
     {
         Debug.Log($"Castle is destroyed! You survived {_currentRound} rounds.");
     }
     
+    public void AddBlood(int amount)
+    {
+        _blood += amount;
+        if (_blood > _maxBlood) _blood = _maxBlood;
+    }
+
+    public int GetBodies()
+    {
+        return _bodies;
+    }
+
+    public int GetBlood()
+    {
+        return _blood;
+    }
+
     IEnumerator StartRoundCoroutine()
     {
         PrepareRound();

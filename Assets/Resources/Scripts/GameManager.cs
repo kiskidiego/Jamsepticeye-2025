@@ -42,12 +42,19 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         _tiles = new Tile[_mapWidth * _mapHeight];
+        GameObject treePrefab = Resources.Load<GameObject>("Prefabs/Tree");
         for (int x = 0; x < _mapWidth; x++)
         {
             for (int y = 0; y < _mapHeight; y++)
             {
                 Tile newTile = Instantiate(_tilePrefab, new Vector3(x, 0, y), Quaternion.identity);
-                newTile.InitializeTile(Tile.TileState.Buildable);
+                if (x == 0 || y == 0 || x == _mapWidth - 1 || y == _mapHeight - 1)
+                {
+                    GameObject tree = Instantiate(treePrefab, new Vector3(x, 0, y), Quaternion.identity, newTile.transform);
+                    newTile.InitializeTile(Tile.TileState.Occupied, tree);
+                }
+                else if (x > 3) newTile.InitializeTile(Tile.TileState.Battlefield);
+                else newTile.InitializeTile(Tile.TileState.Buildable);
                 _tiles[x + y * _mapWidth] = newTile;
             }
         }

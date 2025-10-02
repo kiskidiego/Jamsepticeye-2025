@@ -10,10 +10,9 @@ public class Tile : MonoBehaviour
         Occupied,
         Battlefield,
     }
-
+    [SerializeField] private GameObject _highlightEffectGameObject;
     private TileState _currentState;
     private GameObject _currentBuilding;
-    private GameObject _highlightEffectGameObject;
 
     /// <summary>
     /// Initializes the tile with a given state and an optional building.
@@ -66,15 +65,28 @@ public class Tile : MonoBehaviour
         transform.DOScale(Vector3.one, 0.5f).From(Vector3.zero).SetEase(Ease.OutFlash);
     }
 
-    private void HighlightTile()
+    /// <summary>
+    /// Highlights the tile to indicate it is selectable.
+    /// </summary>
+    public void HighlightTile(CameraController.InteractionMode mode)
     {
-        if (_highlightEffectGameObject == null) return;
-        _highlightEffectGameObject.SetActive(true);
+        if (mode == CameraController.InteractionMode.Building && _currentState == TileState.Buildable)
+        {
+            _highlightEffectGameObject.GetComponent<Renderer>().material.color = Color.green;
+            _highlightEffectGameObject.SetActive(true);
+        }
+        else if (mode == CameraController.InteractionMode.Demolishing && _currentState == TileState.Occupied)
+        {
+            _highlightEffectGameObject.GetComponent<Renderer>().material.color = Color.red;
+            _highlightEffectGameObject.SetActive(true);
+        }
     }
 
-    private void UnhighlightTile()
+    /// <summary>
+    /// Removes the highlight from the tile.
+    /// </summary>
+    public void UnhighlightTile()
     {
-        if (_highlightEffectGameObject == null) return;
         _highlightEffectGameObject.SetActive(false);
     }
 }

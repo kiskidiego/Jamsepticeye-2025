@@ -114,7 +114,7 @@ public abstract class BaseUnit : Hittable
             switch (_targetingPriority)
             {
                 case TargetingPriorities.Units:
-                    _target = GameManager.Instance.GetClosestSubject(transform.position);
+                    _target = GameManager.Instance.GetClosestAllyUnit(transform.position);
                     break;
                 case TargetingPriorities.Towers:
                     _target = GameManager.Instance.GetClosestTower(transform.position);
@@ -123,7 +123,7 @@ public abstract class BaseUnit : Hittable
                     _target = GameManager.Instance.Castle;
                     break;
                 case TargetingPriorities.HighestHealth:
-                    _target = GameManager.Instance.GetHighestHealthFollower();
+                    _target = GameManager.Instance.GetHighestHealthAllyUnit();
                     break;
                 default:
                     throw new System.Exception("Invalid targeting priority.");

@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Projectile
   target: {fileID: 0}
-  _speed: 10
+  _speed: 20
   _size: 0.5
 --- !u!1 &6132255020565134286
 GameObject:

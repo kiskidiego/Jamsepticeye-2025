@@ -6,9 +6,14 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; } // Singleton instance, new game managers will override old ones
     public Hittable Castle { get; private set; }
     [SerializeField] private Hittable _castle;
-    BaseUnit[] _alliedUnits;
-    BaseUnit[] _enemyUnits;
-    BaseTower[] _towers;
+    [SerializeField] Round[] _rounds;
+    List<BaseUnit> _alliedUnits = new List<BaseUnit>();
+    List<BaseUnit> _enemyUnits = new List<BaseUnit>();
+    List<BaseTower> _towers = new List<BaseTower>();
+    int _currentRound = 0;
+    int _blood = 0;
+    int _bodies = 0;
+    PhaseEnum _currentPhase = PhaseEnum.Build;
     void Awake()
     {
         if (Instance == null)
@@ -27,6 +32,11 @@ public class GameManager : MonoBehaviour
         Castle = _castle;
     }
 
+    void Start()
+    {
+        
+    }
+
     void OnDestroy()
     {
         if (Instance == this)
@@ -36,13 +46,82 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns the closest allied unit to the given position.
+    /// Prepares the next round by clearing existing enemies and spawning new ones based on defined probabilities.
+    /// </summary>
+    void PrepareRound()
+    {
+        Round round = _rounds[_currentRound];
+        for (int i = 0; i < round.TotalEnemies; i++)
+        {
+            float rand = Random.Range(0f, 1f);
+            float cumulativeProbability = 0f;
+            foreach (RoundEnemy roundEnemy in round.EnemiesInRound)
+            {
+                cumulativeProbability += roundEnemy.Probability;
+                if (rand <= cumulativeProbability)
+                {
+                    _enemyUnits.Add(Instantiate(roundEnemy.EnemyUnit, Vector3.zero, Quaternion.identity)); // Replace Vector3.zero with spawn point
+                    break;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Starts the round by unpausing all units.
+    /// </summary>
+    void StartRound()
+    {
+        foreach (BaseUnit unit in _enemyUnits)
+        {
+            unit.Unpause();
+        }
+        foreach (BaseUnit unit in _alliedUnits)
+        {
+            unit.Unpause();
+        }
+        _currentPhase = PhaseEnum.Combat;
+    }
+
+    /// <summary>
+    /// Ends the round by rewarding the player and cleaning up units.
+    /// </summary>
+    void EndRound()
+    {
+        foreach (BaseUnit unit in _enemyUnits)
+        {
+            _bodies += unit.BodyReward;
+            _blood += unit.BloodReward;
+            Destroy(unit.gameObject);
+        }
+        _enemyUnits.Clear();
+        foreach (BaseUnit unit in _alliedUnits)
+        {
+            unit.Pause();
+            unit.Reset();
+            if (unit.Dead)
+            {
+                Destroy(unit.gameObject);
+            }
+        }
+        _currentRound++;
+        if (_currentRound < _rounds.Length)
+        {
+            Debug.Log("All rounds completed!");
+        }
+        _currentPhase = PhaseEnum.Build;
+    }
+
+    /// <summary>
+    /// Returns the closest allied unit to the given position. If no allied units exist, returns the closest tower. If no towers exist, returns the castle.
     /// </summary>
     /// <param name="position"></param>
     /// <returns></returns>
-    public BaseUnit GetClosestAllyUnit(Vector3 position)
+    public Hittable GetClosestAllyUnit(Vector3 position)
     {
-        BaseUnit closestUnit = null;
+        if (_alliedUnits.Count == 0) return GetClosestTower(position); // If no allied units, return closest tower
+
+        Hittable closestUnit = null;
         float closestDistance = Mathf.Infinity;
 
         foreach (BaseUnit unit in _alliedUnits)
@@ -59,13 +138,19 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns the closest enemy unit to the given position.
+    /// Returns the closest enemy unit to the given position. If no enemies exist, ends the round and returns null.
     /// </summary>
     /// <param name="position"></param>
     /// <returns></returns>
-    public BaseUnit GetClosestEnemy(Vector3 position)
+    public Hittable GetClosestEnemy(Vector3 position)
     {
-        BaseUnit closestUnit = null;
+        if (_enemyUnits.Count == 0)
+        {
+            EndRound();
+            return null;
+        }
+
+        Hittable closestUnit = null;
         float closestDistance = Mathf.Infinity;
 
         foreach (BaseUnit unit in _enemyUnits)
@@ -82,13 +167,15 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns the closest tower to the given position.
+    /// Returns the closest tower to the given position. If no towers exist, returns the castle.
     /// </summary>
     /// <param name="position"></param>
     /// <returns></returns>
-    public BaseTower GetClosestTower(Vector3 position)
+    public Hittable GetClosestTower(Vector3 position)
     {
-        BaseTower closestTower = null;
+        if (_towers.Count == 0) return _castle; // If no towers, return castle
+
+        Hittable closestTower = null;
         float closestDistance = Mathf.Infinity;
 
         foreach (BaseTower tower in _towers)
@@ -105,11 +192,13 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns the allied unit with the highest max health.
+    /// Returns the allied unit with the highest max health. If no allied units exist, returns the closest tower.
     /// </summary>
-    public BaseUnit GetHighestHealthAllyUnit()
+    public Hittable GetHighestHealthAllyUnit(Vector3 position)
     {
-        BaseUnit highestHealthUnit = null;
+        if (_alliedUnits.Count == 0) return GetClosestTower(position);
+
+        Hittable highestHealthUnit = null;
         float highestHealth = -Mathf.Infinity;
         foreach (BaseUnit unit in _alliedUnits)
         {
@@ -123,13 +212,19 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns the enemy unit with the highest max health.
+    /// Returns the enemy unit with the highest max health. If no enemies exist, ends the round and returns null.
     /// </summary>
     /// <param name="position"></param>
     /// <returns></returns>
-    public BaseUnit GetHighestHealthEnemy()
+    public Hittable GetHighestHealthEnemy()
     {
-        BaseUnit highestHealthUnit = null;
+        if (_enemyUnits.Count == 0)
+        {
+            EndRound();
+            return null;
+        }
+
+        Hittable highestHealthUnit = null;
         float highestHealth = -Mathf.Infinity;
         foreach (BaseUnit unit in _enemyUnits)
         {
@@ -143,14 +238,20 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns all enemies in range of the given position.
+    /// Returns all enemies in range of the given position. If no enemies exist, ends the round and returns null.
     /// </summary>
     /// <param name="position"></param>
     /// <returns></returns>
-    public BaseUnit[] GetAllEnemiesInRange(Vector3 position, float range)
+    public Hittable[] GetAllEnemiesInRange(Vector3 position, float range)
     {
+        if (_enemyUnits.Count == 0)
+        {
+            EndRound();
+            return null;
+        }
+
         float rangeSquared = range * range;
-        List<BaseUnit> enemiesInRange = new List<BaseUnit>();
+        List<Hittable> enemiesInRange = new List<Hittable>();
         foreach (BaseUnit unit in _enemyUnits)
         {
             float distanceSqr = Vector3.SqrMagnitude(position - unit.transform.position);
@@ -187,6 +288,11 @@ public class GameManager : MonoBehaviour
             {
                 alliesInRange.Add(tower);
             }
+        }
+        float castleDistanceSqr = Vector3.SqrMagnitude(position - _castle.transform.position);
+        if (castleDistanceSqr <= rangeSquared)
+        {
+            alliesInRange.Add(_castle);
         }
         return alliesInRange.ToArray();
     }

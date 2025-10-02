@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -9,6 +10,9 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool[] UnlockedSpells;
     public PhaseEnum CurrentPhase => _currentPhase;
     [SerializeField] private Hittable _castle;
+    [SerializeField] private Tile _tilePrefab;
+    [SerializeField] private int _mapWidth = 10;
+    [SerializeField] private int _mapHeight = 10;
     [SerializeField] Round[] _rounds;
     [SerializeField] int _maxBodies = 5;
     [SerializeField] int _maxBlood = 20;
@@ -24,6 +28,7 @@ public class GameManager : MonoBehaviour
     int _blood = 0;
     int _bodies = 0;
     PhaseEnum _currentPhase = PhaseEnum.Build;
+    Tile[] _tiles;
     void Awake()
     {
         if (Instance == null)
@@ -39,7 +44,7 @@ public class GameManager : MonoBehaviour
 
             Instance = this;
         }
-        Castle = _castle;
+        //Castle = _castle;
         UnlockedSpells = new bool[1];
     }
 
@@ -76,6 +81,28 @@ public class GameManager : MonoBehaviour
         {
             Instance = null;
         }
+    }
+
+    private void Start()
+    {
+        _tiles = new Tile[_mapWidth * _mapHeight];
+        GameObject treePrefab = Resources.Load<GameObject>("Prefabs/Tree");
+        for (int x = 0; x < _mapWidth; x++)
+        {
+            for (int y = 0; y < _mapHeight; y++)
+            {
+                Tile newTile = Instantiate(_tilePrefab, new Vector3(x, 0, y), Quaternion.identity);
+                if (x == 0 || y == 0 || x == _mapWidth - 1 || y == _mapHeight - 1)
+                {
+                    GameObject tree = Instantiate(treePrefab, new Vector3(x, 0, y), Quaternion.identity, newTile.transform);
+                    newTile.InitializeTile(Tile.TileState.Occupied, tree);
+                }
+                else if (x > 3) newTile.InitializeTile(Tile.TileState.Battlefield);
+                else newTile.InitializeTile(Tile.TileState.Buildable);
+                _tiles[x + y * _mapWidth] = newTile;
+            }
+        }
+        StartCoroutine(MapSpawnAnimation());
     }
 
     /// <summary>
@@ -424,5 +451,23 @@ public class GameManager : MonoBehaviour
     {
         _maxBlood += numberBlood;
         if (_blood > _maxBlood) _blood = _maxBlood;
+    }
+
+    private IEnumerator MapSpawnAnimation()
+    {
+        foreach (Tile tile in _tiles)
+        {
+            tile.SpawnTileAnimation();
+            yield return new WaitForSeconds(0.02f);
+        }
+    }
+
+    private IEnumerator MapSpawnAnimation()
+    {
+        foreach (Tile tile in _tiles)
+        {
+            tile.SpawnTileAnimation();
+            yield return new WaitForSeconds(0.02f);
+        }
     }
 }

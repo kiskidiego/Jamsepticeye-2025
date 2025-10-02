@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class BoneTower : BaseTower
 {
-    [SerializeField] private float _explosionRadius = 1.5f;
+    [SerializeField] Projectile _projectilePrefab;
+    [SerializeField] Transform _projectileSpawnPoint;
     void Update()
     {
         if (_paused) return;
@@ -18,11 +19,12 @@ public class BoneTower : BaseTower
     protected override void Attack()
     {
         if (_target == null) return;
-        Hittable[] hittedUnits = GameManager.Instance.GetAllEnemiesInRange(_target.transform.position, _explosionRadius);
 
-        foreach (Hittable enemyUnit in hittedUnits)
-        {
-            _target.TakeDamage(_damage);
-        }
+        // Instantiate and launch the projectile towards the target
+        Projectile projectile = Instantiate(_projectilePrefab, _projectileSpawnPoint.position, _projectileSpawnPoint.rotation);
+        projectile.target = _target.transform;
+        projectile.SetDamage(_damage);
+
+        Destroy(projectile.gameObject, 5f); // Destroy after 5 seconds to avoid clutter
     }
 }

@@ -12,7 +12,8 @@ public class GoblinomancyStudy : BaseTower
     public void BuySpell(int idSpell)
     {
         GameManager manager = GameManager.Instance;
-        int spellPrice = 0;
+        int spellPrice;
+        
         switch (idSpell)
         {
             case 1:

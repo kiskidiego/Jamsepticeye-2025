@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Vector2 _allySpawnSize = new Vector2(40f, 20f);
     [SerializeField] Transform _enemySpawnPoint;
     [SerializeField] Vector2 _enemySpawnSize = new Vector2(40f, 20f);
-    List<BaseUnit> _alliedUnits = new List<BaseUnit>();
+    public List<BaseUnit> AlliedUnits = new List<BaseUnit>();
     List<BaseUnit> _enemyUnits = new List<BaseUnit>();
     List<BaseTower> _towers = new List<BaseTower>();
     int _currentRound = 0;
@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A))
         {
             for (int i = 0; i < 10; i++)
-                _alliedUnits.Add(Instantiate(
+                AlliedUnits.Add(Instantiate(
                     _testAlly,
                     _allySpawnPoint.position + new Vector3(Random.Range(-_allySpawnSize.x, _allySpawnSize.x), 0, Random.Range(-_allySpawnSize.y, _allySpawnSize.y)),
                     Quaternion.identity
@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour
         {
             unit.Unpause();
         }
-        foreach (BaseUnit unit in _alliedUnits)
+        foreach (BaseUnit unit in AlliedUnits)
         {
             unit.Unpause();
         }
@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour
 
         Debug.Log($"Round {_currentRound + 1} completed! Rewards: {_bodies} bodies, {_blood} blood.");
 
-        foreach (BaseUnit unit in _alliedUnits)
+        foreach (BaseUnit unit in AlliedUnits)
         {
             unit.Pause();
             unit.Reset();
@@ -146,7 +146,7 @@ public class GameManager : MonoBehaviour
                 Destroy(unit.gameObject);
             }
         }
-        _alliedUnits.RemoveAll(unit => unit.Dead);
+        AlliedUnits.RemoveAll(unit => unit.Dead);
         _currentRound++;
         if (_currentRound < _rounds.Length)
         {
@@ -162,12 +162,12 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     public Hittable GetClosestAllyUnit(Vector3 position)
     {
-        if (_alliedUnits.Count == 0) return GetClosestTower(position); // If no allied units, return closest tower
+        if (AlliedUnits.Count == 0) return GetClosestTower(position); // If no allied units, return closest tower
 
         Hittable closestUnit = null;
         float closestDistance = Mathf.Infinity;
 
-        foreach (BaseUnit unit in _alliedUnits)
+        foreach (BaseUnit unit in AlliedUnits)
         {
             if (unit.Dead) continue;
 
@@ -253,11 +253,11 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public Hittable GetHighestHealthAllyUnit(Vector3 position)
     {
-        if (_alliedUnits.Count == 0) return GetClosestTower(position);
+        if (AlliedUnits.Count == 0) return GetClosestTower(position);
 
         Hittable highestHealthUnit = null;
         float highestHealth = -Mathf.Infinity;
-        foreach (BaseUnit unit in _alliedUnits)
+        foreach (BaseUnit unit in AlliedUnits)
         {
             if (unit.Dead) continue;
 
@@ -353,7 +353,7 @@ public class GameManager : MonoBehaviour
     {
         float rangeSquared = range * range;
         List<Hittable> alliesInRange = new List<Hittable>();
-        foreach (BaseUnit unit in _alliedUnits)
+        foreach (BaseUnit unit in AlliedUnits)
         {
             if (unit.Dead) continue;
 

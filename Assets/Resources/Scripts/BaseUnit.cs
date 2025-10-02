@@ -20,6 +20,7 @@ public class BaseUnit : Hittable
     protected float _currentAttackCooldown; // Time left until next attack
     bool _paused = true;
     bool _dead = false;
+    
 
     /// <summary>
     /// Initializes the unit's current health, its squared size, its squared range and its attack cooldown. Can be overriden by derived classes.

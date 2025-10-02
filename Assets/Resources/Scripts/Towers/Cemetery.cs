@@ -3,6 +3,8 @@ using UnityEngine;
 public class Cemetery : BaseTower
 {
     [SerializeField] int _numberBodiesToAdd;
+    [SerializeField] private Canvas _barracksMenu;
+
     protected override void OnBuy()
     {
         GameManager.Instance.AddMaxBodies(_numberBodiesToAdd);
@@ -19,34 +21,36 @@ public class Cemetery : BaseTower
         base.WhenDestroyed();
     }
     
-    [SerializeField] private Canvas _spellMenu;
+    
 
     protected override void OnClick()
     {
-        _spellMenu.enabled = true;
+        _barracksMenu.enabled = true;
     }
 
-    public void BuySpell(int idSpell)
+    public void BuyUnit(int idUnit)
     {
         GameManager manager = GameManager.Instance;
-        int spellPrice = 0;
-        switch (idSpell)
+        int unitPrice = 0;
+        switch (idUnit)
         {
             case 1:
-                spellPrice = 50;
+                unitPrice = 50;
                 break;
             default:
-                Debug.Log("Wrong Spell ID");
+                Debug.Log("Wrong Unit ID");
                 return;
         }
 
-        if (manager.GetBlood() < spellPrice)
+        if (manager.GetBodies() < unitPrice)
         {
             Debug.Log("Not enough blood");
             return;
         }
 
-        manager.AddBlood(-spellPrice);
-        manager.UnlockedSpells[idSpell] = true;
+        manager.AddBodies(-unitPrice);
+
+        //TODO: Add unit to the gameManagerList
+        //manager.alliedUnits.Add();
     }
 }

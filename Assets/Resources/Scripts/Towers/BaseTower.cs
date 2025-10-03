@@ -22,13 +22,21 @@ public abstract class BaseTower : Hittable
         AudioManager.instance.PlayOneShot(_placeSound, transform.position);
         Pause();
     }
+
+    /// <summary>
+    /// Called before the combat starts.
+    /// </summary>
+    protected virtual void OnPrepare()
+    {
+
+    }
     
     /// <summary>
     /// Tower behaviour when sold.
     /// </summary>
     protected virtual void OnSell()
     {
-        for(int i = 0; i < Mathf.RoundToInt(_bodiesPrice * SELL_CASHBACK * CurrentHealth / MaxHealth); i++)
+        for (int i = 0; i < Mathf.RoundToInt(_bodiesPrice * SELL_CASHBACK * CurrentHealth / MaxHealth); i++)
         {
             GameManager.Instance.AddBody();
         }

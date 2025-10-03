@@ -4,25 +4,35 @@ using UnityEngine;
 public class UnitMenu : MonoBehaviour
 {
     [HideInInspector] public Cemetery cemetery;
-    [SerializeField] TextMeshPro TotalZombieAmountText;
-    [SerializeField] TextMeshPro BloodAmountText;
-    [SerializeField] TextMeshPro ZombiePriceText;
-    [SerializeField] TextMeshPro ArcherPriceText;
-    [SerializeField] TextMeshPro GhoulPriceText;
-    [SerializeField] TextMeshPro VampirePriceText;
-    [SerializeField] TextMeshPro AlchemistPriceText;
-    [SerializeField] TextMeshPro ZombieAmountText;
-    [SerializeField] TextMeshPro ArcherAmountText;
-    [SerializeField] TextMeshPro GhoulAmountText;
-    [SerializeField] TextMeshPro VampireAmountText;
-    [SerializeField] TextMeshPro AlchemistAmountText;
+    [SerializeField] TextMeshProUGUI TotalZombieAmountText;
+    [SerializeField] TextMeshProUGUI BloodAmountText;
+    [SerializeField] TextMeshProUGUI ZombieZombiePriceText;
+    [SerializeField] TextMeshProUGUI ZombieBloodPriceText;
+    [SerializeField] TextMeshProUGUI ArcherZombiePriceText;
+    [SerializeField] TextMeshProUGUI ArcherBloodPriceText;
+    [SerializeField] TextMeshProUGUI GhoulZombiePriceText;
+    [SerializeField] TextMeshProUGUI GhoulBloodPriceText;
+    [SerializeField] TextMeshProUGUI VampireZombiePriceText;
+    [SerializeField] TextMeshProUGUI VampireBloodPriceText;
+    [SerializeField] TextMeshProUGUI AlchemistZombiePriceText;
+    [SerializeField] TextMeshProUGUI AlchemistBloodPriceText;
+    [SerializeField] TextMeshProUGUI ZombieAmountText;
+    [SerializeField] TextMeshProUGUI ArcherAmountText;
+    [SerializeField] TextMeshProUGUI GhoulAmountText;
+    [SerializeField] TextMeshProUGUI VampireAmountText;
+    [SerializeField] TextMeshProUGUI AlchemistAmountText;
     public void Init(Price zombiePrice, Price archerPrice, Price ghoulPrice, Price vampirePrice, Price alchemistPrice)
     {
-        ZombiePriceText.text = zombiePrice.ToString();
-        ArcherPriceText.text = archerPrice.ToString();
-        GhoulPriceText.text = ghoulPrice.ToString();
-        VampirePriceText.text = vampirePrice.ToString();
-        AlchemistPriceText.text = alchemistPrice.ToString();
+        ZombieZombiePriceText.text = zombiePrice.bodyPrice.ToString();
+        ZombieBloodPriceText.text = zombiePrice.bloodPrice.ToString();
+        ArcherZombiePriceText.text = archerPrice.bodyPrice.ToString();
+        ArcherBloodPriceText.text = archerPrice.bloodPrice.ToString();
+        GhoulZombiePriceText.text = ghoulPrice.bodyPrice.ToString();
+        GhoulBloodPriceText.text = ghoulPrice.bloodPrice.ToString();
+        VampireZombiePriceText.text = vampirePrice.bodyPrice.ToString();
+        VampireBloodPriceText.text = vampirePrice.bloodPrice.ToString();
+        AlchemistZombiePriceText.text = alchemistPrice.bodyPrice.ToString();
+        AlchemistBloodPriceText.text = alchemistPrice.bloodPrice.ToString();
     }
     public void OpenMenu(Cemetery cemetery)
     {

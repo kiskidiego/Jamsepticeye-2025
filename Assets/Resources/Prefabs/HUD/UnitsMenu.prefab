@@ -425,6 +425,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitMenu
   cemetery: {fileID: 0}
+  TotalZombieAmountText: {fileID: 6122391854749592097}
+  BloodAmountText: {fileID: 6858145897001944724}
+  ZombieZombiePriceText: {fileID: 1117294541369576839}
+  ZombieBloodPriceText: {fileID: 3679002170928639158}
+  ArcherZombiePriceText: {fileID: 6595603446067149673}
+  ArcherBloodPriceText: {fileID: 3680751207951643622}
+  GhoulZombiePriceText: {fileID: 6668558974996020259}
+  GhoulBloodPriceText: {fileID: 5895946829775102549}
+  VampireZombiePriceText: {fileID: 2393825161872720303}
+  VampireBloodPriceText: {fileID: 8951822850703550992}
+  AlchemistZombiePriceText: {fileID: 4988400478009993246}
+  AlchemistBloodPriceText: {fileID: 8823709369919202722}
+  ZombieAmountText: {fileID: 741939027225537248}
+  ArcherAmountText: {fileID: 7230012295670343249}
+  GhoulAmountText: {fileID: 6463148571084589026}
+  VampireAmountText: {fileID: 6186881621312424960}
+  AlchemistAmountText: {fileID: 5052323743793784827}
 --- !u!1 &1481311940689423446
 GameObject:
   m_ObjectHideFlags: 0

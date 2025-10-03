@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public UnitMenu unitMenu;
     public List<AllyUnit> AlliedUnits => _alliedUnits;
     public static GameManager Instance { get; private set; } // Singleton instance, new game managers will override old ones
     public Hittable Castle => _castle;
@@ -26,8 +27,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] AllyUnitPrice[] _unitPrices;
     [SerializeField] SpellPrice[] _spellPrices;
     [SerializeField] GameObject _spellCastingMenu;
-    [SerializeField] public readonly UnitMenu unitMenu;
-
     List<BaseSpell> _unlockedSpells = new List<BaseSpell>();
     List<AllyUnit> _alliedUnits = new List<AllyUnit>();
     List<EnemyUnit> _enemyUnits = new List<EnemyUnit>();

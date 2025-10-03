@@ -168,13 +168,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6fec76b0ec94604890503ce357438ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyUnit
-  _maxHealth: 10
+  _maxHealth: 50
   _size: 0.5
-  _movementSpeed: 10
+  _movementSpeed: 9
   _cooldownBetweenAttacks: 0.2
   _spawnTweenDuration: 1
   _bodyReward: 1
-  _bloodReward: 3
+  _bloodReward: 15
 --- !u!114 &-2121596272516447083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,8 +191,8 @@ MonoBehaviour:
   _hastenMultiplier: 1
   paused: 1
   _isAlly: 0
-  _damage: 15
-  _attackSpeed: 0.75
+  _damage: 50
+  _attackCooldown: 0.75
   _range: 15
   _targetingPriority: 1
   _attackSound:

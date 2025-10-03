@@ -46,9 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edb82c443d66f5a4fbe71b8a184d1cc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AllyUnit
-  _maxHealth: 10
+  _maxHealth: 300
   _size: 1
-  _movementSpeed: 10
+  _movementSpeed: 11
   _cooldownBetweenAttacks: 0.2
   _spawnTweenDuration: 1
   _cemetery: {fileID: 0}
@@ -69,8 +69,8 @@ MonoBehaviour:
   _hastenMultiplier: 1
   paused: 1
   _isAlly: 0
-  _damage: 6
-  _attackSpeed: 0.6
+  _damage: 20
+  _attackCooldown: 1
   _range: 1
   _targetingPriority: 0
   _attackSound:

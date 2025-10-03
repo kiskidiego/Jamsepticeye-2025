@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int _mapWidth = 10;
     [SerializeField] private int _mapHeight = 10;
     [SerializeField] Round[] _rounds;
+    [SerializeField] Round _freePlay;
+    [SerializeField] float _freePlayEnemyIncreaseRate = 1.1f; // Percentage increase of enemies per round in free play mode
     [SerializeField] int _maxBlood = 20;
     [SerializeField] AllyUnit _zombiePrefab;
     [SerializeField] Transform _enemySpawnPoint;
@@ -121,7 +123,16 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void PrepareRound()
     {
-        Round round = _rounds[_currentRound];
+        Round round;
+        if (_currentRound < _rounds.Length)
+        {
+            round = _rounds[_currentRound];
+        }
+        else
+        {
+            round = _freePlay;
+            round.TotalRandomEnemies = Mathf.RoundToInt(round.TotalRandomEnemies * Mathf.Pow(_freePlayEnemyIncreaseRate, _currentRound - _rounds.Length + 1)); // Increase enemies in free play mode
+        }
         for (int i = 0; i < round.TotalRandomEnemies; i++)
         {
             float rand = Random.Range(0f, 1f);

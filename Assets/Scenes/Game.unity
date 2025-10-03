@@ -217,7 +217,23 @@ MonoBehaviour:
   _tileSize: 5
   _mapWidth: 23
   _mapHeight: 23
-  _rounds: []
+  _rounds:
+  - RandomEnemiesInRound: []
+    TotalRandomEnemies: 0
+    FixedEnemiesInRound:
+    - enemyUnit: {fileID: 7148050295888517780, guid: db4d3d4d874e18f4593a39341d41ac09, type: 3}
+      amount: 4
+  - RandomEnemiesInRound:
+    - enemyUnit: {fileID: 7148050295888517780, guid: db4d3d4d874e18f4593a39341d41ac09, type: 3}
+      Probability: 0.5
+    - enemyUnit: {fileID: 4035190016762269728, guid: 37bac6987c8960843beecb0b5e0be348, type: 3}
+      Probability: 0.5
+    TotalRandomEnemies: 3
+    FixedEnemiesInRound:
+    - enemyUnit: {fileID: 7148050295888517780, guid: db4d3d4d874e18f4593a39341d41ac09, type: 3}
+      amount: 2
+    - enemyUnit: {fileID: 4035190016762269728, guid: 37bac6987c8960843beecb0b5e0be348, type: 3}
+      amount: 1
   _maxBlood: 20
   _zombiePrefab: {fileID: 1818889335017361458, guid: a343a85fa5da0ab449f1537b5171dbf5, type: 3}
   _enemySpawnPoint: {fileID: 110342393}
@@ -231,22 +247,22 @@ MonoBehaviour:
   - unitType: 1
     unitPrefab: {fileID: 8454535446519413816, guid: 7efd604c5c662ef4f996bde3896e2cb6, type: 3}
     price:
-      bodyPrice: 10
+      bodyPrice: 3
       bloodPrice: 0
   - unitType: 2
     unitPrefab: {fileID: 443447381351863103, guid: 51a2ed3177c1bca47866b667130d5963, type: 3}
     price:
-      bodyPrice: 25
+      bodyPrice: 10
       bloodPrice: 0
   - unitType: 3
     unitPrefab: {fileID: 5665511103590708095, guid: 5debbbc0a0fe56641b6aab089023c08b, type: 3}
     price:
-      bodyPrice: 30
+      bodyPrice: 15
       bloodPrice: 0
   - unitType: 4
     unitPrefab: {fileID: 7148454188158189209, guid: 5c248d0829bce914396e511683a2a249, type: 3}
     price:
-      bodyPrice: 40
+      bodyPrice: 20
       bloodPrice: 0
 --- !u!4 &771793857
 Transform:

@@ -258,9 +258,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edb82c443d66f5a4fbe71b8a184d1cc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AllyUnit
-  _maxHealth: 10
+  _maxHealth: 100
   _size: 0.5
-  _movementSpeed: 10
+  _movementSpeed: 9
   _cooldownBetweenAttacks: 0.2
   _spawnTweenDuration: 1
   _cemetery: {fileID: 0}
@@ -282,7 +282,7 @@ MonoBehaviour:
   paused: 1
   _isAlly: 0
   _damage: 1
-  _attackSpeed: 1
+  _attackCooldown: 0.5
   _range: 1
   _targetingPriority: 0
   _attackSound:
@@ -309,7 +309,7 @@ MonoBehaviour:
   paused: 1
   _isAlly: 0
   _damage: 20
-  _attackSpeed: 0.4
+  _attackCooldown: 3
   _range: 1
   _targetingPriority: 0
   _attackSound:
@@ -319,5 +319,5 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
-  _healingPerHit: 2.5
-  _bloodPerHit: 1
+  _healingPerHit: 20
+  _bloodPerHit: 5

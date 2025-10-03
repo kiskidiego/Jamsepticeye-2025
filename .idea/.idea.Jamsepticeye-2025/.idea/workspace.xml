@@ -5,12 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a7abe1bd-7087-4d9b-a871-17635c027804" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Plugins/FMOD/Resources/FMODStudioSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Plugins/FMOD/Resources/FMODStudioSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Scripts/BaseTower.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Scripts/BaseTower.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Jamsepticeye-2025/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Jamsepticeye-2025/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/Scripts/BaseUnit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Scripts/BaseUnit.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/Scripts/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Scripts/GameManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ShaderGraphSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ShaderGraphSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/URPProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/URPProjectSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Scripts/Towers/BarrierGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Scripts/Towers/BarrierGenerator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Scripts/Towers/BoneTower.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Scripts/Towers/BoneTower.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Scripts/Towers/Cemetery.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Scripts/Towers/Cemetery.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Scripts/Towers/GoblinomancyStudy.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Scripts/Towers/GoblinomancyStudy.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Mariio.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Mariio.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +105,7 @@
       <updated>1759402254461</updated>
       <workItem from="1759402256564" duration="2889000" />
       <workItem from="1759409928766" duration="670000" />
-      <workItem from="1759410629189" duration="10093000" />
+      <workItem from="1759410629189" duration="11812000" />
     </task>
     <servers />
   </component>

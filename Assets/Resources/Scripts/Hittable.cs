@@ -13,6 +13,7 @@ public class Hittable : MonoBehaviour
     protected float _currentHealth;
     protected float _overHealth = 0f;
     protected float _sizeSquared;
+    
 
     /// <summary>
     /// Initializes the object's current health to its maximum health, and its squared size. Can be overriden by derived classes.
@@ -26,6 +27,7 @@ public class Hittable : MonoBehaviour
     /// <summary>
     /// Subtracts damage from the object's current health. If health drops to 0 or below, the object dies.
     /// Can also heal if damage is negative. Healing cannot exceed max health.
+    /// If the object has a barrier, damage is subtracted from the barrier health first.
     /// </summary>
     /// <param name="damage">Amount to subtract from current health.</param>
     public virtual void TakeDamage(float damage)

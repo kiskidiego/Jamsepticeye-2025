@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public UnitMenu unitMenu;
+    public UnitMenu unitMenu => _unitMenu;
     public List<AllyUnit> AlliedUnits => _alliedUnits;
     public static GameManager Instance { get; private set; } // Singleton instance, new game managers will override old ones
     public Hittable Castle => _castle;
     [HideInInspector] public bool[] UnlockedSpells;
     public PhaseEnum CurrentPhase => _currentPhase;
-    public AllyUnitPrice[] UnitPrices => _unitPrices;
     [SerializeField] private Cemetery _castle;
     [SerializeField] private int _initialZombies = 5;
     [SerializeField] private Tile _tilePrefab;
@@ -24,9 +23,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] AllyUnit _zombiePrefab;
     [SerializeField] Transform _enemySpawnPoint;
     [SerializeField] Vector2 _enemySpawnSize = new Vector2(40f, 20f);
-    [SerializeField] AllyUnitPrice[] _unitPrices;
-    [SerializeField] SpellPrice[] _spellPrices;
+    [SerializeField] List<AllyUnitPrice> _unitPrices;
+    [SerializeField] List<SpellPrice> _spellPrices;
+    [SerializeField] List<TowerPrice> _towerPrices;
     [SerializeField] GameObject _spellCastingMenu;
+    [SerializeField] UnitMenu _unitMenu;
+    [SerializeField] ConstructionMenu _constructionMenu;
     List<BaseSpell> _unlockedSpells = new List<BaseSpell>();
     List<AllyUnit> _alliedUnits = new List<AllyUnit>();
     List<EnemyUnit> _enemyUnits = new List<EnemyUnit>();
@@ -54,8 +56,10 @@ public class GameManager : MonoBehaviour
         UnlockedSpells = new bool[1];
         _towers.Add(_castle);
         _cemeteries.Add(_castle);
-        unitMenu.gameObject.SetActive(false);
-        unitMenu.Init(_unitPrices[0].price, _unitPrices[1].price, _unitPrices[2].price, _unitPrices[3].price, _unitPrices[4].price);
+        _unitMenu.gameObject.SetActive(false);
+        _unitMenu.Init(_unitPrices);
+
+        _constructionMenu.Init(_towerPrices);
     }
 
     void Update()
@@ -611,6 +615,11 @@ public class GameManager : MonoBehaviour
     {
         _towers.Remove(tower);
         Destroy(tower.gameObject);
+    }
+
+    public void Construct(TowersEnum towerType)
+    {
+        throw new System.NotImplementedException();
     }
 
     public void UnlockSpell(BaseSpell spellType)

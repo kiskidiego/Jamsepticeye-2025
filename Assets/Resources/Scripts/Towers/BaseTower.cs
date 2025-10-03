@@ -6,7 +6,6 @@ public abstract class BaseTower : Hittable
 {
     const float SELL_CASHBACK = 0.7f; // Percentage of bodies returned when sold.
     
-    [SerializeField] protected TargetingPriorities _targetingPriority;
     [SerializeField] protected int _bodiesPrice;
     [SerializeField] EventReference _placeSound;
     [SerializeField] EventReference _interactSound;

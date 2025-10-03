@@ -89,4 +89,16 @@ public class Tile : MonoBehaviour
     {
         _highlightEffectGameObject.SetActive(false);
     }
+
+    /// <summary>
+    /// If there is a tower on this tile, interact with it.
+    /// </summary>
+    public void InteractWithTower()
+    {
+        if (_currentBuilding == null) return;
+        if (_currentBuilding.TryGetComponent<BaseTower>(out BaseTower tower))
+        {
+            tower.OnInteract();
+        }
+    }
 }

@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Cemetery : BaseTower
 {
+    public List<AllyUnit> Units => _units;
     public Transform UnitSpawnPoint => _unitSpawnPoint;
     private List<AllyUnit> _units = new List<AllyUnit>();
     [SerializeField] int _capacity = 20;
     [SerializeField] float _spawnRadius;
-    [SerializeField] private Canvas _unitMenu;
     [SerializeField] private Transform _unitSpawnPoint = null; // Point where units will spawn
 
     protected override void Start()
@@ -21,6 +21,24 @@ public class Cemetery : BaseTower
     }
 
     protected override void OnSell()
+    {
+        MoveUnitsAway();
+
+        GameManager.Instance.CleanUpCemetery(this);
+
+        base.OnSell();
+    }
+
+    protected override void Die()
+    {
+        MoveUnitsAway();
+
+        GameManager.Instance.CleanUpCemetery(this);
+
+        base.Die();
+    }
+
+    void MoveUnitsAway()
     {
         List<Cemetery> cemeteries = GameManager.Instance.GetCemeteries(this);
 
@@ -45,23 +63,14 @@ public class Cemetery : BaseTower
                 _units[Random.Range(0, _units.Count)].ChangeCemetery(cemetery);
             }
         }
-
-        base.OnSell();
-
-        GameManager.Instance.CleanUpCemetery(this);
     }
 
-    protected override void Die()
-    {
-        base.Die();
-    }
-
-    protected override void OnInteract()
+    public override void OnInteract()
     {
         if (_paused) return;
         base.OnInteract();
-        
-        _unitMenu.enabled = true;
+
+        GameManager.Instance.unitMenu.OpenMenu(this);
     }
 
     /// <summary>

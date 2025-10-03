@@ -25,7 +25,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] Vector2 _enemySpawnSize = new Vector2(40f, 20f);
     [SerializeField] AllyUnitPrice[] _unitPrices;
     [SerializeField] SpellPrice[] _spellPrices;
-    [SerializeField] GameObject spellCastingMenu;
+    [SerializeField] GameObject _spellCastingMenu;
+    [SerializeField] public readonly UnitMenu unitMenu;
 
     List<BaseSpell> _unlockedSpells = new List<BaseSpell>();
     List<AllyUnit> _alliedUnits = new List<AllyUnit>();
@@ -54,6 +55,8 @@ public class GameManager : MonoBehaviour
         UnlockedSpells = new bool[1];
         _towers.Add(_castle);
         _cemeteries.Add(_castle);
+        unitMenu.gameObject.SetActive(false);
+        unitMenu.Init(_unitPrices[0].price, _unitPrices[1].price, _unitPrices[2].price, _unitPrices[3].price, _unitPrices[4].price);
     }
 
     void Update()

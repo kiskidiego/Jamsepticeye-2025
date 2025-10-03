@@ -6,7 +6,8 @@ public class CameraController : MonoBehaviour
     {
         Spellcasting,
         Building,
-        Demolishing
+        Demolishing,
+        Selecting
     }
     [SerializeField] private float _moveSpeed = 5f;
     private Camera _camera;
@@ -49,6 +50,9 @@ public class CameraController : MonoBehaviour
                         case InteractionMode.Building:
                             GameObject towerPrefab = Resources.Load<GameObject>("Prefabs/TestTower");
                             tile.ConstructBuilding(towerPrefab);
+                            break;
+                        case InteractionMode.Selecting:
+                            tile.InteractWithTower();
                             break;
                     }
                 }

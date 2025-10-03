@@ -4,7 +4,7 @@ public class GoblinomancyStudy : BaseTower
 {
     [SerializeField] private Canvas _spellMenu;
 
-    protected override void OnInteract()
+    public override void OnInteract()
     {
         if (_paused) return;
 

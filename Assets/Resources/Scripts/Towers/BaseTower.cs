@@ -28,7 +28,7 @@ public abstract class BaseTower : Hittable
     /// </summary>
     protected virtual void OnPrepare()
     {
-        
+
     }
     
     /// <summary>
@@ -52,7 +52,7 @@ public abstract class BaseTower : Hittable
     /// <summary>
     /// Tower behaviour when clicked.
     /// </summary>
-    protected virtual void OnInteract()
+    public virtual void OnInteract()
     {
         if (_paused) return;
         AudioManager.instance.PlayOneShot(_interactSound, transform.position);

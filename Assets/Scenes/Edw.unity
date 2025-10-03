@@ -632,6 +632,9 @@ VisualEffect:
       - m_Value: 200
         m_Name: NoiseScale
         m_Overridden: 1
+      - m_Value: 5
+        m_Name: HealingLife
+        m_Overridden: 1
     m_Vector2f:
       m_Array:
       - m_Value: {x: 0, y: -0.2}
@@ -1164,6 +1167,9 @@ VisualEffect:
       m_Array:
       - m_Value: 200
         m_Name: NoiseScale
+        m_Overridden: 1
+      - m_Value: 5
+        m_Name: HealingLife
         m_Overridden: 1
     m_Vector2f:
       m_Array:

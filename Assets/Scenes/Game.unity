@@ -414,7 +414,37 @@ MonoBehaviour:
     price:
       bodyPrice: 10
       bloodPrice: 30
-  _towerPrices: []
+  _towerPrices:
+  - towerType: 0
+    towerPrefab: {fileID: 7654186673438258621, guid: 30006a62f8d6e0844baf25cd5fe86d2f, type: 3}
+    price:
+      bodyPrice: 3
+      bloodPrice: 10
+  - towerType: 1
+    towerPrefab: {fileID: 8311386977605958815, guid: e813428c0e57aff4da194bf437e757a4, type: 3}
+    price:
+      bodyPrice: 1
+      bloodPrice: 15
+  - towerType: 2
+    towerPrefab: {fileID: 3668697348392549827, guid: d0abf1f66108d3b46934362f6a46037a, type: 3}
+    price:
+      bodyPrice: 5
+      bloodPrice: 12
+  - towerType: 3
+    towerPrefab: {fileID: 9047792337331519980, guid: 5e404a6f963bf524396187839ffd6e2d, type: 3}
+    price:
+      bodyPrice: 30
+      bloodPrice: 30
+  - towerType: 4
+    towerPrefab: {fileID: 6955597548649379628, guid: 48f3f35b9e3707a47a667570f83b34c8, type: 3}
+    price:
+      bodyPrice: 30
+      bloodPrice: 30
+  - towerType: 5
+    towerPrefab: {fileID: 3945266096304189868, guid: 1bd7eeb634adbc9428b7b39a96857f59, type: 3}
+    price:
+      bodyPrice: 50
+      bloodPrice: 50
   _spellCastingMenu: {fileID: 0}
   _unitMenu: {fileID: 266918627}
   _constructionMenu: {fileID: 748327467}
@@ -556,7 +586,6 @@ MonoBehaviour:
       Data3: -1616460625
       Data4: -650137001
     Path: event:/SpawnGoblin
-  _targetingPriority: 0
   _bodiesPrice: 0
   _placeSound:
     Guid:

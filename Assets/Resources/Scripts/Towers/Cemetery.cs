@@ -77,15 +77,15 @@ public class Cemetery : BaseTower
     /// Buys a unit of the specified type if enough resources are available.
     /// </summary>
     /// <param name="unitId"></param>
-    public void BuyUnit(AllyUnitsEnum unitId)
+    public bool BuyUnit(AllyUnitsEnum unitId)
     {
         GameManager manager = GameManager.Instance;
         AllyUnitPrice unitPrice = manager.GetUnitPrice(unitId);
-        if (unitPrice == null) return;
+        if (unitPrice == null) return false;
 
-        if (manager.GetBodies() < unitPrice.price.bodyPrice || manager.GetBlood() < unitPrice.price.bloodPrice) return;
+        if (manager.GetBodies() < unitPrice.price.bodyPrice || manager.GetBlood() < unitPrice.price.bloodPrice) return false;
 
-        if (IsFull()) return;
+        if (IsFull()) return false;
 
         manager.RemoveBodies(-unitPrice.price.bodyPrice);
         manager.AddBlood(-unitPrice.price.bloodPrice);
@@ -97,6 +97,7 @@ public class Cemetery : BaseTower
         newUnit.transform.DOScale(Vector3.one, 0.5f).From(Vector3.zero).SetEase(Ease.OutBack);
 
         AddUnit(newUnit);
+        return true;
     }
     public void AddUnit(AllyUnit unit)
     {

@@ -259,6 +259,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyUnit
   _maxHealth: 15
   _size: 0.5
+  _deathSound:
+    Guid:
+      Data1: 592000093
+      Data2: 1317548066
+      Data3: -133462626
+      Data4: 1049027934
+    Path: event:/GoblinDeath
   _movementSpeed: 7
   _cooldownBetweenAttacks: 0.2
   _spawnTweenDuration: 1
@@ -279,7 +286,7 @@ MonoBehaviour:
   _slowMultiplier: 1
   _hastenMultiplier: 1
   paused: 1
-  _isAlly: 0
+  isAlly: 0
   _damage: 10
   _attackCooldown: 2.5
   _range: 15

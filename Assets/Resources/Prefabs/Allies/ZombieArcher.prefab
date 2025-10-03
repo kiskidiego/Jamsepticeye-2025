@@ -259,11 +259,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AllyUnit
   _maxHealth: 10
   _size: 0.5
+  _deathSound:
+    Guid:
+      Data1: 592000093
+      Data2: 1317548066
+      Data3: -133462626
+      Data4: 1049027934
+    Path: event:/GoblinDeath
   _movementSpeed: 7
   _cooldownBetweenAttacks: 0.2
   _spawnTweenDuration: 1
   _cemetery: {fileID: 0}
   spawnRadius: 5
+  _spawnSound:
+    Guid:
+      Data1: 223465363
+      Data2: 1234368518
+      Data3: -1616460625
+      Data4: -650137001
+    Path: event:/SpawnGoblin
 --- !u!114 &3289619905744163572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,7 +293,7 @@ MonoBehaviour:
   _slowMultiplier: 1
   _hastenMultiplier: 1
   paused: 1
-  _isAlly: 0
+  isAlly: 0
   _damage: 10
   _attackCooldown: 1
   _range: 20

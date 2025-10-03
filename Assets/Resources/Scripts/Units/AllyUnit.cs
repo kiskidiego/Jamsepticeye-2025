@@ -17,6 +17,8 @@ public class AllyUnit : BaseUnit
     {
         base.Start();
 
+        Debug.Log($"AllyUnit spawned: {unitType}");
+
         AudioManager.instance.PlayOneShot(_spawnSound, transform.position);
         transform.DOMove(_cemetery.UnitSpawnPoint.position + new Vector3(
             Random.Range(-spawnRadius, spawnRadius),

@@ -1,3 +1,4 @@
+using FMODUnity;
 using TMPro;
 using UnityEngine;
 
@@ -21,6 +22,7 @@ public class UnitMenu : MonoBehaviour
     [SerializeField] TextMeshProUGUI GhoulAmountText;
     [SerializeField] TextMeshProUGUI VampireAmountText;
     [SerializeField] TextMeshProUGUI AlchemistAmountText;
+    [SerializeField] EventReference _menuInteractionSound;
     public void Init(Price zombiePrice, Price archerPrice, Price ghoulPrice, Price vampirePrice, Price alchemistPrice)
     {
         ZombieZombiePriceText.text = zombiePrice.bodyPrice.ToString();
@@ -78,7 +80,10 @@ public class UnitMenu : MonoBehaviour
     }
     public void BuyZombie()
     {
-        cemetery.BuyUnit(AllyUnitsEnum.Zombie);
+        if(!cemetery.BuyUnit(AllyUnitsEnum.Zombie)) return;
+
+        AudioManager.instance.PlayOneShot(_menuInteractionSound, transform.position);
+
         int zombieAmount = 0;
         foreach (AllyUnit unit in cemetery.Units)
         {
@@ -90,7 +95,10 @@ public class UnitMenu : MonoBehaviour
     }
     public void BuyArcher()
     {
-        cemetery.BuyUnit(AllyUnitsEnum.Archer);
+        if(!cemetery.BuyUnit(AllyUnitsEnum.Archer)) return;
+
+        AudioManager.instance.PlayOneShot(_menuInteractionSound, transform.position);
+
         int archerAmount = 0;
         int zombieAmount = 0;
         foreach (AllyUnit unit in cemetery.Units)
@@ -107,7 +115,10 @@ public class UnitMenu : MonoBehaviour
     }
     public void BuyGhoul()
     {
-        cemetery.BuyUnit(AllyUnitsEnum.Ghoul);
+        if(!cemetery.BuyUnit(AllyUnitsEnum.Ghoul)) return;
+
+        AudioManager.instance.PlayOneShot(_menuInteractionSound, transform.position);
+
         int ghoulAmount = 0;
         int zombieAmount = 0;
         foreach (AllyUnit unit in cemetery.Units)
@@ -124,7 +135,10 @@ public class UnitMenu : MonoBehaviour
     }
     public void BuyVampire()
     {
-        cemetery.BuyUnit(AllyUnitsEnum.Vampire);
+        if(!cemetery.BuyUnit(AllyUnitsEnum.Vampire)) return;
+
+        AudioManager.instance.PlayOneShot(_menuInteractionSound, transform.position);
+
         int vampireAmount = 0;
         int zombieAmount = 0;
         foreach (AllyUnit unit in cemetery.Units)
@@ -141,7 +155,10 @@ public class UnitMenu : MonoBehaviour
     }
     public void BuyAlchemist()
     {
-        cemetery.BuyUnit(AllyUnitsEnum.Alchemist);
+        if(!cemetery.BuyUnit(AllyUnitsEnum.Alchemist)) return;
+
+        AudioManager.instance.PlayOneShot(_menuInteractionSound, transform.position);
+
         int alchemistAmount = 0;
         int zombieAmount = 0;
         foreach (AllyUnit unit in cemetery.Units)
@@ -158,6 +175,7 @@ public class UnitMenu : MonoBehaviour
     }
     public void CloseMenu()
     {
+        AudioManager.instance.PlayOneShot(_menuInteractionSound, transform.position);
         gameObject.SetActive(false);
     }
 }

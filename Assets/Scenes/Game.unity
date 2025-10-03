@@ -244,6 +244,46 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7482184117333195867, guid: dd0d41fdc86adc949a50df9109433985, type: 3}
+      propertyPath: <music>k__BackingField.Path
+      value: event:/Silence
+      objectReference: {fileID: 0}
+    - target: {fileID: 7482184117333195867, guid: dd0d41fdc86adc949a50df9109433985, type: 3}
+      propertyPath: <ambience>k__BackingField.Path
+      value: event:/Silence
+      objectReference: {fileID: 0}
+    - target: {fileID: 7482184117333195867, guid: dd0d41fdc86adc949a50df9109433985, type: 3}
+      propertyPath: <music>k__BackingField.Guid.Data1
+      value: -1313151550
+      objectReference: {fileID: 0}
+    - target: {fileID: 7482184117333195867, guid: dd0d41fdc86adc949a50df9109433985, type: 3}
+      propertyPath: <music>k__BackingField.Guid.Data2
+      value: 1296736903
+      objectReference: {fileID: 0}
+    - target: {fileID: 7482184117333195867, guid: dd0d41fdc86adc949a50df9109433985, type: 3}
+      propertyPath: <music>k__BackingField.Guid.Data3
+      value: 198738608
+      objectReference: {fileID: 0}
+    - target: {fileID: 7482184117333195867, guid: dd0d41fdc86adc949a50df9109433985, type: 3}
+      propertyPath: <music>k__BackingField.Guid.Data4
+      value: 865376899
+      objectReference: {fileID: 0}
+    - target: {fileID: 7482184117333195867, guid: dd0d41fdc86adc949a50df9109433985, type: 3}
+      propertyPath: <ambience>k__BackingField.Guid.Data1
+      value: -1313151550
+      objectReference: {fileID: 0}
+    - target: {fileID: 7482184117333195867, guid: dd0d41fdc86adc949a50df9109433985, type: 3}
+      propertyPath: <ambience>k__BackingField.Guid.Data2
+      value: 1296736903
+      objectReference: {fileID: 0}
+    - target: {fileID: 7482184117333195867, guid: dd0d41fdc86adc949a50df9109433985, type: 3}
+      propertyPath: <ambience>k__BackingField.Guid.Data3
+      value: 198738608
+      objectReference: {fileID: 0}
+    - target: {fileID: 7482184117333195867, guid: dd0d41fdc86adc949a50df9109433985, type: 3}
+      propertyPath: <ambience>k__BackingField.Guid.Data4
+      value: 865376899
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -498,11 +538,11 @@ MonoBehaviour:
   _size: 5
   _deathSound:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: 223465363
+      Data2: 1234368518
+      Data3: -1616460625
+      Data4: -650137001
+    Path: event:/SpawnGoblin
   _targetingPriority: 0
   _bodiesPrice: 0
   _placeSound:
@@ -796,25 +836,6 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
---- !u!1 &2004138398 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8699030292855443731, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
-  m_PrefabInstance: {fileID: 3034327707157753441}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2004138404
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2004138398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioListener
-  nonRigidbodyVelocity: 0
-  attenuationObject: {fileID: 0}
 --- !u!1001 &3034327707157753441
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -871,13 +892,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Main Camera
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8699030292855443731, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2004138404}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

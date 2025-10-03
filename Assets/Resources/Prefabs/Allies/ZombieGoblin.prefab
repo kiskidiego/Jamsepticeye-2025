@@ -242,7 +242,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3367147025405800019}
-  - component: {fileID: 7685138834005623286}
+  - component: {fileID: 1818889335017361458}
   - component: {fileID: -4538686881225131809}
   m_Layer: 0
   m_Name: ZombieGoblin
@@ -267,7 +267,7 @@ Transform:
   - {fileID: 8389789276964654732}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7685138834005623286
+--- !u!114 &1818889335017361458
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -276,16 +276,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 7723771758560292652}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55f8a670f82601a47994af231f3e661f, type: 3}
+  m_Script: {fileID: 11500000, guid: edb82c443d66f5a4fbe71b8a184d1cc7, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BaseUnit
-  _maxHealth: 20
+  m_EditorClassIdentifier: Assembly-CSharp::AllyUnit
+  _maxHealth: 10
   _size: 0.5
   _movementSpeed: 10
   _cooldownBetweenAttacks: 0.2
-  _bodyReward: 0
-  _bloodReward: 0
-  _isAlly: 1
+  _spawnTweenDuration: 1
+  _cemetery: {fileID: 0}
+  spawnRadius: 5
 --- !u!114 &-4538686881225131809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -304,7 +304,7 @@ MonoBehaviour:
   _isAlly: 0
   _damage: 5
   _attackSpeed: 0.9
-  range: 1
+  _range: 1
   _targetingPriority: 0
   _attackSound:
     Guid:

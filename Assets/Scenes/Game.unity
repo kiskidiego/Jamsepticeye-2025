@@ -174,12 +174,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 155996395}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 50, y: 0, z: 50}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 3, y: 0, z: 0.5}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1402729767}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &771793855
 GameObject:
@@ -212,48 +212,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   UnlockedSpells: 
   _castle: {fileID: 1402729768}
+  _initialZombies: 5
   _tilePrefab: {fileID: 7562894851678332238, guid: 8ed5b9d31768877409b23bc26bd753f5, type: 3}
   _tileSize: 5
   _mapWidth: 23
   _mapHeight: 23
-  _rounds:
-  - RandomEnemiesInRound: []
-    TotalRandomEnemies: 0
-    FixedEnemiesInRound:
-    - EnemyUnit: {fileID: 4934002821833302945, guid: 37bac6987c8960843beecb0b5e0be348, type: 3}
-      amount: 3
-    - EnemyUnit: {fileID: -8374564441741986563, guid: cb950e8e25b431f44b1eae7c8151f505, type: 3}
-      amount: 3
-    - EnemyUnit: {fileID: 7685138834005623286, guid: db4d3d4d874e18f4593a39341d41ac09, type: 3}
-      amount: 3
-    - EnemyUnit: {fileID: 3970597870596697276, guid: 20dc24c2a8ee40a4b8a5c49b3ee9c081, type: 3}
-      amount: 3
-    - EnemyUnit: {fileID: 5948013963128131574, guid: 96ffdf476034ee648a86ca433d2e0846, type: 3}
-      amount: 3
-  - RandomEnemiesInRound: []
-    TotalRandomEnemies: 0
-    FixedEnemiesInRound:
-    - EnemyUnit: {fileID: 7685138834005623286, guid: db4d3d4d874e18f4593a39341d41ac09, type: 3}
-      amount: 5
-  - RandomEnemiesInRound:
-    - EnemyUnit: {fileID: 7685138834005623286, guid: db4d3d4d874e18f4593a39341d41ac09, type: 3}
-      Probability: 0.5
-    - EnemyUnit: {fileID: 4934002821833302945, guid: 37bac6987c8960843beecb0b5e0be348, type: 3}
-      Probability: 0.5
-    TotalRandomEnemies: 7
-    FixedEnemiesInRound:
-    - EnemyUnit: {fileID: 7685138834005623286, guid: db4d3d4d874e18f4593a39341d41ac09, type: 3}
-      amount: 5
-    - EnemyUnit: {fileID: 4934002821833302945, guid: 37bac6987c8960843beecb0b5e0be348, type: 3}
-      amount: 3
-  _maxBodies: 1000
+  _rounds: []
   _maxBlood: 20
-  _testAllies:
-  - {fileID: 7685138834005623286, guid: 5c248d0829bce914396e511683a2a249, type: 3}
-  _allySpawnPoint: {fileID: 155996396}
-  _allySpawnSize: {x: 10, y: 20}
+  _zombiePrefab: {fileID: 1818889335017361458, guid: a343a85fa5da0ab449f1537b5171dbf5, type: 3}
   _enemySpawnPoint: {fileID: 110342393}
   _enemySpawnSize: {x: 10, y: 20}
+  _unitPrices:
+  - unitType: 0
+    unitPrefab: {fileID: 1818889335017361458, guid: a343a85fa5da0ab449f1537b5171dbf5, type: 3}
+    price:
+      bodyPrice: 1
+      bloodPrice: 0
+  - unitType: 1
+    unitPrefab: {fileID: 8454535446519413816, guid: 7efd604c5c662ef4f996bde3896e2cb6, type: 3}
+    price:
+      bodyPrice: 10
+      bloodPrice: 0
+  - unitType: 2
+    unitPrefab: {fileID: 443447381351863103, guid: 51a2ed3177c1bca47866b667130d5963, type: 3}
+    price:
+      bodyPrice: 25
+      bloodPrice: 0
+  - unitType: 3
+    unitPrefab: {fileID: 5665511103590708095, guid: 5debbbc0a0fe56641b6aab089023c08b, type: 3}
+    price:
+      bodyPrice: 30
+      bloodPrice: 0
+  - unitType: 4
+    unitPrefab: {fileID: 7148454188158189209, guid: 5c248d0829bce914396e511683a2a249, type: 3}
+    price:
+      bodyPrice: 40
+      bloodPrice: 0
 --- !u!4 &771793857
 Transform:
   m_ObjectHideFlags: 0
@@ -363,11 +357,12 @@ Transform:
   m_GameObject: {fileID: 1402729766}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20, y: 0.5, z: 45}
+  m_LocalPosition: {x: 20, y: 0, z: 45}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1590084163}
+  - {fileID: 155996396}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1402729768
@@ -379,11 +374,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 1402729766}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27f8ae196e8755945821db571b096d6b, type: 3}
+  m_Script: {fileID: 11500000, guid: bf7997e3fd955ea47ae5f8f8c649a37c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Hittable
-  _maxHealth: 500
+  m_EditorClassIdentifier: Assembly-CSharp::Cemetery
+  _maxHealth: 100
   _size: 5
+  _targetingPriority: 0
+  _bodiesPrice: 0
+  _canAttack: 0
+  _damage: 0
+  _attackCooldown: 0
+  _capacity: 10
+  _spawnRadius: 15
+  _unitMenu: {fileID: 0}
+  _unitSpawnPoint: {fileID: 155996396}
 --- !u!1 &1590084162
 GameObject:
   m_ObjectHideFlags: 0
@@ -671,4 +675,3 @@ SceneRoots:
   - {fileID: 1033844809}
   - {fileID: 1402729767}
   - {fileID: 110342393}
-  - {fileID: 155996396}

@@ -28,19 +28,22 @@ public abstract class BaseTower : Hittable
     /// </summary>
     protected virtual void OnSell()
     {
-        GameManager.Instance.AddBodies(Mathf.RoundToInt(_bodiesPrice * SELL_CASHBACK));
-        Destroy(gameObject);
+        for(int i = 0; i < Mathf.RoundToInt(_bodiesPrice * SELL_CASHBACK * CurrentHealth / MaxHealth); i++)
+        {
+            GameManager.Instance.AddBody();
+        }
+        GameManager.Instance.RemoveTower(this);
     }
 
     protected virtual void WhenDestroyed()
     {
-        Destroy(gameObject);
+        GameManager.Instance.RemoveTower(this);
     }
 
     /// <summary>
     /// Tower behaviour when clicked.
     /// </summary>
-    protected virtual void OnClick()
+    protected virtual void OnInteract()
     {
     }
     /// <summary>

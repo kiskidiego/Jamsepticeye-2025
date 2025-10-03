@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5053830068302542396}
-  - component: {fileID: 7453026637412622406}
+  - component: {fileID: 443447381351863103}
   - component: {fileID: 4440692974190417714}
   m_Layer: 0
   m_Name: GhoulGoblin
@@ -34,7 +34,7 @@ Transform:
   - {fileID: 8547718672912777178}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7453026637412622406
+--- !u!114 &443447381351863103
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,16 +43,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 5802281431603513866}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55f8a670f82601a47994af231f3e661f, type: 3}
+  m_Script: {fileID: 11500000, guid: edb82c443d66f5a4fbe71b8a184d1cc7, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BaseUnit
-  _maxHealth: 50
+  m_EditorClassIdentifier: Assembly-CSharp::AllyUnit
+  _maxHealth: 10
   _size: 1
-  _movementSpeed: 11
+  _movementSpeed: 10
   _cooldownBetweenAttacks: 0.2
-  _bodyReward: 0
-  _bloodReward: 0
-  _isAlly: 1
+  _spawnTweenDuration: 1
+  _cemetery: {fileID: 0}
+  spawnRadius: 5
 --- !u!114 &4440692974190417714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71,7 +71,7 @@ MonoBehaviour:
   _isAlly: 0
   _damage: 6
   _attackSpeed: 0.6
-  range: 1
+  _range: 1
   _targetingPriority: 0
   _attackSound:
     Guid:

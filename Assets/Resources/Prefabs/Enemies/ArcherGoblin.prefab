@@ -220,7 +220,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3048664500812532442}
-  - component: {fileID: 4934002821833302945}
+  - component: {fileID: 4035190016762269728}
   - component: {fileID: 8091357199125041030}
   m_Layer: 0
   m_Name: ArcherGoblin
@@ -245,7 +245,7 @@ Transform:
   - {fileID: 1452689063382396228}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4934002821833302945
+--- !u!114 &4035190016762269728
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -254,16 +254,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 6503517707342459342}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55f8a670f82601a47994af231f3e661f, type: 3}
+  m_Script: {fileID: 11500000, guid: b6fec76b0ec94604890503ce357438ec, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BaseUnit
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyUnit
   _maxHealth: 10
   _size: 0.5
-  _movementSpeed: 7
+  _movementSpeed: 10
   _cooldownBetweenAttacks: 0.2
+  _spawnTweenDuration: 1
   _bodyReward: 1
-  _bloodReward: 10
-  _isAlly: 0
+  _bloodReward: 3
 --- !u!114 &8091357199125041030
 MonoBehaviour:
   m_ObjectHideFlags: 0

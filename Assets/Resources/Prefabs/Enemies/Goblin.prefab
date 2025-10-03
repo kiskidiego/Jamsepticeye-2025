@@ -188,7 +188,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3367147025405800019}
-  - component: {fileID: 7685138834005623286}
+  - component: {fileID: 7148050295888517780}
   - component: {fileID: 8486192010664964669}
   m_Layer: 0
   m_Name: Goblin
@@ -213,7 +213,7 @@ Transform:
   - {fileID: 8389789276964654732}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7685138834005623286
+--- !u!114 &7148050295888517780
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -222,16 +222,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 7723771758560292652}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55f8a670f82601a47994af231f3e661f, type: 3}
+  m_Script: {fileID: 11500000, guid: b6fec76b0ec94604890503ce357438ec, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BaseUnit
-  _maxHealth: 20
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyUnit
+  _maxHealth: 10
   _size: 0.5
   _movementSpeed: 10
   _cooldownBetweenAttacks: 0.2
+  _spawnTweenDuration: 1
   _bodyReward: 1
-  _bloodReward: 5
-  _isAlly: 0
+  _bloodReward: 3
 --- !u!114 &8486192010664964669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,7 +250,7 @@ MonoBehaviour:
   _isAlly: 0
   _damage: 5
   _attackSpeed: 1
-  range: 1
+  _range: 1
   _targetingPriority: 0
   _attackSound:
     Guid:

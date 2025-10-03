@@ -42,7 +42,6 @@ GameObject:
   - component: {fileID: 4201960981911515993}
   - component: {fileID: 8224242926185897961}
   - component: {fileID: 2978773598387322182}
-  - component: {fileID: 6339241227998831694}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -121,27 +120,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6339241227998831694
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3461165556151551430}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4470822278878890120
 GameObject:
   m_ObjectHideFlags: 0
@@ -184,7 +162,6 @@ GameObject:
   - component: {fileID: 4344554622333845872}
   - component: {fileID: 3394429407460598443}
   - component: {fileID: 3305192039055823983}
-  - component: {fileID: 3336181872792883620}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -263,29 +240,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &3336181872792883620
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5687843674828256825}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5874844656389675767
 GameObject:
   m_ObjectHideFlags: 0
@@ -341,12 +295,12 @@ MonoBehaviour:
   _size: 1.5
   _movementSpeed: 5
   _cooldownBetweenAttacks: 0.2
+  _spawnTweenDuration: 1
   _bodyReward: 0
   _bloodReward: 0
-  _isAlly: 0
-  _secondaryUnitPrefab1: {fileID: 7685138834005623286, guid: db4d3d4d874e18f4593a39341d41ac09, type: 3}
-  _secondaryUnitPrefab2: {fileID: 7685138834005623286, guid: db4d3d4d874e18f4593a39341d41ac09, type: 3}
-  _secondaryUnitPrefab3: {fileID: 4934002821833302945, guid: 37bac6987c8960843beecb0b5e0be348, type: 3}
+  _secondaryUnitPrefab1: {fileID: 7148050295888517780, guid: db4d3d4d874e18f4593a39341d41ac09, type: 3}
+  _secondaryUnitPrefab2: {fileID: 7148050295888517780, guid: db4d3d4d874e18f4593a39341d41ac09, type: 3}
+  _secondaryUnitPrefab3: {fileID: 1939611623146773574, guid: 20dc24c2a8ee40a4b8a5c49b3ee9c081, type: 3}
   _secondaryUnitSpawnPoint1: {fileID: 7751334627048302195}
   _secondaryUnitSpawnPoint2: {fileID: 1264629273977812523}
   _secondaryUnitSpawnPoint3: {fileID: 5064899602940985786}
@@ -368,7 +322,7 @@ MonoBehaviour:
   _isAlly: 0
   _damage: 20
   _attackSpeed: 0.5
-  range: 1
+  _range: 1
   _targetingPriority: 2
   _attackSound:
     Guid:
@@ -396,7 +350,7 @@ MonoBehaviour:
   _isAlly: 0
   _damage: 10
   _attackSpeed: 0.75
-  range: 1
+  _range: 1
   _targetingPriority: 2
   _attackSound:
     Guid:

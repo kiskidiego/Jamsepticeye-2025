@@ -8,25 +8,26 @@ public class GameManager : MonoBehaviour
     public Hittable Castle => _castle;
     [HideInInspector] public bool[] UnlockedSpells;
     public PhaseEnum CurrentPhase => _currentPhase;
-    [SerializeField] private Hittable _castle;
+    public AllyUnitPrice[] UnitPrices => _unitPrices;
+    [SerializeField] private Cemetery _castle;
+    [SerializeField] private int _initialZombies = 5;
     [SerializeField] private Tile _tilePrefab;
     [SerializeField] private float _tileSize = 10f;
     [SerializeField] private int _mapWidth = 10;
     [SerializeField] private int _mapHeight = 10;
     [SerializeField] Round[] _rounds;
-    [SerializeField] int _maxBodies = 10;
     [SerializeField] int _maxBlood = 20;
-    [SerializeField] List<BaseUnit> _testAllies = new List<BaseUnit>();
-    [SerializeField] Transform _allySpawnPoint;
-    [SerializeField] Vector2 _allySpawnSize = new Vector2(40f, 20f);
+    [SerializeField] AllyUnit _zombiePrefab;
     [SerializeField] Transform _enemySpawnPoint;
     [SerializeField] Vector2 _enemySpawnSize = new Vector2(40f, 20f);
-    List<BaseUnit> _alliedUnits = new List<BaseUnit>();
-    List<BaseUnit> _enemyUnits = new List<BaseUnit>();
+    [SerializeField] AllyUnitPrice[] _unitPrices;
+
+    List<AllyUnit> _alliedUnits = new List<AllyUnit>();
+    List<EnemyUnit> _enemyUnits = new List<EnemyUnit>();
     List<BaseTower> _towers = new List<BaseTower>();
+    List<Cemetery> _cemeteries = new List<Cemetery>();
     int _currentRound = 0;
     int _blood = 0;
-    int _bodies = 0;
     PhaseEnum _currentPhase = PhaseEnum.Build;
     Tile[] _tiles;
     void Awake()
@@ -45,22 +46,17 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
         UnlockedSpells = new bool[1];
+        _towers.Add(_castle);
+        _cemeteries.Add(_castle);
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
-            for (int i = 0; i < 1; i++)
+            if (GetBodies() >= 2)
             {
-                foreach (BaseUnit _testAlly in _testAllies)
-                {
-                    _alliedUnits.Add(Instantiate(
-                        _testAlly,
-                        _allySpawnPoint.position + new Vector3(Random.Range(-_allySpawnSize.x, _allySpawnSize.x), 0, Random.Range(-_allySpawnSize.y, _allySpawnSize.y)),
-                        Quaternion.identity
-                    ));
-                }
+                RemoveBodies(2);
             }
         }
         if (_currentPhase == PhaseEnum.Build)
@@ -136,7 +132,7 @@ public class GameManager : MonoBehaviour
                 if (rand <= cumulativeProbability)
                 {
                     _enemyUnits.Add(Instantiate(
-                        roundEnemy.EnemyUnit,
+                        roundEnemy.enemyUnit,
                         _enemySpawnPoint.position + new Vector3(Random.Range(-_enemySpawnSize.x, _enemySpawnSize.x), 0, Random.Range(-_enemySpawnSize.y, _enemySpawnSize.y)),
                         Quaternion.identity
                     ));
@@ -145,17 +141,17 @@ public class GameManager : MonoBehaviour
             }
         }
         foreach (FixedRoundEnemy fixedEnemy in round.FixedEnemiesInRound)
+        {
+            for (int j = 0; j < fixedEnemy.amount; j++)
             {
-                for (int j = 0; j < fixedEnemy.amount; j++)
-                {
-                    Debug.Log("Spawning fixed enemy: " + fixedEnemy.EnemyUnit.name);
-                    _enemyUnits.Add(Instantiate(
-                        fixedEnemy.EnemyUnit,
-                        _enemySpawnPoint.position + new Vector3(Random.Range(-_enemySpawnSize.x, _enemySpawnSize.x), 0, Random.Range(-_enemySpawnSize.y, _enemySpawnSize.y)),
-                        Quaternion.identity
-                    ));
-                }
+                Debug.Log("Spawning fixed enemy: " + fixedEnemy.enemyUnit.name);
+                _enemyUnits.Add(Instantiate(
+                    fixedEnemy.enemyUnit,
+                    _enemySpawnPoint.position + new Vector3(Random.Range(-_enemySpawnSize.x, _enemySpawnSize.x), 0, Random.Range(-_enemySpawnSize.y, _enemySpawnSize.y)),
+                    Quaternion.identity
+                ));
             }
+        }
         _currentPhase = PhaseEnum.Combat;
     }
 
@@ -179,7 +175,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void EndRound()
     {
-        foreach (BaseUnit unit in _enemyUnits)
+        foreach (EnemyUnit unit in _enemyUnits)
         {
             if (!unit.Dead)
             {
@@ -187,31 +183,30 @@ public class GameManager : MonoBehaviour
                 return;
             }
         }
-        int oldBodies = _bodies;
-        int oldBlood = _blood;
-        foreach (BaseUnit unit in _enemyUnits)
-        {
-            _bodies += unit.BodyReward;
-            _blood += unit.BloodReward;
-            if (_bodies > _maxBodies) _bodies = _maxBodies;
-            if (_blood > _maxBlood) _blood = _maxBlood;
-            Destroy(unit.gameObject);
-        }
-        _enemyUnits.Clear();
 
-        Debug.Log($"Round {_currentRound + 1} completed! Rewards: {_bodies - oldBodies} bodies, {_blood - oldBlood} blood.");
-
-        foreach (BaseUnit unit in _alliedUnits)
+        foreach (AllyUnit unit in _alliedUnits)
         {
             unit.Pause();
             unit.Reset();
-            unit.transform.position = _allySpawnPoint.position + new Vector3(Random.Range(-_allySpawnSize.x, _allySpawnSize.x), 0, Random.Range(-_allySpawnSize.y, _allySpawnSize.y));
             if (unit.Dead)
             {
                 Destroy(unit.gameObject);
             }
         }
         _alliedUnits.RemoveAll(unit => unit.Dead);
+
+        foreach (EnemyUnit unit in _enemyUnits)
+        {
+            for(int i = 0; i < unit.BodyReward; i++)
+            {
+                AddBody();
+            }
+            _blood += unit.BloodReward;
+            if (_blood > _maxBlood) _blood = _maxBlood;
+            Destroy(unit.gameObject);
+        }
+        _enemyUnits.Clear();
+
         _currentRound++;
         if (_currentRound < _rounds.Length)
         {
@@ -446,10 +441,50 @@ public class GameManager : MonoBehaviour
         return alliesInRange;
     }
 
-    public void AddBodies(int amount)
+    public void AddBody()
     {
-        _bodies += amount;
-        if (_bodies > _maxBodies) _bodies = _maxBodies;
+        List<Cemetery> cemeteries = new List<Cemetery>();
+        foreach (BaseTower tower in _towers)
+        {
+            if (tower is Cemetery)
+            {
+                cemeteries.Add(tower as Cemetery);
+            }
+        }
+        bool added = false;
+        while (cemeteries.Count > 0 && !added)
+        {
+            int index = Random.Range(0, cemeteries.Count);
+            Cemetery cemetery = cemeteries[index];
+            if (cemetery != null && !cemetery.IsFull())
+            {
+                Debug.Log("Adding body to cemetery: " + cemetery.name + " at " + cemetery.transform.position);
+                AllyUnit newZombie = Instantiate(_zombiePrefab, cemetery.transform.position, Quaternion.identity);
+                added = true;
+                newZombie.ChangeCemetery(cemetery);
+                _alliedUnits.Add(newZombie);
+            }
+            cemeteries.RemoveAt(index);
+        }
+
+    }
+
+    public void RemoveBodies(int amount)
+    {
+        int bodiesToRemove = amount;
+        for (int i = _alliedUnits.Count - 1; i >= 0 && bodiesToRemove > 0; i--)
+        {
+            if (_alliedUnits[i].unitType == AllyUnitsEnum.Zombie)
+            {
+                Destroy(_alliedUnits[i].gameObject);
+                _alliedUnits.RemoveAt(i);
+                bodiesToRemove--;
+            }
+        }
+        if (bodiesToRemove > 0)
+        {
+            Debug.LogError("Not enough bodies to remove!");
+        }
     }
 
     public void EndGame()
@@ -465,7 +500,15 @@ public class GameManager : MonoBehaviour
 
     public int GetBodies()
     {
-        return _bodies;
+        int zombieCount = 0;
+        foreach (AllyUnit unit in _alliedUnits)
+        {
+            if (unit.unitType == AllyUnitsEnum.Zombie)
+            {
+                zombieCount++;
+            }
+        }
+        return zombieCount;
     }
 
     public int GetBlood()
@@ -480,26 +523,65 @@ public class GameManager : MonoBehaviour
         StartRound();
     }
 
-    public void AddMaxBodies(int numberBodies)
-    {
-        _maxBodies += numberBodies;
-        if (_bodies > _maxBodies) _bodies = _maxBodies;
-    }
-
     public void AddMaxBlood(int numberBlood)
     {
         _maxBlood += numberBlood;
         if (_blood > _maxBlood) _blood = _maxBlood;
     }
 
-    public void AddEnemyUnit(BaseUnit enemy)
+    public void AddEnemyUnit(EnemyUnit enemy)
     {
         _enemyUnits.Add(enemy);
     }
 
-    public void AddAllyUnit(BaseUnit ally)
+    public void AddAllyUnit(AllyUnit ally)
     {
         _alliedUnits.Add(ally);
+    }
+
+    public AllyUnitPrice GetUnitPrice(AllyUnitsEnum unitType)
+    {
+        foreach (AllyUnitPrice unitPrice in _unitPrices)
+        {
+            if (unitPrice.unitType == unitType)
+            {
+                return unitPrice;
+            }
+        }
+        return null;
+    }
+
+    public List<Cemetery> GetCemeteries(Cemetery exclude = null)
+    {
+        List<Cemetery> cemeteries = new List<Cemetery>();
+        foreach (BaseTower tower in _towers)
+        {
+            if (tower is Cemetery && tower != exclude)
+            {
+                cemeteries.Add(tower as Cemetery);
+            }
+        }
+        return cemeteries;
+    }
+
+    public void CleanUpCemetery(Cemetery cemetery)
+    {
+        foreach (AllyUnit unit in cemetery.GetComponentsInChildren<AllyUnit>())
+        {
+            unit.ChangeCemetery(null);
+            unit.Reset();
+            if (unit.Dead)
+            {
+                Destroy(unit.gameObject);
+            }
+        }
+        _alliedUnits.RemoveAll(unit => unit.Dead);
+    }
+
+    public void RemoveTower(BaseTower tower)
+    {
+        _towers.Remove(tower);
+        Destroy(tower.gameObject);
     }
 
     private IEnumerator MapSpawnAnimation()
@@ -509,6 +591,7 @@ public class GameManager : MonoBehaviour
             StartCoroutine(TileRowAnimation(i));
             yield return new WaitForSeconds(0.15f);
         }
+        StartCoroutine(InitialZombieSpawns());
     }
     private IEnumerator TileRowAnimation(int row)
     {
@@ -516,6 +599,14 @@ public class GameManager : MonoBehaviour
         {
             _tiles[i + row * _mapWidth].SpawnTileAnimation();
             yield return new WaitForSeconds(0.05f);
+        }
+    }
+    private IEnumerator InitialZombieSpawns()
+    {
+        for (int i = 0; i < _initialZombies; i++)
+        {
+            AddBody();
+            yield return new WaitForSeconds(0.5f);
         }
     }
 }

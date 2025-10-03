@@ -1,19 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using DG.Tweening;
 using UnityEditor.UI;
 
 // Base class for all units, enemy and ally
-public class BaseUnit : Hittable
+public abstract class BaseUnit : Hittable
 {
-    public int BodyReward => _bodyReward;
-    public int BloodReward => _bloodReward;
     public bool Dead => _dead;
-    [SerializeField] protected float _movementSpeed;
+    [SerializeField] protected float _movementSpeed = 10f;
     [SerializeField] protected float _cooldownBetweenAttacks = 0.2f;
-    [SerializeField] int _bodyReward;
-    [SerializeField] int _bloodReward;
-    [SerializeField] protected bool _isAlly; // True if the unit is an ally, false if it's an enemy
+    [SerializeField] protected float _spawnTweenDuration = 1f;
     protected float _slowMultiplier = 1f; // Multiplier for movement speed when slowed
     protected float _hastenMultiplier = 1f; // Multiplier for movement speed when hastened
     protected Hittable _target;
@@ -21,7 +18,7 @@ public class BaseUnit : Hittable
     protected bool _dead = false;
     protected float _currentAttackCooldown;
     protected int currentAttackIndex = 0;
-    protected List<BaseAttack> _attacks;
+    protected List<BaseAttack> _attacks = new List<BaseAttack>();
 
     /// <summary>
     /// Initializes the unit's current health and its squared size, as well as its attacks. Can be overriden by derived classes.
@@ -32,8 +29,11 @@ public class BaseUnit : Hittable
         _attacks = new List<BaseAttack>(GetComponents<BaseAttack>());
         foreach (var attack in _attacks)
         {
-            attack._isAlly = _isAlly;
+            attack._isAlly = this is AllyUnit;
         }
+        _currentAttackCooldown = _cooldownBetweenAttacks;
+
+        transform.DOScale(Vector3.one, _spawnTweenDuration).From(Vector3.zero).SetEase(Ease.InOutCubic);
     }
     /// <summary>
     /// Default Unit behavior. Finds a target and tries to attack it if in range. Can be overriden by derived classes.
@@ -141,23 +141,6 @@ public class BaseUnit : Hittable
         foreach (var attack in _attacks)
         {
             attack.paused = false;
-        }
-    }
-
-    /// <summary>
-    /// Resets the unit's state for reuse.
-    /// </summary>
-    public void Reset()
-    {
-        _currentHealth = _maxHealth;
-        _target = null;
-        _slowMultiplier = 1f;
-        _hastenMultiplier = 1f;
-        foreach (var attack in _attacks)
-        {
-            attack.paused = true;
-            attack._slowMultiplier = 1f;
-            attack._hastenMultiplier = 1f;
         }
     }
 

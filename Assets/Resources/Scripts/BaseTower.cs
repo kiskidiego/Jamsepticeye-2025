@@ -16,6 +16,13 @@ public abstract class BaseTower : Hittable
     protected bool _paused;
 
     /// <summary>
+    /// Called before the combat starts.
+    /// </summary>
+    protected virtual void OnPrepare()
+    {
+    }
+
+    /// <summary>
     /// Tower behaviour when bought.
     /// </summary>
     protected virtual void OnBuy()

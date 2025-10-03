@@ -51,8 +51,8 @@ MonoBehaviour:
   _speed: 10
   _size: 0.5
   _explosionRadius: 5
-  _arcHeight: 5
-  _slowAmount: 30
+  _curvature: 0.5
+  _slowAmount: 60
   _slowDuration: 1
 --- !u!1 &6132255020565134286
 GameObject:

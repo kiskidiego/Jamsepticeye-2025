@@ -259,7 +259,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AllyUnit
   _maxHealth: 10
   _size: 0.5
-  _movementSpeed: 10
+  _movementSpeed: 7
   _cooldownBetweenAttacks: 0.2
   _spawnTweenDuration: 1
   _cemetery: {fileID: 0}

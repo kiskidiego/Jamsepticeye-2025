@@ -280,8 +280,8 @@ MonoBehaviour:
   _hastenMultiplier: 1
   paused: 1
   _isAlly: 0
-  _damage: 15
-  _attackCooldown: 2
+  _damage: 10
+  _attackCooldown: 2.5
   _range: 15
   _targetingPriority: 0
   _attackSound:

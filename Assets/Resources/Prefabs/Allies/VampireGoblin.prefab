@@ -281,7 +281,7 @@ MonoBehaviour:
   _hastenMultiplier: 1
   paused: 1
   _isAlly: 0
-  _damage: 1
+  _damage: 2
   _attackCooldown: 0.5
   _range: 1
   _targetingPriority: 0

@@ -281,7 +281,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AllyUnit
   _maxHealth: 12
   _size: 0.5
-  _movementSpeed: 10
+  _movementSpeed: 6
   _cooldownBetweenAttacks: 0.2
   _spawnTweenDuration: 1
   _cemetery: {fileID: 0}
@@ -302,7 +302,7 @@ MonoBehaviour:
   _hastenMultiplier: 1
   paused: 1
   _isAlly: 0
-  _damage: 3
+  _damage: 4
   _attackCooldown: 1.2
   _range: 1
   _targetingPriority: 0

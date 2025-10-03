@@ -1,9 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ExplosiveProjectile : Projectile
 {
-    [HideInInspector] public bool isAlly;
-    [SerializeField] float _explosionRadius = 5f;
+    [SerializeField] protected float _explosionRadius = 5f;
     [SerializeField] float _arcHeight = 5f;
     float a, b, c; // Variables for parabolic equation
     Vector3 startPosition;
@@ -77,7 +77,7 @@ public class ExplosiveProjectile : Projectile
     {
         if (isAlly)
         {
-            Hittable[] hittables = GameManager.Instance.GetAllEnemiesInRange(transform.position, _explosionRadius);
+            List<Hittable> hittables = GameManager.Instance.GetAllEnemiesInRange(transform.position, _explosionRadius);
             foreach (Hittable hittable in hittables)
             {
                 hittable.TakeDamage(_damage);
@@ -85,7 +85,7 @@ public class ExplosiveProjectile : Projectile
         }
         else
         {
-            Hittable[] hittables = GameManager.Instance.GetAllAlliesInRange(transform.position, _explosionRadius);
+            List<Hittable> hittables = GameManager.Instance.GetAllAlliesInRange(transform.position, _explosionRadius);
             foreach (Hittable hittable in hittables)
             {
                 hittable.TakeDamage(_damage);

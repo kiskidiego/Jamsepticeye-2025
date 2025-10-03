@@ -1,5 +1,7 @@
 using UnityEngine;
-using FMODUnity;
+using System.Collections.Generic;
+using System.Collections;
+using UnityEditor.UI;
 
 // Base class for all units, enemy and ally
 public class BaseUnit : Hittable
@@ -7,30 +9,31 @@ public class BaseUnit : Hittable
     public int BodyReward => _bodyReward;
     public int BloodReward => _bloodReward;
     public bool Dead => _dead;
-    [SerializeField] protected float _damage;
-    [SerializeField] protected float _attackSpeed; // Attacks per second
     [SerializeField] protected float _movementSpeed;
-    [SerializeField] protected float _range;
-    [SerializeField] protected TargetingPriorities _targetingPriority;
+    [SerializeField] protected float _cooldownBetweenAttacks = 0.2f;
     [SerializeField] int _bodyReward;
     [SerializeField] int _bloodReward;
     [SerializeField] protected bool _isAlly; // True if the unit is an ally, false if it's an enemy
-    [SerializeField] protected EventReference _attackSound;
+    protected float _slowMultiplier = 1f; // Multiplier for movement speed when slowed
+    protected float _hastenMultiplier = 1f; // Multiplier for movement speed when hastened
     protected Hittable _target;
-    protected float _rangeSquared;
-    protected float _attackCooldown; // Time between attacks
-    protected float _currentAttackCooldown; // Time left until next attack
-    bool _paused = true;
-    bool _dead = false;
+    protected bool _paused = true;
+    protected bool _dead = false;
+    protected float _currentAttackCooldown;
+    protected int currentAttackIndex = 0;
+    protected List<BaseAttack> _attacks;
 
     /// <summary>
-    /// Initializes the unit's current health, its squared size, its squared range and its attack cooldown. Can be overriden by derived classes.
+    /// Initializes the unit's current health and its squared size, as well as its attacks. Can be overriden by derived classes.
     /// </summary>
     protected override void Start()
     {
         base.Start();
-        _rangeSquared = _range * _range;
-        _attackCooldown = 1f / _attackSpeed;
+        _attacks = new List<BaseAttack>(GetComponents<BaseAttack>());
+        foreach (var attack in _attacks)
+        {
+            attack._isAlly = _isAlly;
+        }
     }
     /// <summary>
     /// Default Unit behavior. Finds a target and tries to attack it if in range. Can be overriden by derived classes.
@@ -46,14 +49,19 @@ public class BaseUnit : Hittable
             FindTarget();
             return;
         }
-        if (Vector3.SqrMagnitude(transform.position - _target.transform.position) - _sizeSquared - _target.GetSizeSquared() > _rangeSquared)
+        if (_attacks.Count == 0)
+        {
+            return;
+        }
+        if (Vector3.SqrMagnitude(transform.position - _target.transform.position) - _sizeSquared - _target.GetSizeSquared() > _attacks[currentAttackIndex].RangeSqr)
         {
             MoveToTarget();
         }
-        else
+        else if (_currentAttackCooldown <= 0f)
         {
             CheckAttack();
         }
+        _currentAttackCooldown -= Time.deltaTime * _hastenMultiplier * _slowMultiplier;
     }
 
     /// <summary>
@@ -63,7 +71,7 @@ public class BaseUnit : Hittable
     {
         if (_target != null)
         {
-            transform.position = Vector3.MoveTowards(transform.position, _target.transform.position, _movementSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, _target.transform.position, _movementSpeed * Time.deltaTime * _slowMultiplier * _hastenMultiplier);
             transform.LookAt(_target.transform);
         }
     }
@@ -73,80 +81,42 @@ public class BaseUnit : Hittable
     /// </summary>
     protected void CheckAttack()
     {
-        if (_currentAttackCooldown <= 0f)
+        if (_attacks[currentAttackIndex].CanAttack)
         {
-            Attack();
-            _currentAttackCooldown = _attackCooldown;
-        }
-        else
-        {
-            _currentAttackCooldown -= Time.deltaTime;
+            _attacks[currentAttackIndex].Attack(_target);
+            _target = null; // Reset target after attack to find a new one next frame
+            _currentAttackCooldown = _cooldownBetweenAttacks;
         }
     }
 
     /// <summary>
-    /// Attacks the current target, dealing damage. Can be overridden by derived classes for custom attack behavior.
-    /// </summary>
-    protected virtual void Attack()
-    {
-        AudioManager.instance.PlayOneShot(_attackSound, transform.position);
-        if (_target != null)
-        {
-            _target.TakeDamage(_damage);
-        }
-    }
-
-    /// <summary>
-    /// Finds a target based on the unit's targeting priority.
+    /// Picks the attack with the lowest cooldown and assigns it as the current attack, then finds a target for it.
     /// </summary>
     protected virtual void FindTarget()
     {
-        if (GameManager.Instance == null)
+        float minAttackCooldown = float.MaxValue;
+        for (int i = 0; i < _attacks.Count; i++)
         {
-            throw new System.Exception("GameManager instance is null. Cannot find target.");
-        }
-        if (_isAlly)
-        {
-            switch (_targetingPriority)
+            var attack = _attacks[i];
+            if (attack.CurrentAttackCooldown < minAttackCooldown)
             {
-                case TargetingPriorities.Units:
-                    _target = GameManager.Instance.GetClosestEnemy(transform.position);
-                    break;
-                case TargetingPriorities.Towers:
-                    throw new System.Exception("Allies cannot target towers.");
-                case TargetingPriorities.Castle:
-                    throw new System.Exception("Allies cannot target the castle.");
-                case TargetingPriorities.HighestHealth:
-                    _target = GameManager.Instance.GetHighestHealthEnemy();
-                    break;
-                default:
-                    throw new System.Exception("Invalid targeting priority.");
-            }
-        }
-        else
-        {
-            switch (_targetingPriority)
-            {
-                case TargetingPriorities.Units:
-                    _target = GameManager.Instance.GetClosestAllyUnit(transform.position);
-                    break;
-                case TargetingPriorities.Towers:
-                    _target = GameManager.Instance.GetClosestTower(transform.position);
-                    break;
-                case TargetingPriorities.Castle:
-                    _target = GameManager.Instance.Castle;
-                    break;
-                case TargetingPriorities.HighestHealth:
-                    _target = GameManager.Instance.GetHighestHealthAllyUnit(transform.position);
-                    break;
-                default:
-                    throw new System.Exception("Invalid targeting priority.");
+                minAttackCooldown = attack.CurrentAttackCooldown;
+                _target = attack.GetTarget(transform.position, this);
+                currentAttackIndex = i;
             }
         }
     }
 
+    /// <summary>
+    /// Handles the unit's death, marking it as dead. Can be overridden by derived classes for custom death behavior.
+    /// </summary>
     protected override void Die()
     {
+        if (_dead)
+        {
+            Debug.LogWarning($"{gameObject.name} is already dead. Die() called again.");
+        }
+        Debug.Log($"{gameObject.name} has died.");
         _dead = true;
     }
 
@@ -156,6 +126,10 @@ public class BaseUnit : Hittable
     public void Pause()
     {
         _paused = true;
+        foreach (var attack in _attacks)
+        {
+            attack.paused = true;
+        }
     }
 
     /// <summary>
@@ -164,6 +138,10 @@ public class BaseUnit : Hittable
     public void Unpause()
     {
         _paused = false;
+        foreach (var attack in _attacks)
+        {
+            attack.paused = false;
+        }
     }
 
     /// <summary>
@@ -173,6 +151,61 @@ public class BaseUnit : Hittable
     {
         _currentHealth = _maxHealth;
         _target = null;
-        _currentAttackCooldown = 0f;
+        _slowMultiplier = 1f;
+        _hastenMultiplier = 1f;
+        foreach (var attack in _attacks)
+        {
+            attack.paused = true;
+            attack._slowMultiplier = 1f;
+            attack._hastenMultiplier = 1f;
+        }
+    }
+
+    /// <summary>
+    /// Applies a slow effect to the unit and its attacks for a specified duration. Multiplicative with other slows.
+    /// </summary>
+    /// <param name="slowAmount"></param>
+    /// <param name="duration"></param>
+    public void ApplySlow(float slowAmount, float duration)
+    {
+        _slowMultiplier *= (100f - slowAmount) / 100f;
+        foreach (var attack in _attacks)
+        {
+            attack.ApplySlow(slowAmount);
+        }
+        StartCoroutine(RemoveSlowAfterDuration(duration, slowAmount));
+    }
+
+    /// <summary>
+    /// Applies a hasten effect to the unit and its attacks for a specified duration. Additive with other hasten effects.
+    /// </summary>
+    /// <param name="hastenAmount"></param>
+    /// <param name="duration"></param>
+    public void ApplyHasten(float hastenAmount, float duration)
+    {
+        _hastenMultiplier += hastenAmount / 100f;
+        foreach (var attack in _attacks)
+        {
+            attack.ApplyHasten(hastenAmount);
+        }
+        StartCoroutine(RemoveHastenAfterDuration(duration, hastenAmount));
+    }
+    IEnumerator RemoveSlowAfterDuration(float duration, float slowAmount)
+    {
+        yield return new WaitForSeconds(duration);
+        _slowMultiplier /= (100f - slowAmount) / 100f;
+        foreach (var attack in _attacks)
+        {
+            attack.RemoveSlow(slowAmount);
+        }
+    }
+    IEnumerator RemoveHastenAfterDuration(float duration, float hastenAmount)
+    {
+        yield return new WaitForSeconds(duration);
+        _hastenMultiplier -= hastenAmount / 100f;
+        foreach (var attack in _attacks)
+        {
+            attack.RemoveHasten(hastenAmount);
+        }
     }
 }

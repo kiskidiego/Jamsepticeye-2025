@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BoneTower : BaseTower
@@ -18,7 +19,7 @@ public class BoneTower : BaseTower
     protected override void Attack()
     {
         if (_target == null) return;
-        Hittable[] hittedUnits = GameManager.Instance.GetAllEnemiesInRange(_target.transform.position, _explosionRadius);
+        List<Hittable> hittedUnits = GameManager.Instance.GetAllEnemiesInRange(_target.transform.position, _explosionRadius);
 
         foreach (Hittable enemyUnit in hittedUnits)
         {

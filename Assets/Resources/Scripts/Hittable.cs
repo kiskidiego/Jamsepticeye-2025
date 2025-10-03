@@ -5,8 +5,8 @@ public class Hittable : MonoBehaviour
 {
     public float MaxHealth => _maxHealth;
     public float CurrentHealth => _currentHealth;
-    [SerializeField] protected float _maxHealth;
-    [SerializeField] protected float _size; //Radius of the object for range calculations
+    [SerializeField] protected float _maxHealth = 10f;
+    [SerializeField] protected float _size = .5f; //Radius of the object for range calculations
     protected float _currentHealth;
     protected float _sizeSquared;
 
@@ -27,7 +27,6 @@ public class Hittable : MonoBehaviour
     public virtual void TakeDamage(float damage)
     {
         _currentHealth -= damage;
-        Debug.Log($"{gameObject.name}: Taking damage: {damage} Current Health: {_currentHealth}");
         if (_currentHealth <= 0)
         {
             Die();

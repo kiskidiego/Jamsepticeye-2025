@@ -119,6 +119,68 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &110342392
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 110342393}
+  m_Layer: 0
+  m_Name: EnemySpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &110342393
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110342392}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 100, y: 0, z: 50}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &155996395
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 155996396}
+  m_Layer: 0
+  m_Name: AllySpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &155996396
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155996395}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 50, y: 0, z: 50}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &771793855
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,19 +211,49 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   UnlockedSpells: 
-  _castle: {fileID: 0}
+  _castle: {fileID: 1402729768}
   _tilePrefab: {fileID: 7562894851678332238, guid: 8ed5b9d31768877409b23bc26bd753f5, type: 3}
   _tileSize: 5
   _mapWidth: 23
   _mapHeight: 23
-  _rounds: []
-  _maxBodies: 5
+  _rounds:
+  - RandomEnemiesInRound: []
+    TotalRandomEnemies: 0
+    FixedEnemiesInRound:
+    - EnemyUnit: {fileID: 4934002821833302945, guid: 37bac6987c8960843beecb0b5e0be348, type: 3}
+      amount: 3
+    - EnemyUnit: {fileID: -8374564441741986563, guid: cb950e8e25b431f44b1eae7c8151f505, type: 3}
+      amount: 3
+    - EnemyUnit: {fileID: 7685138834005623286, guid: db4d3d4d874e18f4593a39341d41ac09, type: 3}
+      amount: 3
+    - EnemyUnit: {fileID: 3970597870596697276, guid: 20dc24c2a8ee40a4b8a5c49b3ee9c081, type: 3}
+      amount: 3
+    - EnemyUnit: {fileID: 5948013963128131574, guid: 96ffdf476034ee648a86ca433d2e0846, type: 3}
+      amount: 3
+  - RandomEnemiesInRound: []
+    TotalRandomEnemies: 0
+    FixedEnemiesInRound:
+    - EnemyUnit: {fileID: 7685138834005623286, guid: db4d3d4d874e18f4593a39341d41ac09, type: 3}
+      amount: 5
+  - RandomEnemiesInRound:
+    - EnemyUnit: {fileID: 7685138834005623286, guid: db4d3d4d874e18f4593a39341d41ac09, type: 3}
+      Probability: 0.5
+    - EnemyUnit: {fileID: 4934002821833302945, guid: 37bac6987c8960843beecb0b5e0be348, type: 3}
+      Probability: 0.5
+    TotalRandomEnemies: 7
+    FixedEnemiesInRound:
+    - EnemyUnit: {fileID: 7685138834005623286, guid: db4d3d4d874e18f4593a39341d41ac09, type: 3}
+      amount: 5
+    - EnemyUnit: {fileID: 4934002821833302945, guid: 37bac6987c8960843beecb0b5e0be348, type: 3}
+      amount: 3
+  _maxBodies: 1000
   _maxBlood: 20
-  _testAlly: {fileID: 0}
-  _allySpawnPoint: {fileID: 0}
-  _allySpawnSize: {x: 40, y: 20}
-  _enemySpawnPoint: {fileID: 0}
-  _enemySpawnSize: {x: 40, y: 20}
+  _testAllies:
+  - {fileID: 7685138834005623286, guid: 5c248d0829bce914396e511683a2a249, type: 3}
+  _allySpawnPoint: {fileID: 155996396}
+  _allySpawnSize: {x: 10, y: 20}
+  _enemySpawnPoint: {fileID: 110342393}
+  _enemySpawnSize: {x: 10, y: 20}
 --- !u!4 &771793857
 Transform:
   m_ObjectHideFlags: 0
@@ -254,6 +346,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1402729767}
+  - component: {fileID: 1402729768}
   m_Layer: 0
   m_Name: Castle
   m_TagString: Untagged
@@ -277,6 +370,20 @@ Transform:
   - {fileID: 1590084163}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1402729768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1402729766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27f8ae196e8755945821db571b096d6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hittable
+  _maxHealth: 500
+  _size: 5
 --- !u!1 &1590084162
 GameObject:
   m_ObjectHideFlags: 0
@@ -563,3 +670,5 @@ SceneRoots:
   - {fileID: 771793857}
   - {fileID: 1033844809}
   - {fileID: 1402729767}
+  - {fileID: 110342393}
+  - {fileID: 155996396}

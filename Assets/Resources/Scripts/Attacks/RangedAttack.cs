@@ -1,25 +1,24 @@
-using UnityEditor.SearchService;
+using System;
 using UnityEngine;
 
-public class RangedUnit : BaseUnit
+public class RangedAttack : BaseAttack
 {
     [SerializeField] Projectile _projectilePrefab;
     [SerializeField] Transform _projectileSpawnPoint;
 
     /// <summary>
-    /// Launches a projectile towards the target.
+    /// Spawns a projectile and launches it towards the target.
     /// </summary>
-    protected override void Attack()
+    protected override void AttackEffect(Hittable target)
     {
-        if (_target == null) return;
+        if (target == null) return;
 
-        AudioManager.instance.PlayOneShot(_attackSound, transform.position);
-        
         // Instantiate and launch the projectile towards the target
         Projectile projectile = Instantiate(_projectilePrefab, _projectileSpawnPoint.position, _projectileSpawnPoint.rotation);
-        projectile.target = _target.transform;
-        projectile.targetSize = _target.GetSize();
+        projectile.target = target.transform;
+        projectile.targetSize = target.GetSize();
         projectile.SetDamage(_damage);
+        projectile.isAlly = _isAlly;
 
         Destroy(projectile.gameObject, 5f); // Destroy after 5 seconds to avoid clutter
     }

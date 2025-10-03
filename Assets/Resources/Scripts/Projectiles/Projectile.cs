@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    [HideInInspector] public bool isAlly;
     [HideInInspector] public Transform target;
     [HideInInspector] public float targetSize;
     [SerializeField] protected float _speed = 10f;

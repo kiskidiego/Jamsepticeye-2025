@@ -31,8 +31,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7188822983357739112}
   - {fileID: 4033913200155900705}
+  - {fileID: 7188822983357739112}
   m_Father: {fileID: 3048664500812532442}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4980087236744214979
@@ -131,7 +131,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3048664500812532442}
-  - component: {fileID: 6345436546058429017}
+  - component: {fileID: 3970597870596697276}
+  - component: {fileID: -2121596272516447083}
   m_Layer: 0
   m_Name: PyroGoblin
   m_TagString: Untagged
@@ -155,7 +156,7 @@ Transform:
   - {fileID: 1452689063382396228}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6345436546058429017
+--- !u!114 &3970597870596697276
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -164,27 +165,44 @@ MonoBehaviour:
   m_GameObject: {fileID: 6503517707342459342}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e019498cb3dbd24fabcab2b948b35ed, type: 3}
+  m_Script: {fileID: 11500000, guid: 55f8a670f82601a47994af231f3e661f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RangedUnit
-  _maxHealth: 5
+  m_EditorClassIdentifier: Assembly-CSharp::BaseUnit
+  _maxHealth: 20
   _size: 0.5
-  _damage: 10
-  _attackSpeed: 0.75
-  _movementSpeed: 10
-  _range: 10
-  _targetingPriority: 1
+  _movementSpeed: 8
+  _cooldownBetweenAttacks: 0.2
   _bodyReward: 1
-  _bloodReward: 12
+  _bloodReward: 10
   _isAlly: 0
+--- !u!114 &-2121596272516447083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6503517707342459342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14f3f682d3cf67e4a81b20a30aff1b91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RangedAttack
+  _slowMultiplier: 1
+  _hastenMultiplier: 1
+  paused: 1
+  _isAlly: 0
+  _damage: 15
+  _attackSpeed: 0.75
+  range: 20
+  _targetingPriority: 1
   _attackSound:
     Guid:
-      Data1: 223465363
-      Data2: 1234368518
-      Data3: -1616460625
-      Data4: -650137001
-    Path: event:/SpawnGoblin
-  _projectilePrefab: {fileID: 3519205912370290149, guid: d79bfdd9512a33e48abd717f27409cdd, type: 3}
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  _projectilePrefab: {fileID: 3519205912370290149, guid: 5fb9aa56ba81ddd488b8b0b1d9fdf525, type: 3}
   _projectileSpawnPoint: {fileID: 7188822983357739112}
 --- !u!1 &8911670048369243032
 GameObject:
@@ -213,7 +231,7 @@ Transform:
   m_GameObject: {fileID: 8911670048369243032}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.49663, z: 0.337}
+  m_LocalPosition: {x: 0, y: 0.49662995, z: 0.337}
   m_LocalScale: {x: 0.6247, y: 0.29730427, z: 0.62401}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 1496160627683488516}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.546, z: 0.296}
+  m_LocalPosition: {x: 0, y: 0.444, z: 0.296}
   m_LocalScale: {x: 0.4583, y: 0.19704, z: 0.61595}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -89,6 +89,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &3258816170611244792
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1115501080372329274}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1115501080372329274
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3258816170611244792}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.211, y: 0, z: 0.647}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8389789276964654732}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4655794588818913409
 GameObject:
   m_ObjectHideFlags: 0
@@ -121,6 +152,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8295729293443367469}
+  - {fileID: 1115501080372329274}
   m_Father: {fileID: 3367147025405800019}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6647767775031414312
@@ -156,7 +188,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: f96821bbefeea864b9b418af4b8615ac, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -189,9 +221,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3367147025405800019}
   - component: {fileID: 7685138834005623286}
-  - component: {fileID: 8486192010664964669}
+  - component: {fileID: 3289619905744163572}
   m_Layer: 0
-  m_Name: Goblin
+  m_Name: ZombieArcher
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -225,14 +257,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55f8a670f82601a47994af231f3e661f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BaseUnit
-  _maxHealth: 20
+  _maxHealth: 10
   _size: 0.5
-  _movementSpeed: 10
+  _movementSpeed: 7
   _cooldownBetweenAttacks: 0.2
-  _bodyReward: 1
-  _bloodReward: 5
-  _isAlly: 0
---- !u!114 &8486192010664964669
+  _bodyReward: 0
+  _bloodReward: 0
+  _isAlly: 1
+--- !u!114 &3289619905744163572
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -241,16 +273,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 7723771758560292652}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3187632588541c4f81351e996d8e4bf, type: 3}
+  m_Script: {fileID: 11500000, guid: 14f3f682d3cf67e4a81b20a30aff1b91, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BaseAttack
+  m_EditorClassIdentifier: Assembly-CSharp::RangedAttack
   _slowMultiplier: 1
   _hastenMultiplier: 1
   paused: 1
   _isAlly: 0
-  _damage: 5
+  _damage: 4
   _attackSpeed: 1
-  range: 1
+  range: 20
   _targetingPriority: 0
   _attackSound:
     Guid:
@@ -259,3 +291,5 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
+  _projectilePrefab: {fileID: 3519205912370290149, guid: d79bfdd9512a33e48abd717f27409cdd, type: 3}
+  _projectileSpawnPoint: {fileID: 1115501080372329274}

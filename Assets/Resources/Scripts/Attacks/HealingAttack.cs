@@ -10,13 +10,13 @@ public class HealingAttack : BaseAttack
             switch (_targetingPriority)
             {
                 case TargetingPriorities.Units:
-                    return GameManager.Instance.GetClosestAllyUnit(position);
+                    return GameManager.Instance.GetClosestAllyUnit(position, exclude);
                 case TargetingPriorities.Towers:
-                    return GameManager.Instance.GetClosestTower(position);
+                    return GameManager.Instance.GetClosestTower(position, exclude);
                 case TargetingPriorities.Castle:
                     return GameManager.Instance.Castle;
                 case TargetingPriorities.HighestHealth:
-                    return GameManager.Instance.GetHighestHealthAllyUnit(position);
+                    return GameManager.Instance.GetHighestHealthAllyUnit(position, exclude);
                 default:
                     throw new System.Exception("Invalid targeting priority.");
             }
@@ -26,13 +26,13 @@ public class HealingAttack : BaseAttack
             switch (_targetingPriority)
             {
                 case TargetingPriorities.Units:
-                    return GameManager.Instance.GetClosestEnemy(position);
+                    return GameManager.Instance.GetClosestEnemy(position, exclude);
                 case TargetingPriorities.Towers:
                     throw new System.Exception("Invalid targeting priority.");
                 case TargetingPriorities.Castle:
                     throw new System.Exception("Invalid targeting priority.");
                 case TargetingPriorities.HighestHealth:
-                    return GameManager.Instance.GetHighestHealthEnemy();
+                    return GameManager.Instance.GetHighestHealthEnemy(exclude);
                 default:
                     throw new System.Exception("Invalid targeting priority.");
             }

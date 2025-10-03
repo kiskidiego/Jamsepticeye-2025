@@ -4,11 +4,11 @@ using UnityEngine;
 public class ExplosiveProjectile : Projectile
 {
     [SerializeField] protected float _explosionRadius = 5f;
-    [SerializeField] float _arcHeight = 5f;
+    [SerializeField, Min(0.1f)] float _curvature = 0.5f;
     float a, b, c; // Variables for parabolic equation
     Vector3 startPosition;
     Vector3 targetPosition;
-    
+
     /// <summary>
     /// Initializes the projectile's size squared and calculates the parabolic trajectory coefficients. Can be overridden by derived classes.
     /// </summary>
@@ -23,7 +23,7 @@ public class ExplosiveProjectile : Projectile
 
         // Calculate coefficients for parabolic trajectory
         Vector2 end = new Vector2(Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(targetPosition.x, 0, targetPosition.z)), targetPosition.y);
-        Vector2 middle = new Vector2(end.x / 2, Mathf.Max(transform.position.y, targetPosition.y) + _arcHeight);
+        Vector2 middle = new Vector2(end.x / 2, Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(targetPosition.x, 0, targetPosition.z)) * _curvature);
         CalculateParabolaCoefficients(transform.position.y, middle, end);
     }
 
@@ -54,7 +54,8 @@ public class ExplosiveProjectile : Projectile
         {
             Destroy(gameObject);
             return;
-        }
+        }        
+
         // Move towards target horizontally
         transform.position = Vector3.MoveTowards(transform.position, new Vector3(targetPosition.x, transform.position.y, targetPosition.z), _speed * Time.deltaTime);
 

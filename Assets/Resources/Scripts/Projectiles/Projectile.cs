@@ -43,7 +43,7 @@ public class Projectile : MonoBehaviour
             Hit();
         }
     }
-
+    
     /// <summary>
     /// Called when the projectile hits its target. Deals damage to the target if it has a Hittable component, then destroys the projectile. Can be overridden by derived classes for custom hit behavior.
     /// </summary>

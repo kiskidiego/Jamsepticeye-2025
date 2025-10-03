@@ -7,13 +7,13 @@ public class BaseAttack : MonoBehaviour
     [HideInInspector] public float _slowMultiplier = 1f; // Multiplier to slow down the attack speed
     [HideInInspector] public float _hastenMultiplier = 1f; // Multiplier to hasten the attack speed
     public bool paused = true; // Pauses the attack's cooldown when true
-    public float RangeSqr => range * range;
+    public float RangeSqr => _range * _range;
     public bool CanAttack => _currentAttackCooldown <= 0f;
     public float CurrentAttackCooldown => _currentAttackCooldown;
     [HideInInspector] public bool _isAlly; // True if the attack is from an ally unit, false if from an enemy unit
     [SerializeField] protected float _damage = 10f; // Damage dealt by the attack
     [SerializeField] protected float _attackSpeed = 1f; // Attacks per second
-    [SerializeField] protected float range = 1f; // Maximum range of the attack
+    [SerializeField] protected float _range = 1f; // Maximum range of the attack
     [SerializeField] protected TargetingPriorities _targetingPriority = TargetingPriorities.Units; // Priority for selecting targets
     [SerializeField] protected EventReference _attackSound;
     protected float _attackCooldown; // Time between attacks

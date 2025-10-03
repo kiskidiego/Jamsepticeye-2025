@@ -193,7 +193,7 @@ MonoBehaviour:
   _isAlly: 0
   _damage: 15
   _attackSpeed: 0.75
-  range: 20
+  _range: 15
   _targetingPriority: 1
   _attackSound:
     Guid:

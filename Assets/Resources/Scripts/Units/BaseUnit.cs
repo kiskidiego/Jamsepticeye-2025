@@ -38,7 +38,7 @@ public class BaseUnit : Hittable
     /// <summary>
     /// Default Unit behavior. Finds a target and tries to attack it if in range. Can be overriden by derived classes.
     /// </summary>
-    protected virtual void Update()
+    void Update()
     {
         if (_paused) return;
 
@@ -67,7 +67,7 @@ public class BaseUnit : Hittable
     /// <summary>
     /// Moves the unit towards its target. Can be overridden by derived classes for custom movement behavior.
     /// </summary>
-    protected virtual void MoveToTarget()
+    void MoveToTarget()
     {
         if (_target != null)
         {
@@ -79,7 +79,7 @@ public class BaseUnit : Hittable
     /// <summary>
     /// Checks if the unit can attack based on its attack cooldown, and attacks if possible.
     /// </summary>
-    protected void CheckAttack()
+    void CheckAttack()
     {
         if (_attacks[currentAttackIndex].CanAttack)
         {
@@ -92,7 +92,7 @@ public class BaseUnit : Hittable
     /// <summary>
     /// Picks the attack with the lowest cooldown and assigns it as the current attack, then finds a target for it.
     /// </summary>
-    protected virtual void FindTarget()
+    void FindTarget()
     {
         float minAttackCooldown = float.MaxValue;
         for (int i = 0; i < _attacks.Count; i++)

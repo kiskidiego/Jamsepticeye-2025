@@ -281,17 +281,17 @@ MonoBehaviour:
       bloodPrice: 0
   _spellPrices:
   - spellType: 0
-    spellPrefab: {fileID: 0}
+    spellPrefab: {fileID: 365293947622672670, guid: 06ad424e459e04b4182344b9754f5998, type: 3}
     price:
       bodyPrice: 2
       bloodPrice: 10
   - spellType: 1
-    spellPrefab: {fileID: 0}
+    spellPrefab: {fileID: 955966295299851911, guid: 43032d61a8fd9b34abcc425e4ee42295, type: 3}
     price:
       bodyPrice: 4
       bloodPrice: 15
   - spellType: 2
-    spellPrefab: {fileID: 0}
+    spellPrefab: {fileID: -5458858186886593183, guid: f1a2fecc81bf2294a8271fb2606f3c3b, type: 3}
     price:
       bodyPrice: 10
       bloodPrice: 30
@@ -427,11 +427,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Cemetery
   _maxHealth: 2000
   _size: 5
+  _deathSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   _targetingPriority: 0
   _bodiesPrice: 0
-  _canAttack: 0
-  _damage: 0
-  _attackCooldown: 0
+  _placeSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  _interactSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   _capacity: 10
   _spawnRadius: 15
   _unitMenu: {fileID: 0}
@@ -662,39 +680,39 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 726155113837991295, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 80
+      value: 84
       objectReference: {fileID: 0}
     - target: {fileID: 726155113837991295, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 37.5
+      value: 37.2
       objectReference: {fileID: 0}
     - target: {fileID: 726155113837991295, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 30
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 726155113837991295, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.8535535
+      value: 0.9330127
       objectReference: {fileID: 0}
     - target: {fileID: 726155113837991295, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.35355338
+      value: 0.25000006
       objectReference: {fileID: 0}
     - target: {fileID: 726155113837991295, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.35355338
+      value: -0.24999997
       objectReference: {fileID: 0}
     - target: {fileID: 726155113837991295, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.1464466
+      value: 0.066987306
       objectReference: {fileID: 0}
     - target: {fileID: 726155113837991295, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 45
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 726155113837991295, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -45
+      value: -30
       objectReference: {fileID: 0}
     - target: {fileID: 726155113837991295, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -702,7 +720,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4423356806726561634, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
       propertyPath: orthographic size
-      value: 25
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 8699030292855443731, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
       propertyPath: m_Name

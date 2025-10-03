@@ -12,7 +12,7 @@ public class AreaAttack : BaseAttack
     {
         if (target == null) return;
 
-        if (_isAlly)
+        if (isAlly)
         {
             List<Hittable> hittables = GameManager.Instance.GetAllEnemiesInRange(target.transform.position, _radius);
             foreach (var hittable in hittables)

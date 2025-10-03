@@ -10,7 +10,7 @@ public class BaseAttack : MonoBehaviour
     public float RangeSqr => _range * _range;
     public bool CanAttack => _currentAttackCooldown <= 0f;
     public float CurrentAttackCooldown => _currentAttackCooldown;
-    [HideInInspector] public bool _isAlly; // True if the attack is from an ally unit, false if from an enemy unit
+    [HideInInspector] public bool isAlly; // True if the attack is from an ally unit, false if from an enemy unit
     [SerializeField] protected float _damage = 10f; // Damage dealt by the attack
     [SerializeField] protected float _attackCooldown = 1f; // Attack cooldown in seconds
     [SerializeField] protected float _range = 1f; // Maximum range of the attack
@@ -41,7 +41,7 @@ public class BaseAttack : MonoBehaviour
     /// </summary>
     public virtual Hittable GetTarget(Vector3 position, Hittable exclude)
     {
-        if (_isAlly)
+        if (isAlly)
         {
             switch (_targetingPriority)
             {
@@ -81,6 +81,7 @@ public class BaseAttack : MonoBehaviour
 
         AttackEffect(target);
         _currentAttackCooldown = _attackCooldown;
+        AudioManager.instance.PlayOneShot(_attackSound, transform.position);
     }
 
     /// <summary>

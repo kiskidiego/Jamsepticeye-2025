@@ -1,3 +1,4 @@
+using FMODUnity;
 using UnityEngine;
 
 // Base class for all towers
@@ -7,19 +8,18 @@ public abstract class BaseTower : Hittable
     
     [SerializeField] protected TargetingPriorities _targetingPriority;
     [SerializeField] protected int _bodiesPrice;
+    [SerializeField] EventReference _placeSound;
+    [SerializeField] EventReference _interactSound;
     [Header("Damage properties")]
-    [SerializeField] protected bool _canAttack;
-    [SerializeField] protected int _damage;
-    [SerializeField] protected float _attackCooldown; // Time between attacks
-    protected Hittable _target;
-    protected float _currentAttackCooldown; // Time left until next attack
     protected bool _paused;
 
     /// <summary>
     /// Tower behaviour when bought.
     /// </summary>
-    protected virtual void OnBuy()
+    protected override void Start()
     {
+        base.Start();
+        AudioManager.instance.PlayOneShot(_placeSound, transform.position);
         Pause();
     }
     
@@ -35,8 +35,9 @@ public abstract class BaseTower : Hittable
         GameManager.Instance.RemoveTower(this);
     }
 
-    protected virtual void WhenDestroyed()
+    protected override void Die()
     {
+        AudioManager.instance.PlayOneShot(_deathSound, transform.position);
         GameManager.Instance.RemoveTower(this);
     }
 
@@ -45,6 +46,8 @@ public abstract class BaseTower : Hittable
     /// </summary>
     protected virtual void OnInteract()
     {
+        if (_paused) return;
+        AudioManager.instance.PlayOneShot(_interactSound, transform.position);
     }
     /// <summary>
     /// Pauses the tower's behavior between rounds.
@@ -60,59 +63,5 @@ public abstract class BaseTower : Hittable
     public void Unpause()
     {
         _paused = false;
-    }
-    
-    /// <summary>
-    /// Checks if the tower can attack based on its attack cooldown, and attacks if possible.
-    /// </summary>
-    protected void CheckAttack()
-    {
-        if (_currentAttackCooldown <= 0f)
-        {
-            Attack();
-            _currentAttackCooldown = _attackCooldown;
-        }
-        else
-        {
-            _currentAttackCooldown -= Time.deltaTime;
-        }
-    }
-    
-    /// <summary>
-    /// Attacks the current target, dealing damage. Can be overridden by derived classes for custom attack behavior.
-    /// </summary>
-    protected virtual void Attack()
-    {
-        if (_target != null)
-        {
-            _target.TakeDamage(_damage);
-        }
-    }
-    
-    /// <summary>
-    /// Finds a target based on the tower's targeting priority.
-    /// </summary>
-    
-    protected virtual void FindTarget()
-    {
-        if (GameManager.Instance == null)
-        {
-            throw new System.Exception("GameManager instance is null. Cannot find target.");
-        }
-        switch (_targetingPriority)
-        {
-            case TargetingPriorities.Units:
-                _target = GameManager.Instance.GetClosestEnemy(transform.position);
-                break;
-            case TargetingPriorities.Towers:
-                throw new System.Exception("Allies cannot target towers.");
-            case TargetingPriorities.Castle:
-                throw new System.Exception("Allies cannot target the castle.");
-            case TargetingPriorities.HighestHealth:
-                _target = GameManager.Instance.GetHighestHealthEnemy();
-                break;
-            default:
-                throw new System.Exception("Invalid targeting priority.");
-        }
     }
 }

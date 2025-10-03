@@ -18,7 +18,7 @@ public class RangedAttack : BaseAttack
         projectile.target = target.transform;
         projectile.targetSize = target.GetSize();
         projectile.SetDamage(_damage);
-        projectile.isAlly = _isAlly;
+        projectile.isAlly = isAlly;
 
         Destroy(projectile.gameObject, 5f); // Destroy after 5 seconds to avoid clutter
     }

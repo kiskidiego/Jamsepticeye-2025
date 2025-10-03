@@ -6,30 +6,31 @@ public class GoblinomancyStudy : BaseTower
 
     protected override void OnInteract()
     {
+        if (_paused) return;
+
+        base.OnInteract();
         _spellMenu.enabled = true;
     }
 
-    public void BuySpell(int idSpell)
+    public void BuySpell(SpellEnum spellId)
     {
         GameManager manager = GameManager.Instance;
-        int spellPrice = 0;
-        switch (idSpell)
+        SpellPrice spellPrice = manager.GetSpellPrice(spellId);
+        if (spellPrice == null)
         {
-            case 1:
-                spellPrice = 50;
-                break;
-            default:
-                Debug.Log("Wrong Spell ID");
-                return;
-        }
-
-        if (manager.GetBlood() < spellPrice)
-        {
-            Debug.Log("Not enough blood");
+            Debug.LogError($"SpellPrice for {spellId} not found.");
             return;
         }
-
-        manager.AddBlood(-spellPrice);
-        manager.UnlockedSpells[idSpell] = true;
+        if (manager.GetBodies() >= spellPrice.price.bodyPrice && manager.GetBlood() >= spellPrice.price.bloodPrice)
+        {
+            manager.RemoveBodies(spellPrice.price.bodyPrice);
+            manager.AddBlood(-spellPrice.price.bloodPrice);
+            manager.UnlockSpell(spellPrice.spellPrefab);
+            Debug.Log($"{spellId} spell purchased and unlocked.");
+        }
+        else
+        {
+            Debug.Log("Not enough resources to buy this spell.");
+        }
     }
 }

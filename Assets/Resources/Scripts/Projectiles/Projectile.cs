@@ -1,4 +1,5 @@
 using System;
+using FMODUnity;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
@@ -8,6 +9,7 @@ public class Projectile : MonoBehaviour
     [HideInInspector] public float targetSize;
     [SerializeField] protected float _speed = 10f;
     [SerializeField] protected float _size = 0.5f;
+    [SerializeField] EventReference _impactSound;
     protected float _sizeSqr;
     protected float _damage = 10f;
     protected float _targetSizeSqr;
@@ -50,6 +52,7 @@ public class Projectile : MonoBehaviour
     protected virtual void Hit()
     {
         Hittable hittable = target.GetComponent<Hittable>();
+        AudioManager.instance.PlayOneShot(_impactSound, transform.position);
         if (hittable != null)
         {
             hittable.TakeDamage(_damage);

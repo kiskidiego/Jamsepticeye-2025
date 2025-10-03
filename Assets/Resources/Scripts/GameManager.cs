@@ -23,7 +23,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] Transform _enemySpawnPoint;
     [SerializeField] Vector2 _enemySpawnSize = new Vector2(40f, 20f);
     [SerializeField] AllyUnitPrice[] _unitPrices;
+    [SerializeField] SpellPrice[] _spellPrices;
+    [SerializeField] GameObject spellCastingMenu;
 
+    List<BaseSpell> _unlockedSpells = new List<BaseSpell>();
     List<AllyUnit> _alliedUnits = new List<AllyUnit>();
     List<EnemyUnit> _enemyUnits = new List<EnemyUnit>();
     List<BaseTower> _towers = new List<BaseTower>();
@@ -562,6 +565,18 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
+    public SpellPrice GetSpellPrice(SpellEnum spellType)
+    {
+        foreach (SpellPrice spellPrice in _spellPrices)
+        {
+            if (spellPrice.spellType == spellType)
+            {
+                return spellPrice;
+            }
+        }
+        return null;
+    }
+
     public List<Cemetery> GetCemeteries(Cemetery exclude = null)
     {
         List<Cemetery> cemeteries = new List<Cemetery>();
@@ -593,6 +608,14 @@ public class GameManager : MonoBehaviour
     {
         _towers.Remove(tower);
         Destroy(tower.gameObject);
+    }
+
+    public void UnlockSpell(BaseSpell spellType)
+    {
+        if (!_unlockedSpells.Contains(spellType))
+        {
+            _unlockedSpells.Add(spellType);
+        }
     }
 
     private IEnumerator MapSpawnAnimation()

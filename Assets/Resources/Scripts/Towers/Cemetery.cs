@@ -51,15 +51,16 @@ public class Cemetery : BaseTower
         GameManager.Instance.CleanUpCemetery(this);
     }
 
-    protected override void WhenDestroyed()
+    protected override void Die()
     {
-        base.WhenDestroyed();
+        base.Die();
     }
 
     protected override void OnInteract()
     {
         if (_paused) return;
-
+        base.OnInteract();
+        
         _unitMenu.enabled = true;
     }
 

@@ -17,7 +17,7 @@ public abstract class BaseUnit : Hittable
     protected bool _paused = true;
     protected bool _dead = false;
     protected float _currentAttackCooldown;
-    protected int currentAttackIndex = 0;
+    protected int _currentAttackIndex = 0;
     protected List<BaseAttack> _attacks = new List<BaseAttack>();
 
     /// <summary>
@@ -29,7 +29,7 @@ public abstract class BaseUnit : Hittable
         _attacks = new List<BaseAttack>(GetComponents<BaseAttack>());
         foreach (var attack in _attacks)
         {
-            attack._isAlly = this is AllyUnit;
+            attack.isAlly = this is AllyUnit;
         }
         _currentAttackCooldown = _cooldownBetweenAttacks;
 
@@ -53,7 +53,7 @@ public abstract class BaseUnit : Hittable
         {
             return;
         }
-        if (Vector3.SqrMagnitude(transform.position - _target.transform.position) - _sizeSquared - _target.GetSizeSquared() > _attacks[currentAttackIndex].RangeSqr)
+        if (Vector3.SqrMagnitude(transform.position - _target.transform.position) - _sizeSquared - _target.GetSizeSquared() > _attacks[_currentAttackIndex].RangeSqr)
         {
             MoveToTarget();
         }
@@ -81,9 +81,9 @@ public abstract class BaseUnit : Hittable
     /// </summary>
     void CheckAttack()
     {
-        if (_attacks[currentAttackIndex].CanAttack)
+        if (_attacks[_currentAttackIndex].CanAttack)
         {
-            _attacks[currentAttackIndex].Attack(_target);
+            _attacks[_currentAttackIndex].Attack(_target);
             _target = null; // Reset target after attack to find a new one next frame
             _currentAttackCooldown = _cooldownBetweenAttacks;
         }
@@ -102,7 +102,7 @@ public abstract class BaseUnit : Hittable
             {
                 minAttackCooldown = attack.CurrentAttackCooldown;
                 _target = attack.GetTarget(transform.position, this);
-                currentAttackIndex = i;
+                _currentAttackIndex = i;
             }
         }
     }

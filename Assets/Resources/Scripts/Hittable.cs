@@ -1,3 +1,5 @@
+using System.Collections;
+using FMODUnity;
 using UnityEngine;
 
 // Base class for all objects that can be hit and take damage
@@ -7,7 +9,9 @@ public class Hittable : MonoBehaviour
     public float CurrentHealth => _currentHealth;
     [SerializeField] protected float _maxHealth = 10f;
     [SerializeField] protected float _size = .5f; //Radius of the object for range calculations
+    [SerializeField] protected EventReference _deathSound;
     protected float _currentHealth;
+    protected float _overHealth = 0f;
     protected float _sizeSquared;
 
     /// <summary>
@@ -26,6 +30,12 @@ public class Hittable : MonoBehaviour
     /// <param name="damage">Amount to subtract from current health.</param>
     public virtual void TakeDamage(float damage)
     {
+        if (_overHealth > 0 && damage > 0)
+        {
+            float overHealthUsed = Mathf.Min(_overHealth, damage);
+            _overHealth -= overHealthUsed;
+            damage -= overHealthUsed;
+        }
         _currentHealth -= damage;
         if (_currentHealth <= 0)
         {
@@ -38,6 +48,7 @@ public class Hittable : MonoBehaviour
     /// </summary>
     protected virtual void Die()
     {
+        AudioManager.instance.PlayOneShot(_deathSound, transform.position);
         Destroy(gameObject);
     }
 
@@ -52,5 +63,25 @@ public class Hittable : MonoBehaviour
     public float GetSizeSquared()
     {
         return _sizeSquared;
+    }
+
+    public void AddOverHealth(float amount, float duration = 0f, GameObject effect = null)
+    {
+        _overHealth += amount;
+        if (duration > 0f)
+        {
+            StartCoroutine(RemoveOverHealthAfterDuration(amount, duration, effect));
+        }
+    }
+
+    IEnumerator RemoveOverHealthAfterDuration(float amount, float duration, GameObject effect = null)
+    {
+        yield return new WaitForSeconds(duration);
+        _overHealth -= amount;
+        if (_overHealth < 0) _overHealth = 0;
+        if (effect != null)
+        {
+            Destroy(effect);
+        }
     }
 }

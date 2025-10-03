@@ -279,6 +279,23 @@ MonoBehaviour:
     price:
       bodyPrice: 20
       bloodPrice: 0
+  _spellPrices:
+  - spellType: 0
+    spellPrefab: {fileID: 0}
+    price:
+      bodyPrice: 2
+      bloodPrice: 10
+  - spellType: 1
+    spellPrefab: {fileID: 0}
+    price:
+      bodyPrice: 4
+      bloodPrice: 15
+  - spellType: 2
+    spellPrefab: {fileID: 0}
+    price:
+      bodyPrice: 10
+      bloodPrice: 30
+  spellCastingMenu: {fileID: 0}
 --- !u!4 &771793857
 Transform:
   m_ObjectHideFlags: 0

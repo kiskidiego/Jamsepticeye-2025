@@ -4,7 +4,7 @@ public class HealingAttack : BaseAttack
 {
     public override Hittable GetTarget(Vector3 position, Hittable exclude)
     {
-        if (_isAlly)
+        if (isAlly)
         {
             Debug.Log($"{gameObject.name} is trying to heal.");
             switch (_targetingPriority)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 using DG.Tweening;
 using UnityEditor.UI;
+using FMODUnity;
 
 // Base class for all units, enemy and ally
 public class AllyUnit : BaseUnit
@@ -10,12 +11,13 @@ public class AllyUnit : BaseUnit
     [HideInInspector] public Cemetery _cemetery;
     [HideInInspector] public float spawnRadius = 5f;
     [SerializeField] public readonly AllyUnitsEnum unitType; // Type of the unit, used for identifying it
+    [SerializeField] EventReference _spawnSound;
 
     protected override void Start()
     {
         base.Start();
 
-
+        AudioManager.instance.PlayOneShot(_spawnSound, transform.position);
         transform.DOMove(_cemetery.UnitSpawnPoint.position + new Vector3(
             Random.Range(-spawnRadius, spawnRadius),
             0,

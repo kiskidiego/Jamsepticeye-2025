@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public List<AllyUnit> AlliedUnits => _alliedUnits;
     public static GameManager Instance { get; private set; } // Singleton instance, new game managers will override old ones
     public Hittable Castle => _castle;
     [HideInInspector] public bool[] UnlockedSpells;

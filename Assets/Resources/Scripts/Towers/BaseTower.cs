@@ -28,7 +28,7 @@ public abstract class BaseTower : Hittable
     /// </summary>
     protected virtual void OnPrepare()
     {
-
+        
     }
     
     /// <summary>

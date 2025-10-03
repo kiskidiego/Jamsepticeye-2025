@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO.Compression;
 using UnityEngine;
 
 public class BarrierGenerator : BaseTower
@@ -7,28 +8,13 @@ public class BarrierGenerator : BaseTower
     [SerializeField] int numberBarriers = 10;
     protected override void OnPrepare()
     {
-        int barriersGenerated = 0;
         GameManager manager = GameManager.Instance;
 
-        List<BaseUnit> allies = new List<BaseUnit>(manager.alliedUnits);
+        List<BaseUnit> allies = new List<BaseUnit>(manager.AlliedUnits);
 
-        foreach (BaseUnit ally in allies)
+        for (int i = 0; i < numberBarriers; i++)
         {
-            if (ally != null && !ally.Dead)
-            {
-                if (ally.HasBarrier)
-                {
-                    continue;
-                }
-                
-                ally.GetBarrier(_barrierAmount);
-                barriersGenerated++;
-
-                if (barriersGenerated >= numberBarriers)
-                {
-                    break;
-                }
-            }
+            allies[Random.Range(0, allies.Count)].AddOverHealth(_barrierAmount);
         }
     }
 }

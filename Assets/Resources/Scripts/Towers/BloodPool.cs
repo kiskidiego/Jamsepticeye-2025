@@ -3,8 +3,9 @@ using UnityEngine;
 public class BloodPool : BaseTower
 {
     [SerializeField] int _numberBloodToAdd;
-    protected override void OnBuy()
+    protected override void Start()
     {
+        base.Start();
         GameManager.Instance.AddMaxBlood(_numberBloodToAdd);
     }
     protected override void OnSell()
@@ -13,9 +14,9 @@ public class BloodPool : BaseTower
         base.OnSell();
     }
 
-    protected override void WhenDestroyed()
+    protected override void Die()
     {
         GameManager.Instance.AddMaxBlood(- _numberBloodToAdd);
-        base.WhenDestroyed();
+        base.Die();
     }
 }

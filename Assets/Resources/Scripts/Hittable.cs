@@ -1,3 +1,5 @@
+using System.Collections;
+using FMODUnity;
 using UnityEngine;
 
 // Base class for all objects that can be hit and take damage
@@ -7,11 +9,9 @@ public class Hittable : MonoBehaviour
     public float CurrentHealth => _currentHealth;
     [SerializeField] protected float _maxHealth = 10f;
     [SerializeField] protected float _size = .5f; //Radius of the object for range calculations
-    public bool HasBarrier => _hasBarrier;
-    public float BarrierHealth => _barrierHealth;
+    [SerializeField] protected EventReference _deathSound;
     protected float _currentHealth;
-    protected bool _hasBarrier = false;
-    protected float _barrierHealth;
+    protected float _overHealth = 0f;
     protected float _sizeSquared;
     
 
@@ -24,12 +24,6 @@ public class Hittable : MonoBehaviour
         _sizeSquared = _size * _size;
     }
 
-    public void GetBarrier(int extraHP)
-    {
-        _hasBarrier = true;
-        _barrierHealth = extraHP;
-    }
-
     /// <summary>
     /// Subtracts damage from the object's current health. If health drops to 0 or below, the object dies.
     /// Can also heal if damage is negative. Healing cannot exceed max health.
@@ -38,18 +32,13 @@ public class Hittable : MonoBehaviour
     /// <param name="damage">Amount to subtract from current health.</param>
     public virtual void TakeDamage(float damage)
     {
-        if (_hasBarrier)
+        if (_overHealth > 0 && damage > 0)
         {
-            _barrierHealth -= damage;
-            if (_barrierHealth <= 0)
-            {
-                _hasBarrier = false;
-            }
-            return;
+            float overHealthUsed = Mathf.Min(_overHealth, damage);
+            _overHealth -= overHealthUsed;
+            damage -= overHealthUsed;
         }
-
         _currentHealth -= damage;
-        Debug.Log($"{gameObject.name}: Taking damage: {damage} Current Health: {_currentHealth}");
         if (_currentHealth <= 0)
         {
             Die();
@@ -61,7 +50,13 @@ public class Hittable : MonoBehaviour
     /// </summary>
     protected virtual void Die()
     {
+        AudioManager.instance.PlayOneShot(_deathSound, transform.position);
         Destroy(gameObject);
+    }
+
+    public float GetSize()
+    {
+        return _size;
     }
 
     /// <summary>
@@ -70,5 +65,25 @@ public class Hittable : MonoBehaviour
     public float GetSizeSquared()
     {
         return _sizeSquared;
+    }
+
+    public void AddOverHealth(float amount, float duration = 0f, GameObject effect = null)
+    {
+        _overHealth += amount;
+        if (duration > 0f)
+        {
+            StartCoroutine(RemoveOverHealthAfterDuration(amount, duration, effect));
+        }
+    }
+
+    IEnumerator RemoveOverHealthAfterDuration(float amount, float duration, GameObject effect = null)
+    {
+        yield return new WaitForSeconds(duration);
+        _overHealth -= amount;
+        if (_overHealth < 0) _overHealth = 0;
+        if (effect != null)
+        {
+            Destroy(effect);
+        }
     }
 }

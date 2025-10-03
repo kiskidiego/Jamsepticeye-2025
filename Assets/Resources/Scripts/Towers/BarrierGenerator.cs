@@ -10,7 +10,7 @@ public class BarrierGenerator : BaseTower
         int barriersGenerated = 0;
         GameManager manager = GameManager.Instance;
 
-        List<BaseUnit> allies = new List<BaseUnit>(manager.AlliedUnits);
+        List<BaseUnit> allies = new List<BaseUnit>(manager.alliedUnits);
 
         foreach (BaseUnit ally in allies)
         {

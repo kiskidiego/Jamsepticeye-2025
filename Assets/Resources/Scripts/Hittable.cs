@@ -5,10 +5,10 @@ public class Hittable : MonoBehaviour
 {
     public float MaxHealth => _maxHealth;
     public float CurrentHealth => _currentHealth;
+    [SerializeField] protected float _maxHealth = 10f;
+    [SerializeField] protected float _size = .5f; //Radius of the object for range calculations
     public bool HasBarrier => _hasBarrier;
     public float BarrierHealth => _barrierHealth;
-    [SerializeField] protected float _maxHealth;
-    [SerializeField] protected float _size; //Radius of the object for range calculations
     protected float _currentHealth;
     protected bool _hasBarrier = false;
     protected float _barrierHealth;

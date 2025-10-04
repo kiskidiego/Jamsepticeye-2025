@@ -848,6 +848,11 @@ public class GameManager : MonoBehaviour
         ShowHUD();
     }
 
+    public PhaseEnum GetCurrentPhase()
+    {
+        return _currentPhase;
+    }
+
     private IEnumerator MapSpawnAnimation()
     {
         for (int i = 0; i < _mapWidth; i++)

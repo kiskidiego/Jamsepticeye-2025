@@ -31,6 +31,7 @@ public abstract class BaseSpell : BaseMenu
     /// </summary>
     void Update()
     {
+        if (GameManager.Instance.GetCurrentPhase() != PhaseEnum.Combat) return;
         if (_currentCooldown > 0f)
         {
             _currentCooldown -= Time.deltaTime;

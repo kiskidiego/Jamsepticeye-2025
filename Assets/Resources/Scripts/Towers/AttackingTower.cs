@@ -2,11 +2,18 @@ using System.Collections.Generic;
 using FMODUnity;
 using UnityEngine;
 
+/// <summary>
+/// A tower that can attack enemies using its equipped attacks.
+/// </summary>
 public class AttackingTower : BaseTower
 {
     [SerializeField] protected float _cooldownBetweenAttacks; // Time between attacks
     float _currentAttackCooldown; // Time left until next attack
     readonly List<BaseAttack> _attacks = new List<BaseAttack>();
+
+    /// <summary>
+    /// Initializes the attacking tower by gathering its attacks and setting the initial cooldown.
+    /// </summary>
     protected override void Start()
     {
         base.Start();
@@ -18,6 +25,9 @@ public class AttackingTower : BaseTower
         _currentAttackCooldown = _cooldownBetweenAttacks;
     }
 
+    /// <summary>
+    /// Handles the attack logic, checking if the tower can attack and executing attacks as needed.
+    /// </summary>
     void Update()
     {
         if (_paused) return;
@@ -37,6 +47,10 @@ public class AttackingTower : BaseTower
         }
     }
 
+    /// <summary>
+    /// Checks if the given attack can be executed and performs the attack if possible.
+    /// </summary>
+    /// <param name="attack"></param>
     protected void CheckAttack(BaseAttack attack)
     {
         if (attack == null) return;

@@ -329,9 +329,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9b87e799ee77204e948fcd928d0b224, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  UnlockedSpells: 
+  _cameraController: {fileID: 789228130}
+  _treePrefab: {fileID: 6091531865139590403, guid: 80f3166d54a855345867a868917dbb1c, type: 3}
   _castle: {fileID: 1402729768}
-  _initialZombies: 6
+  _initialResources:
+    bodyPrice: 6
+    bloodPrice: 10
   _tilePrefab: {fileID: 7562894851678332238, guid: 8ed5b9d31768877409b23bc26bd753f5, type: 3}
   _tileSize: 5
   _mapWidth: 23
@@ -463,6 +466,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &789228130 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6146914402081955577, guid: f8d392e1b8f091644939b6228d7c2892, type: 3}
+  m_PrefabInstance: {fileID: 3034327707157753441}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df6f27067ac156141aa3837e40c12238, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraController
 --- !u!1 &1033844806
 GameObject:
   m_ObjectHideFlags: 0
@@ -586,7 +600,8 @@ MonoBehaviour:
       Data3: -1616460625
       Data4: -650137001
     Path: event:/SpawnGoblin
-  _bodiesPrice: 0
+  tile: {fileID: 0}
+  _towerType: 0
   _placeSound:
     Guid:
       Data1: 0
@@ -616,17 +631,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: UnitsMenu
       objectReference: {fileID: 0}
-    - target: {fileID: 660015899840835072, guid: 6605b56fd287d264b9583ca6055a03d7, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3345888700849065739, guid: 6605b56fd287d264b9583ca6055a03d7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 90.51849
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3345888700849065739, guid: 6605b56fd287d264b9583ca6055a03d7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 44.91782
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3345888700849065739, guid: 6605b56fd287d264b9583ca6055a03d7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -661,8 +672,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 3116192938348257630, guid: 6605b56fd287d264b9583ca6055a03d7, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6605b56fd287d264b9583ca6055a03d7, type: 3}
@@ -896,11 +906,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2907533428681362685, guid: d4900b7a76deb34488a0bcfd13f3575b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 930.20184
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2907533428681362685, guid: d4900b7a76deb34488a0bcfd13f3575b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 525.4942
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2907533428681362685, guid: d4900b7a76deb34488a0bcfd13f3575b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1012,5 +1022,5 @@ SceneRoots:
   - {fileID: 1402729767}
   - {fileID: 110342393}
   - {fileID: 1456060227}
-  - {fileID: 653161563}
   - {fileID: 1674590446}
+  - {fileID: 653161563}

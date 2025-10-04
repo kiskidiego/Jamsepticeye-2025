@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class CameraController : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class CameraController : MonoBehaviour
     private Vector3 _cameraForward;
     private InteractionMode _currentMode;
     private Tile _currentlyHighlightedTile;
+    TowerPrice _currentTower;
 
     private void Awake()
     {
@@ -40,16 +42,30 @@ public class CameraController : MonoBehaviour
                     _currentlyHighlightedTile = tile;
                     _currentlyHighlightedTile.HighlightTile(_currentMode);
                 }
+                if (Input.GetMouseButtonDown(1))
+                {
+                    ExitState();
+                    GameManager.Instance.ShowHUD();
+                }
                 if (Input.GetMouseButtonDown(0))
                 {
                     switch (_currentMode)
                     {
+                        case InteractionMode.Spellcasting:
+                            // Handle spellcasting interaction
+                            _currentMode = InteractionMode.Selecting;
+                            GameManager.Instance.ShowHUD();
+                            break;
                         case InteractionMode.Demolishing:
                             tile.DemolishBuilding();
+                            _currentMode = InteractionMode.Selecting;
+                            GameManager.Instance.ShowHUD();
                             break;
                         case InteractionMode.Building:
-                            GameObject towerPrefab = Resources.Load<GameObject>("Prefabs/TestTower");
-                            tile.ConstructBuilding(towerPrefab);
+                            tile.ConstructBuilding(_currentTower);
+                            _currentTower = null;
+                            _currentMode = InteractionMode.Selecting;
+                            GameManager.Instance.ShowHUD();
                             break;
                         case InteractionMode.Selecting:
                             tile.InteractWithTower();
@@ -63,5 +79,35 @@ public class CameraController : MonoBehaviour
             _currentlyHighlightedTile?.UnhighlightTile();
             _currentlyHighlightedTile = null;
         }
+    }
+
+    /// <summary>
+    /// Enters building mode to allow the player to construct a building.
+    /// </summary>
+    public void ConstructBuilding(TowerPrice tower)
+    {
+        _currentTower = tower;
+        _currentMode = InteractionMode.Building;
+    }
+
+    /// <summary>
+    /// Enters destruction mode to allow the player to demolish buildings and trees
+    /// </summary>
+    public void EnterDestructionMode()
+    {
+        _currentMode = InteractionMode.Demolishing;
+    }
+
+    /// <summary>
+    /// Exits the current interaction mode and returns to selecting mode.
+    /// </summary>
+    public void ExitState()
+    {
+        if (_currentMode == InteractionMode.Selecting) return;
+
+        _currentMode = InteractionMode.Selecting;
+        _currentTower = null;
+        _currentlyHighlightedTile?.UnhighlightTile();
+        _currentlyHighlightedTile = null;
     }
 }

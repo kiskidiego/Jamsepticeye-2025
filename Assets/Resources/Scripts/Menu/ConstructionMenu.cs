@@ -16,12 +16,8 @@ public class ConstructionMenu : BaseMenu
     [SerializeField] List<TowerArticle> _articles = new List<TowerArticle>();
     [SerializeField] TextMeshProUGUI ZombieAmountText;
     [SerializeField] TextMeshProUGUI BloodAmountText;
+    [SerializeField] float _superOpenOffset = -170f;
     List<TowerPrice> _prices = new List<TowerPrice>();
-
-    void Start()
-    {
-        _open = true;
-    }
     
     void Update()
     {
@@ -79,6 +75,18 @@ public class ConstructionMenu : BaseMenu
         GameManager.Instance.EnterDestructionMode();
     }
 
+    public void SuperOpen()
+    {
+        if (_state == MenuState.SuperOpened)
+        {
+            OpenMenu();
+            return;
+        }
+
+        _state = MenuState.SuperOpened;
+        _menuTransform.DOLocalMove(new Vector3(0, _superOpenOffset, 0), _animationDuration).SetEase(Ease.OutBack);
+    }
+
     /// <summary>
     /// Gets the index of the tower price in the list based on the tower type.
     /// </summary>
@@ -99,10 +107,10 @@ public class ConstructionMenu : BaseMenu
     /// </summary>
     public override void CloseMenu()
     {
-        if (!_open) return;
+        if (_state == MenuState.Closed) return;
 
-        _open = false;
-        _menuTransform.DOLocalMove(new Vector3(0, Screen.height, 0), _animationDuration).SetEase(Ease.InBack);
+        _state = MenuState.Closed;
+        _menuTransform.DOLocalMove(_closedPosition, _animationDuration).SetEase(Ease.InBack);
     }
 
     /// <summary>
@@ -110,9 +118,9 @@ public class ConstructionMenu : BaseMenu
     /// </summary>
     public override void OpenMenu()
     {
-        if (_open) return;
+        if (_state == MenuState.Opened) return;
 
-        _open = true;
+        _state = MenuState.Opened;
         _menuTransform.DOLocalMove(Vector3.zero, _animationDuration).SetEase(Ease.OutBack);
     }
 }

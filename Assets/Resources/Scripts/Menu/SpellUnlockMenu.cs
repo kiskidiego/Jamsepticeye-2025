@@ -8,13 +8,17 @@ public class SpellUnlockMenu : BaseMenu
 {
     public override void OpenMenu()
     {
+        if (_state == MenuState.Opened) return;
+
         _menuTransform.DOLocalMove(Vector3.zero, _animationDuration).SetEase(Ease.OutBack);
-        _open = true;
+        _state = MenuState.Opened;
     }
 
     public override void CloseMenu()
     {
-        _menuTransform.DOLocalMove(new Vector3(Screen.width, 0, 0), _animationDuration).SetEase(Ease.OutBack);
-        _open = false;
+        if (_state == MenuState.Closed) return;
+
+        _menuTransform.DOLocalMove(_closedPosition, _animationDuration).SetEase(Ease.OutBack);
+        _state = MenuState.Closed;
     }
 }

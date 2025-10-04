@@ -6,7 +6,8 @@ public abstract class BaseMenu : MonoBehaviour
     [SerializeField] protected EventReference _menuInteractionSound;
     [SerializeField] protected RectTransform _menuTransform;
     [SerializeField] protected float _animationDuration = 0.5f;
-    protected bool _open;
+    [SerializeField] protected Vector3 _closedPosition;
+    [SerializeField] protected MenuState _state = MenuState.Closed;
 
     /// <summary>
     /// Opens the menu.

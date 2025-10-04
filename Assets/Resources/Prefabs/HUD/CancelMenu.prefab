@@ -155,6 +155,10 @@ MonoBehaviour:
       Data4: 0
     Path: 
   _menuTransform: {fileID: 1563263415339220317}
+  _animationDuration: 0.5
+  _closedPosition: {x: 0, y: 300, z: 0}
+  _state: 0
+  _cameraController: {fileID: 0}
 --- !u!1 &4053052581657761018
 GameObject:
   m_ObjectHideFlags: 0

@@ -19,9 +19,9 @@ public class CancelMenu : BaseMenu
     /// </summary>
     public override void OpenMenu()
     {
-        if (_open) return;
+        if (_state == MenuState.Opened) return;
 
-        _open = true;
+        _state = MenuState.Opened;
         _menuTransform.DOLocalMove(Vector3.zero, _animationDuration).SetEase(Ease.OutBack);
     }
 
@@ -30,9 +30,9 @@ public class CancelMenu : BaseMenu
     /// </summary>
     public override void CloseMenu()
     {
-        if (!_open) return;
+        if (_state == MenuState.Closed) return;
 
-        _open = false;
-        _menuTransform.DOLocalMove(new Vector3(0, Screen.height, 0), _animationDuration).SetEase(Ease.InBack);
+        _state = MenuState.Closed;
+        _menuTransform.DOLocalMove(_closedPosition, _animationDuration).SetEase(Ease.InBack);
     }
 }

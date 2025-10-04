@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// A spell that creates protective barriers around allied units within a certain radius.
+/// </summary>
 public class ProtectiveSpell : BaseSpell
 {
     [SerializeField] float _duration = 5f;
@@ -8,6 +11,9 @@ public class ProtectiveSpell : BaseSpell
     [SerializeField] float _effectRadius = 5f;
     [SerializeField] GameObject _barrierPrefab;
 
+    /// <summary>
+    /// The specific effect of the protective spell.
+    /// </summary>
     protected override void Effect(Vector3 position)
     {
         List<Hittable> allies = GameManager.Instance.GetAllAlliesInRange(position, _effectRadius);

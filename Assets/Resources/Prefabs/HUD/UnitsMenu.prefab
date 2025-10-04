@@ -423,6 +423,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63b10b489c36c8742bd7db51fc078841, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitMenu
+  _menuInteractionSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  _menuTransform: {fileID: 1012760687577481600}
   cemetery: {fileID: 0}
   TotalZombieAmountText: {fileID: 6122391854749592097}
   BloodAmountText: {fileID: 6858145897001944724}
@@ -458,13 +466,6 @@ MonoBehaviour:
   - unitType: 4
     amountText: {fileID: 5052323743793784827}
     amount: 0
-  _menuInteractionSound:
-    Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
 --- !u!1 &1481311940689423446
 GameObject:
   m_ObjectHideFlags: 0
@@ -2323,7 +2324,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -2000, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4975926562770609435

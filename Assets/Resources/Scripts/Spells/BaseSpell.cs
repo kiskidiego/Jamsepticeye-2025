@@ -1,6 +1,9 @@
 using FMODUnity;
 using UnityEngine;
 
+/// <summary>
+/// Base class for spells that can be cast by the player.
+/// </summary>
 public abstract class BaseSpell : MonoBehaviour
 {
     public Price Cost => _castingCost;
@@ -8,15 +11,24 @@ public abstract class BaseSpell : MonoBehaviour
     [SerializeField] float _cooldown = 20f; // Cooldown time in seconds
     [SerializeField] EventReference _spellSound;
     float _currentCooldown; // Time left until the spell can be cast again
+
+    /// <summary>
+    /// Updates the spell's cooldown timer.
+    /// </summary>
     void Update()
     {
         if (_currentCooldown > 0f)
             _currentCooldown -= Time.deltaTime;
     }
+
+    /// <summary>
+    /// Casts the spell at the specified target position if the spell is off cooldown and the player has enough resources.
+    /// </summary>
+    /// <param name="targetPosition"></param>
     public void CastSpell(Vector3 targetPosition)
     {
         if (_currentCooldown > 0f) return;
-        if( GameManager.Instance.GetBlood() < _castingCost.bloodPrice || GameManager.Instance.GetBodies() < _castingCost.bodyPrice)
+        if (GameManager.Instance.GetBlood() < _castingCost.bloodPrice || GameManager.Instance.GetBodies() < _castingCost.bodyPrice)
             return;
 
         GameManager.Instance.RemoveBodies(_castingCost.bodyPrice);
@@ -26,5 +38,10 @@ public abstract class BaseSpell : MonoBehaviour
         _currentCooldown = _cooldown;
         AudioManager.instance.PlayOneShot(_spellSound, targetPosition);
     }
+
+    /// <summary>
+    /// The specific effect of the spell, to be implemented by derived classes.
+    /// </summary>
+    /// <param name="targetPosition"></param>
     protected abstract void Effect(Vector3 targetPosition);
 }

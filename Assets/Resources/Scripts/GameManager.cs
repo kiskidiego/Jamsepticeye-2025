@@ -8,10 +8,11 @@ public class GameManager : MonoBehaviour
     public List<AllyUnit> AlliedUnits => _alliedUnits;
     public static GameManager Instance { get; private set; } // Singleton instance, new game managers will override old ones
     public Hittable Castle => _castle;
-    [HideInInspector] public bool[] UnlockedSpells;
     public PhaseEnum CurrentPhase => _currentPhase;
+    [SerializeField] CameraController _cameraController;
+    [SerializeField] BaseTower _treePrefab;
     [SerializeField] private Cemetery _castle;
-    [SerializeField] private int _initialZombies = 5;
+    [SerializeField] private Price _initialResources;
     [SerializeField] private Tile _tilePrefab;
     [SerializeField] private float _tileSize = 10f;
     [SerializeField] private int _mapWidth = 10;
@@ -26,9 +27,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] List<AllyUnitPrice> _unitPrices;
     [SerializeField] List<SpellPrice> _spellPrices;
     [SerializeField] List<TowerPrice> _towerPrices;
-    [SerializeField] GameObject _spellCastingMenu;
     [SerializeField] UnitMenu _unitMenu;
     [SerializeField] ConstructionMenu _constructionMenu;
+    [SerializeField] CancelMenu _cancelMenu;
+    [SerializeField] BaseMenu _spellCastingMenu;
+    [SerializeField] BaseMenu _spellUnlockMenu;
     List<BaseSpell> _unlockedSpells = new List<BaseSpell>();
     List<AllyUnit> _alliedUnits = new List<AllyUnit>();
     List<EnemyUnit> _enemyUnits = new List<EnemyUnit>();
@@ -53,10 +56,7 @@ public class GameManager : MonoBehaviour
 
             Instance = this;
         }
-        UnlockedSpells = new bool[1];
-        _towers.Add(_castle);
-        _cemeteries.Add(_castle);
-        _unitMenu.gameObject.SetActive(false);
+
         _unitMenu.Init(_unitPrices);
 
         _constructionMenu.Init(_towerPrices);
@@ -64,13 +64,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            if (GetBodies() >= 2)
-            {
-                RemoveBodies(2);
-            }
-        }
         if (_currentPhase == PhaseEnum.Build)
         {
             if (Input.GetKeyDown(KeyCode.Space))
@@ -98,7 +91,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         _tiles = new Tile[_mapWidth * _mapHeight];
-        GameObject treePrefab = Resources.Load<GameObject>("Prefabs/Tree");
         for (int x = 0; x < _mapWidth; x++)
         {
             for (int y = 0; y < _mapHeight; y++)
@@ -108,17 +100,17 @@ public class GameManager : MonoBehaviour
                 {
                     if (y <= 4 || y >= _mapHeight - 7 || x <= 2)
                     {
-                        Instantiate(treePrefab, new Vector3(x * _tileSize, 0, y * _tileSize), Quaternion.identity, newTile.transform);
+                        Instantiate(_treePrefab, new Vector3(x * _tileSize, 0, y * _tileSize), Quaternion.identity, newTile.transform);
                     }
                     if (x <= 5 && (y <= 7 || y >= _mapHeight - 12))
                     {
-                        Instantiate(treePrefab, new Vector3(x * _tileSize, 0, y * _tileSize), Quaternion.identity, newTile.transform);
+                        Instantiate(_treePrefab, new Vector3(x * _tileSize, 0, y * _tileSize), Quaternion.identity, newTile.transform);
                     }
                     newTile.InitializeTile(Tile.TileState.Battlefield);
                 }
                 else if (y <= 7 || y >= _mapHeight - 12)
                 {
-                    GameObject tree = Instantiate(treePrefab, new Vector3(x * _tileSize, 0, y * _tileSize), Quaternion.identity, newTile.transform);
+                    BaseTower tree = Instantiate(_treePrefab, new Vector3(x * _tileSize, 0, y * _tileSize), Quaternion.identity, newTile.transform);
                     newTile.InitializeTile(Tile.TileState.Occupied, tree);
                 }
                 else newTile.InitializeTile(Tile.TileState.Buildable);
@@ -126,6 +118,8 @@ public class GameManager : MonoBehaviour
             }
         }
         StartCoroutine(MapSpawnAnimation());
+
+        _blood = _initialResources.bloodPrice;
     }
 
     /// <summary>
@@ -173,7 +167,14 @@ public class GameManager : MonoBehaviour
                 ));
             }
         }
+        foreach (BaseTower tower in _towers)
+        {
+            tower.OnPrepare();
+            tower.Pause();
+        }
         _currentPhase = PhaseEnum.Combat;
+
+        HideHUD(false);
     }
 
     /// <summary>
@@ -218,7 +219,7 @@ public class GameManager : MonoBehaviour
 
         foreach (EnemyUnit unit in _enemyUnits)
         {
-            for(int i = 0; i < unit.BodyReward; i++)
+            for (int i = 0; i < unit.BodyReward; i++)
             {
                 AddBody();
             }
@@ -228,12 +229,18 @@ public class GameManager : MonoBehaviour
         }
         _enemyUnits.Clear();
 
+        foreach (BaseTower tower in _towers)
+        {
+            tower.Unpause();
+        }
+
         _currentRound++;
         if (_currentRound < _rounds.Length)
         {
             Debug.Log("All rounds completed!");
         }
         _currentPhase = PhaseEnum.Build;
+        ShowHUD();
     }
 
     /// <summary>
@@ -462,6 +469,9 @@ public class GameManager : MonoBehaviour
         return alliesInRange;
     }
 
+    /// <summary>
+    /// Adds a zombie to a random cemetery if there is space available.
+    /// </summary>
     public void AddBody()
     {
         List<Cemetery> cemeteries = new List<Cemetery>();
@@ -490,15 +500,23 @@ public class GameManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Removes the specified amount of bodies (zombies) from the player's units.
+    /// </summary>
     public void RemoveBodies(int amount)
     {
         int bodiesToRemove = amount;
-        for (int i = _alliedUnits.Count - 1; i >= 0 && bodiesToRemove > 0; i--)
+        for (int i = 0; i < _alliedUnits.Count && bodiesToRemove > 0; i++)
         {
             if (_alliedUnits[i].unitType == AllyUnitsEnum.Zombie)
             {
+                if (_alliedUnits[i].cemetery != null)
+                {
+                    _alliedUnits[i].cemetery.RemoveUnit(_alliedUnits[i]);
+                }
                 Destroy(_alliedUnits[i].gameObject);
                 _alliedUnits.RemoveAt(i);
+                i--;
                 bodiesToRemove--;
             }
         }
@@ -513,12 +531,19 @@ public class GameManager : MonoBehaviour
         Debug.Log($"Castle is destroyed! You survived {_currentRound} rounds.");
     }
 
+    /// <summary>
+    /// Adds blood to the player's resources.
+    /// </summary>
+    /// <param name="amount"></param>
     public void AddBlood(int amount)
     {
         _blood += amount;
         if (_blood > _maxBlood) _blood = _maxBlood;
     }
 
+    /// <summary>
+    /// Returns the current amount of bodies (zombies) the player has.
+    /// </summary>
     public int GetBodies()
     {
         int zombieCount = 0;
@@ -532,11 +557,31 @@ public class GameManager : MonoBehaviour
         return zombieCount;
     }
 
+    /// <summary>
+    /// Returns the maximum number of bodies (zombies) the player can have based on cemetery capacities.
+    /// </summary>
+    public int GetMaxBodies()
+    {
+        int maxBodies = 0;
+        foreach (Cemetery cemetery in _cemeteries)
+        {
+            maxBodies += cemetery.Capacity;
+        }
+        return maxBodies;
+    }
+
+    /// <summary>
+    /// Returns the current amount of blood the player has.
+    /// </summary>
     public int GetBlood()
     {
         return _blood;
     }
 
+    /// <summary>
+    /// Starts the round.
+    /// </summary>
+    /// <returns></returns>
     IEnumerator StartRoundCoroutine()
     {
         PrepareRound();
@@ -544,22 +589,46 @@ public class GameManager : MonoBehaviour
         StartRound();
     }
 
+    /// <summary>
+    /// Increases the maximum blood capacity of the player.
+    /// </summary>
+    /// <param name="numberBlood"></param>
     public void AddMaxBlood(int numberBlood)
     {
         _maxBlood += numberBlood;
         if (_blood > _maxBlood) _blood = _maxBlood;
     }
 
+    /// <summary>
+    /// Returns the maximum blood capacity of the player.
+    /// </summary>
+    public int GetMaxBlood()
+    {
+        return _maxBlood;
+    }
+
+    /// <summary>
+    /// Registers an enemy unit to the game.
+    /// </summary>
+    /// <param name="enemy"></param>
     public void AddEnemyUnit(EnemyUnit enemy)
     {
         _enemyUnits.Add(enemy);
     }
 
+    /// <summary>
+    /// Registers an allied unit to the game.
+    /// </summary>
+    /// <param name="ally"></param>
     public void AddAllyUnit(AllyUnit ally)
     {
         _alliedUnits.Add(ally);
     }
 
+    /// <summary>
+    /// Returns the price of the specified allied unit.
+    /// </summary>
+    /// <param name="unitType"></param>
     public AllyUnitPrice GetUnitPrice(AllyUnitsEnum unitType)
     {
         foreach (AllyUnitPrice unitPrice in _unitPrices)
@@ -572,6 +641,10 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
+    /// <summary>
+    /// Returns the price of the specified spell.
+    /// </summary>
+    /// <param name="spellType"></param>
     public SpellPrice GetSpellPrice(SpellEnum spellType)
     {
         foreach (SpellPrice spellPrice in _spellPrices)
@@ -584,6 +657,9 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
+    /// <summary>
+    /// Returns the list of cemeteries excluding the specified one.
+    /// </summary>
     public List<Cemetery> GetCemeteries(Cemetery exclude = null)
     {
         List<Cemetery> cemeteries = new List<Cemetery>();
@@ -597,6 +673,10 @@ public class GameManager : MonoBehaviour
         return cemeteries;
     }
 
+    /// <summary>
+    /// Cleans up the specified cemetery by removing killing units inside it and removing dead units from the allied units list.
+    /// </summary>
+    /// <param name="cemetery"></param>
     public void CleanUpCemetery(Cemetery cemetery)
     {
         foreach (AllyUnit unit in cemetery.GetComponentsInChildren<AllyUnit>())
@@ -611,23 +691,99 @@ public class GameManager : MonoBehaviour
         _alliedUnits.RemoveAll(unit => unit.Dead);
     }
 
+    /// <summary>
+    /// Enters destruction mode to allow the player to demolish buildings and trees
+    /// </summary>
+    public void EnterDestructionMode()
+    {
+        _cameraController.EnterDestructionMode();
+        HideHUD();
+    }
+
+    /// <summary>
+    /// Registers a tower to the game.
+    /// </summary>
+    public void AddTower(BaseTower tower)
+    {
+        _towers.Add(tower);
+    }
+
+    /// <summary>
+    /// Registers a cemetery to the game.
+    /// </summary>
+    public void AddCemetery(Cemetery cemetery)
+    {
+        _cemeteries.Add(cemetery);
+    }
+
+    /// <summary>
+    /// Removes a tower from the game.
+    /// </summary>
     public void RemoveTower(BaseTower tower)
     {
         _towers.Remove(tower);
         Destroy(tower.gameObject);
     }
 
-    public void Construct(TowersEnum towerType)
+    /// <summary>
+    /// Enters building mode to allow the player to construct a building.
+    /// </summary>
+    public void Construct(TowerPrice tower)
     {
-        throw new System.NotImplementedException();
+        _cameraController.ConstructBuilding(tower);
+        HideHUD();
     }
 
+    /// <summary>
+    /// Unlocks a new spell for the player.
+    /// </summary>
     public void UnlockSpell(BaseSpell spellType)
     {
         if (!_unlockedSpells.Contains(spellType))
         {
             _unlockedSpells.Add(spellType);
         }
+    }
+
+    /// <summary>
+    /// Hides the HUD and shows the cancel menu if specified.
+    /// </summary>
+    public void HideHUD(bool showCancel = true)
+    {
+        _constructionMenu.CloseMenu();
+        //_spellCastingMenu.CloseMenu();
+        if (showCancel)
+        {
+            _cancelMenu.OpenMenu();
+        }
+    }
+
+    /// <summary>
+    /// Shows the HUD and hides other menus.
+    /// </summary>
+    public void ShowHUD()
+    {
+        _constructionMenu.OpenMenu();
+        //_spellCastingMenu.OpenMenu();
+        _cancelMenu.CloseMenu();
+        _unitMenu.CloseMenu();
+        //_spellUnlockMenu.CloseMenu();
+    }
+
+    /// <summary>
+    /// Returns the price of the specified tower.
+    /// </summary>
+    /// <param name="towerType"></param>
+    public Price GetTowerPrice(TowersEnum towerType)
+    {
+        foreach (TowerPrice price in _towerPrices)
+        {
+            if (price.towerType == towerType)
+            {
+                return price.price;
+            }
+        }
+        return null;
     }
 
     private IEnumerator MapSpawnAnimation()
@@ -649,7 +805,7 @@ public class GameManager : MonoBehaviour
     }
     private IEnumerator InitialZombieSpawns()
     {
-        for (int i = 0; i < _initialZombies; i++)
+        for (int i = 0; i < _initialResources.bodyPrice; i++)
         {
             AddBody();
             yield return new WaitForSeconds(0.5f);

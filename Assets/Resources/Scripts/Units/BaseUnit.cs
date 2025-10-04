@@ -4,7 +4,9 @@ using System.Collections;
 using DG.Tweening;
 using UnityEditor.UI;
 
-// Base class for all units, enemy and ally
+/// <summary>
+/// Base class for all units, enemy and ally
+/// </summary>
 public abstract class BaseUnit : Hittable
 {
     public bool Dead => _dead;

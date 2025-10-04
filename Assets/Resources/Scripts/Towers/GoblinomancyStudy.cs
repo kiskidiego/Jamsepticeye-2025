@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// A tower that allows players to purchase and unlock spells.
+/// </summary>
 public class GoblinomancyStudy : BaseTower
 {
     [SerializeField] private Canvas _spellMenu;
@@ -12,6 +15,9 @@ public class GoblinomancyStudy : BaseTower
         _spellMenu.enabled = true;
     }
 
+    /// <summary>
+    /// Attempts to purchase and unlock a spell if the player has enough resources.
+    /// </summary>
     public void BuySpell(SpellEnum spellId)
     {
         GameManager manager = GameManager.Instance;

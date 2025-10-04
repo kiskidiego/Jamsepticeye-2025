@@ -144,7 +144,7 @@ public class UnitMenu : BaseMenu
         if (!_open) return;
 
         _open = false;
-        _menuTransform.DOLocalMove(new Vector3(-2000, 0, 0), 0.25f).SetEase(Ease.InBack).OnComplete(() => gameObject.SetActive(false));
+        _menuTransform.DOLocalMove(new Vector3(-Screen.width, 0, 0), _animationDuration).SetEase(Ease.InBack).OnComplete(() => gameObject.SetActive(false));
         GameManager.Instance.ShowHUD();
     }
 
@@ -156,7 +156,7 @@ public class UnitMenu : BaseMenu
         if (_open) return;
 
         _open = true;
-        _menuTransform.DOLocalMove(Vector3.zero, 0.25f).SetEase(Ease.OutBack);
+        _menuTransform.DOLocalMove(Vector3.zero, _animationDuration).SetEase(Ease.OutBack);
         GameManager.Instance.HideHUD();
     }
 }

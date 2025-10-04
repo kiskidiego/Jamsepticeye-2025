@@ -786,6 +786,36 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
+    public void OpenSpellUnlockMenu()
+    {
+        _spellUnlockMenu.OpenMenu();
+        HideHUD();
+    }
+
+    /// <summary>
+    /// Attempts to purchase and unlock a spell if the player has enough resources.
+    /// </summary>
+    public void BuySpell(SpellEnum spell)
+    {
+        SpellPrice spellPrice = GetSpellPrice(spell);
+        if (spellPrice == null)
+        {
+            Debug.LogError($"SpellPrice for {spell} not found.");
+            return;
+        }
+        if (GetBodies() >= spellPrice.price.bodyPrice && GetBlood() >= spellPrice.price.bloodPrice)
+        {
+            RemoveBodies(spellPrice.price.bodyPrice);
+            AddBlood(-spellPrice.price.bloodPrice);
+            UnlockSpell(spellPrice.spellPrefab);
+            Debug.Log($"{spell} spell purchased and unlocked.");
+        }
+        else
+        {
+            Debug.Log("Not enough resources to buy this spell.");
+        }
+    }
+
     private IEnumerator MapSpawnAnimation()
     {
         for (int i = 0; i < _mapWidth; i++)

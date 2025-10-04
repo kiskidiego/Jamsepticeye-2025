@@ -102,7 +102,7 @@ public class ConstructionMenu : BaseMenu
         if (!_open) return;
 
         _open = false;
-        _menuTransform.DOLocalMove(new Vector3(0, 300, 0), 0.25f).SetEase(Ease.InBack);
+        _menuTransform.DOLocalMove(new Vector3(0, Screen.height, 0), _animationDuration).SetEase(Ease.InBack);
     }
 
     /// <summary>
@@ -113,6 +113,6 @@ public class ConstructionMenu : BaseMenu
         if (_open) return;
 
         _open = true;
-        _menuTransform.DOLocalMove(Vector3.zero, 0.25f).SetEase(Ease.OutBack);
+        _menuTransform.DOLocalMove(Vector3.zero, _animationDuration).SetEase(Ease.OutBack);
     }
 }

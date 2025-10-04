@@ -1,3 +1,4 @@
+using FMODUnity;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -5,11 +6,12 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] GameObject OptionsMenu;
-    [SerializeField] Slider MasterVolumeSlider;
-    [SerializeField] Slider MusicVolumeSlider;
-    [SerializeField] Slider AmbienceVolumeSlider;
-    [SerializeField] Slider SFXVolumeSlider;
+    [SerializeField] EventReference _pressSound;
 
+    public void PlayButtonSound()
+    {
+        AudioManager.instance.PlayOneShot(_pressSound, transform.position);
+    }
     public void PlayGame()
     {
         SceneManager.LoadScene("Game");
@@ -23,31 +25,11 @@ public class MainMenu : MonoBehaviour
     public void OpenOptionsMenu()
     {
         OptionsMenu.SetActive(true);
-        MasterVolumeSlider.value = AudioManager.instance.masterVolume;
-        MusicVolumeSlider.value = AudioManager.instance.musicVolume;
-        AmbienceVolumeSlider.value = AudioManager.instance.ambienceVolume;
-        SFXVolumeSlider.value = AudioManager.instance.SFXVolume;
+        OptionsMenu.GetComponent<OptionsMenu>().OpenOptionsMenu();
     }
 
-    public void CloseOptionsMenu()
+    public void OpenURL(string url)
     {
-        OptionsMenu.SetActive(false);
-    }
-
-    public void SetMasterVolume(float volume)
-    {
-        AudioManager.instance.masterVolume = volume;
-    }
-    public void SetMusicVolume(float volume)
-    {
-        AudioManager.instance.musicVolume = volume;
-    }
-    public void SetAmbienceVolume(float volume)
-    {
-        AudioManager.instance.ambienceVolume = volume;
-    }
-    public void SetSFXVolume(float volume)
-    {
-        AudioManager.instance.SFXVolume = volume;
+        Application.OpenURL(url);
     }
 }

@@ -2,48 +2,47 @@ using FMODUnity;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class OptionsMenu : MonoBehaviour
+public class OptionsMenu : BaseMenu
 {
     [SerializeField] Slider MasterVolumeSlider;
     [SerializeField] Slider MusicVolumeSlider;
     [SerializeField] Slider AmbienceVolumeSlider;
     [SerializeField] Slider SFXVolumeSlider;
-    [SerializeField] EventReference _pressSound;
-    public void OpenOptionsMenu()
+    public override void OpenMenu()
     {
+        gameObject.SetActive(true);
         MasterVolumeSlider.value = AudioManager.instance.masterVolume;
         MusicVolumeSlider.value = AudioManager.instance.musicVolume;
         AmbienceVolumeSlider.value = AudioManager.instance.ambienceVolume;
         SFXVolumeSlider.value = AudioManager.instance.SFXVolume;
     }
 
-    public void PlayButtonSound()
-    {
-        AudioManager.instance.PlayOneShot(_pressSound, transform.position);
-    }
-
     public void MuteMasterVolume()
     {
         bool isMuted = AudioManager.instance.masterMuted;
         AudioManager.instance.masterMuted = !isMuted;
+        AudioManager.instance.PlayOneShot(_menuInteractionSound, transform.position);
     }
 
     public void MuteMusicVolume()
     {
         bool isMuted = AudioManager.instance.musicMuted;
         AudioManager.instance.musicMuted = !isMuted;
+        AudioManager.instance.PlayOneShot(_menuInteractionSound, transform.position);
     }
 
     public void MuteAmbienceVolume()
     {
         bool isMuted = AudioManager.instance.ambienceMuted;
         AudioManager.instance.ambienceMuted = !isMuted;
+        AudioManager.instance.PlayOneShot(_menuInteractionSound, transform.position);
     }
 
     public void MuteSFXVolume()
     {
         bool isMuted = AudioManager.instance.SFXMuted;
         AudioManager.instance.SFXMuted = !isMuted;
+        AudioManager.instance.PlayOneShot(_menuInteractionSound, transform.position);
     }
 
     public void SetMasterVolume()
@@ -67,8 +66,9 @@ public class OptionsMenu : MonoBehaviour
         AudioManager.instance.SFXMuted = false;
     }
     
-    public void CloseOptionsMenu()
+    public override void CloseMenu()
     {
+        AudioManager.instance.PlayOneShot(_menuInteractionSound, transform.position);
         gameObject.SetActive(false);
     }
 

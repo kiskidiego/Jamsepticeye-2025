@@ -11,6 +11,7 @@ public class CameraController : MonoBehaviour
         Selecting
     }
     [SerializeField] private float _moveSpeed = 5f;
+    [SerializeField] BaseMenu _pauseMenu;
     private Camera _camera;
     private Vector3 _cameraForward;
     private InteractionMode _currentMode;
@@ -32,53 +33,54 @@ public class CameraController : MonoBehaviour
         if (Input.GetKeyDown("1")) _currentMode = InteractionMode.Demolishing;
         else if (Input.GetKeyDown("2")) _currentMode = InteractionMode.Building;
         else if (Input.GetKeyDown("3")) _currentMode = InteractionMode.Spellcasting;
+        if (Input.GetKeyDown(KeyCode.Escape)) _pauseMenu.OpenMenu();
         if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hitInfo))
-        {
-            if (hitInfo.collider.TryGetComponent<Tile>(out Tile tile))
             {
-                if (tile != _currentlyHighlightedTile)
+                if (hitInfo.collider.TryGetComponent<Tile>(out Tile tile))
                 {
-                    _currentlyHighlightedTile?.UnhighlightTile();
-                    _currentlyHighlightedTile = tile;
-                    _currentlyHighlightedTile.HighlightTile(_currentMode);
-                }
-                if (Input.GetMouseButtonDown(1))
-                {
-                    ExitState();
-                    GameManager.Instance.ShowHUD();
-                }
-                if (Input.GetMouseButtonDown(0))
-                {
-                    switch (_currentMode)
+                    if (tile != _currentlyHighlightedTile)
                     {
-                        case InteractionMode.Spellcasting:
-                            // Handle spellcasting interaction
-                            _currentMode = InteractionMode.Selecting;
-                            GameManager.Instance.ShowHUD();
-                            break;
-                        case InteractionMode.Demolishing:
-                            tile.DemolishBuilding();
-                            _currentMode = InteractionMode.Selecting;
-                            GameManager.Instance.ShowHUD();
-                            break;
-                        case InteractionMode.Building:
-                            tile.ConstructBuilding(_currentTower);
-                            _currentTower = null;
-                            _currentMode = InteractionMode.Selecting;
-                            GameManager.Instance.ShowHUD();
-                            break;
-                        case InteractionMode.Selecting:
-                            tile.InteractWithTower();
-                            break;
+                        _currentlyHighlightedTile?.UnhighlightTile();
+                        _currentlyHighlightedTile = tile;
+                        _currentlyHighlightedTile.HighlightTile(_currentMode);
+                    }
+                    if (Input.GetMouseButtonDown(1))
+                    {
+                        ExitState();
+                        GameManager.Instance.ShowHUD();
+                    }
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        switch (_currentMode)
+                        {
+                            case InteractionMode.Spellcasting:
+                                // Handle spellcasting interaction
+                                _currentMode = InteractionMode.Selecting;
+                                GameManager.Instance.ShowHUD();
+                                break;
+                            case InteractionMode.Demolishing:
+                                tile.DemolishBuilding();
+                                _currentMode = InteractionMode.Selecting;
+                                GameManager.Instance.ShowHUD();
+                                break;
+                            case InteractionMode.Building:
+                                tile.ConstructBuilding(_currentTower);
+                                _currentTower = null;
+                                _currentMode = InteractionMode.Selecting;
+                                GameManager.Instance.ShowHUD();
+                                break;
+                            case InteractionMode.Selecting:
+                                tile.InteractWithTower();
+                                break;
+                        }
                     }
                 }
             }
-        }
-        else
-        {
-            _currentlyHighlightedTile?.UnhighlightTile();
-            _currentlyHighlightedTile = null;
-        }
+            else
+            {
+                _currentlyHighlightedTile?.UnhighlightTile();
+                _currentlyHighlightedTile = null;
+            }
     }
 
     /// <summary>

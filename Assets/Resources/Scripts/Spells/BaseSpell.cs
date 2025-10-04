@@ -43,6 +43,11 @@ public abstract class BaseSpell : BaseMenu
         }
     }
 
+    public void EnterCastingMode()
+    {
+        GameManager.Instance.EnterCastingMode(this);
+    }
+
     /// <summary>
     /// Casts the spell at the specified target position if the spell is off cooldown and the player has enough resources.
     /// </summary>

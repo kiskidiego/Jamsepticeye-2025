@@ -17,6 +17,7 @@ public class CameraController : MonoBehaviour
     private InteractionMode _currentMode;
     private Tile _currentlyHighlightedTile;
     TowerPrice _currentTower;
+    BaseSpell _currentSpell;
 
     private void Awake()
     {
@@ -54,9 +55,10 @@ public class CameraController : MonoBehaviour
                         switch (_currentMode)
                         {
                             case InteractionMode.Spellcasting:
-                                // Handle spellcasting interaction
+                                _currentSpell.CastSpell(hitInfo.point);
+                                _currentSpell = null;
                                 _currentMode = InteractionMode.Selecting;
-                                GameManager.Instance.ShowHUD();
+                                GameManager.Instance.ExitCastingMode();
                                 break;
                             case InteractionMode.Demolishing:
                                 tile.DemolishBuilding();
@@ -100,6 +102,12 @@ public class CameraController : MonoBehaviour
         _currentMode = InteractionMode.Demolishing;
     }
 
+    public void EnterCastingMode(BaseSpell spell)
+    {
+        _currentSpell = spell;
+        _currentMode = InteractionMode.Spellcasting;
+    }
+
     /// <summary>
     /// Exits the current interaction mode and returns to selecting mode.
     /// </summary>
@@ -107,6 +115,7 @@ public class CameraController : MonoBehaviour
     {
         if (_currentMode == InteractionMode.Selecting) return;
 
+        _currentSpell = null;
         _currentMode = InteractionMode.Selecting;
         _currentTower = null;
         _currentlyHighlightedTile?.UnhighlightTile();

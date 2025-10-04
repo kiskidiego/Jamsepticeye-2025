@@ -311,7 +311,7 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
-  _lightningPrefab: {fileID: 5855548668255424474, guid: 41190176e076b24449e141ba6dca4be1, type: 3}
+  _lightningPrefab: {fileID: 645171300196340114, guid: 2b43a6de018559246801d97d4f8c16e6, type: 3}
   _damage: 100
 --- !u!1 &4053052581657761018
 GameObject:
@@ -436,9 +436,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: CancelMenu, Assembly-CSharp
-        m_MethodName: Cancel
+      - m_Target: {fileID: 4107687205794462187}
+        m_TargetAssemblyTypeName: LightningSpell, Assembly-CSharp
+        m_MethodName: EnterCastingMode
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

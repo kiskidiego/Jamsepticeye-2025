@@ -173,9 +173,8 @@ public class GameManager : MonoBehaviour
             tower.OnPrepare();
             tower.Pause();
         }
-        _currentPhase = PhaseEnum.Combat;
-
         HideHUD(false);
+        _currentPhase = PhaseEnum.Combat;
     }
 
     /// <summary>
@@ -755,7 +754,14 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void HideHUD(bool showCancel = true)
     {
-        _constructionMenu.CloseMenu();
+        if (_currentPhase == PhaseEnum.Build)
+        {
+            _constructionMenu.CloseMenu();
+        }
+        else if (_currentPhase == PhaseEnum.Combat)
+        {
+            _spellCastingMenu.CloseMenu();
+        }
         if (showCancel)
         {
             _cancelMenu.OpenMenu();
@@ -767,10 +773,22 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ShowHUD()
     {
-        _constructionMenu.OpenMenu();
-        _cancelMenu.CloseMenu();
-        _unitMenu.CloseMenu();
-        _spellUnlockMenu.CloseMenu();
+        if (_currentPhase == PhaseEnum.Build)
+        {
+            _constructionMenu.OpenMenu();
+            _constructionMenu.OpenMenu();
+            _cancelMenu.CloseMenu();
+            _unitMenu.CloseMenu();
+            _spellUnlockMenu.CloseMenu();
+        }
+        else if (_currentPhase == PhaseEnum.Combat)
+        {
+            _spellCastingMenu.OpenMenu();
+            _cancelMenu.CloseMenu();
+            _constructionMenu.CloseMenu();
+            _unitMenu.CloseMenu();
+            _spellUnlockMenu.CloseMenu();
+        }
     }
 
     /// <summary>
@@ -817,6 +835,17 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Not enough resources to buy this spell.");
         }
+    }
+
+    public void EnterCastingMode(BaseSpell spell)
+    {
+        _cameraController.EnterCastingMode(spell);
+        HideHUD();
+    }
+
+    public void ExitCastingMode()
+    {
+        ShowHUD();
     }
 
     private IEnumerator MapSpawnAnimation()

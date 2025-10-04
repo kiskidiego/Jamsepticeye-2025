@@ -25,7 +25,6 @@ public class BaseTower : Hittable
         AudioManager.instance.PlayOneShot(_placeSound, transform.position);
         GameManager.Instance.AddTower(this);
         _price = GameManager.Instance.GetTowerPrice(_towerType);
-        Debug.Log("Built " + gameObject.name + " for " + _price.bodyPrice + " bodies and " + _price.bloodPrice + " blood.");
     }
 
     /// <summary>
@@ -41,7 +40,6 @@ public class BaseTower : Hittable
     /// </summary>
     public virtual void OnSell()
     {
-        Debug.Log("Sold " + gameObject.name + " for " + Mathf.RoundToInt(_price.bodyPrice * SELL_CASHBACK) + " bodies and " + Mathf.RoundToInt(_price.bloodPrice * SELL_CASHBACK) + " blood.");
         for (int i = 0; i < Mathf.RoundToInt(_price.bodyPrice * SELL_CASHBACK * CurrentHealth / MaxHealth); i++)
         {
             GameManager.Instance.AddBody();

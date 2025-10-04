@@ -30,9 +30,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] UnitMenu _unitMenu;
     [SerializeField] ConstructionMenu _constructionMenu;
     [SerializeField] CancelMenu _cancelMenu;
-    [SerializeField] BaseMenu _spellCastingMenu;
-    [SerializeField] BaseMenu _spellUnlockMenu;
-    List<BaseSpell> _unlockedSpells = new List<BaseSpell>();
+    [SerializeField] SpellCastingMenu _spellCastingMenu;
+    [SerializeField] SpellUnlockMenu _spellUnlockMenu;
     List<AllyUnit> _alliedUnits = new List<AllyUnit>();
     List<EnemyUnit> _enemyUnits = new List<EnemyUnit>();
     List<BaseTower> _towers = new List<BaseTower>();
@@ -60,6 +59,8 @@ public class GameManager : MonoBehaviour
         _unitMenu.Init(_unitPrices);
 
         _constructionMenu.Init(_towerPrices);
+
+        _spellUnlockMenu.Init(_spellPrices);
     }
 
     void Update()
@@ -190,6 +191,11 @@ public class GameManager : MonoBehaviour
         {
             unit.Unpause();
         }
+        foreach (BaseTower tower in _towers)
+        {
+            tower.Unpause();
+        }
+        _spellCastingMenu.OpenMenu();
     }
 
     /// <summary>
@@ -241,6 +247,7 @@ public class GameManager : MonoBehaviour
         }
         _currentPhase = PhaseEnum.Build;
         ShowHUD();
+        _spellCastingMenu.CloseMenu();
     }
 
     /// <summary>
@@ -737,12 +744,10 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Unlocks a new spell for the player.
     /// </summary>
-    public void UnlockSpell(BaseSpell spellType)
+    public void UnlockSpell(BaseSpell spellPrefab)
     {
-        if (!_unlockedSpells.Contains(spellType))
-        {
-            _unlockedSpells.Add(spellType);
-        }
+        Instantiate(spellPrefab, _spellCastingMenu.transform);
+        _spellCastingMenu.CloseMenu();
     }
 
     /// <summary>
@@ -751,7 +756,6 @@ public class GameManager : MonoBehaviour
     public void HideHUD(bool showCancel = true)
     {
         _constructionMenu.CloseMenu();
-        //_spellCastingMenu.CloseMenu();
         if (showCancel)
         {
             _cancelMenu.OpenMenu();
@@ -764,10 +768,9 @@ public class GameManager : MonoBehaviour
     public void ShowHUD()
     {
         _constructionMenu.OpenMenu();
-        //_spellCastingMenu.OpenMenu();
         _cancelMenu.CloseMenu();
         _unitMenu.CloseMenu();
-        //_spellUnlockMenu.CloseMenu();
+        _spellUnlockMenu.CloseMenu();
     }
 
     /// <summary>

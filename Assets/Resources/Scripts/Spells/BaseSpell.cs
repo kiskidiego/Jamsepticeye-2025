@@ -1,16 +1,30 @@
+using DG.Tweening;
 using FMODUnity;
+using TMPro;
 using UnityEngine;
 
 /// <summary>
 /// Base class for spells that can be cast by the player.
 /// </summary>
-public abstract class BaseSpell : MonoBehaviour
+public abstract class BaseSpell : BaseMenu
 {
     public Price Cost => _castingCost;
+    [SerializeField] float _superOpenOffset;
     [SerializeField] Price _castingCost;
     [SerializeField] float _cooldown = 20f; // Cooldown time in seconds
+    [SerializeField] TextMeshProUGUI _cooldownText;
+    [SerializeField] TextMeshProUGUI _bodyCostText;
+    [SerializeField] TextMeshProUGUI _bloodCostText;
     [SerializeField] EventReference _spellSound;
     float _currentCooldown; // Time left until the spell can be cast again
+
+    void Start()
+    {
+        _currentCooldown = 0f;
+        _bodyCostText.text = _castingCost.bodyPrice.ToString() + " Z";
+        _bloodCostText.text = _castingCost.bloodPrice.ToString() + " B";
+        _cooldownText.text = "";
+    }
 
     /// <summary>
     /// Updates the spell's cooldown timer.
@@ -18,7 +32,15 @@ public abstract class BaseSpell : MonoBehaviour
     void Update()
     {
         if (_currentCooldown > 0f)
+        {
             _currentCooldown -= Time.deltaTime;
+            _cooldownText.text = Mathf.Ceil(_currentCooldown).ToString();
+        }
+        else if (_state == MenuState.Open)
+        {
+            SuperOpen();
+            _cooldownText.text = "";
+        }
     }
 
     /// <summary>
@@ -37,6 +59,7 @@ public abstract class BaseSpell : MonoBehaviour
         Effect(targetPosition);
         _currentCooldown = _cooldown;
         AudioManager.instance.PlayOneShot(_spellSound, targetPosition);
+        OpenMenu();
     }
 
     /// <summary>
@@ -44,4 +67,26 @@ public abstract class BaseSpell : MonoBehaviour
     /// </summary>
     /// <param name="targetPosition"></param>
     protected abstract void Effect(Vector3 targetPosition);
+
+    public override void OpenMenu()
+    {
+        if (_state == MenuState.Open) return;
+
+        _menuTransform.DOLocalMove(Vector3.zero, _animationDuration).SetEase(Ease.OutBack);
+        _state = MenuState.Open;
+    }
+    public override void CloseMenu()
+    {
+        if (_state == MenuState.Closed) return;
+
+        _menuTransform.DOLocalMove(_closedPosition, _animationDuration).SetEase(Ease.OutBack);
+        _state = MenuState.Closed;
+    }
+    public void SuperOpen()
+    {
+        if (_state == MenuState.SuperOpen) return;
+
+        _menuTransform.DOLocalMove(new Vector3(0, _superOpenOffset, 0), _animationDuration).SetEase(Ease.OutBack);
+        _state = MenuState.SuperOpen;
+    }
 }

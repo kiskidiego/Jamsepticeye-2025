@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// A spell that creates protective barriers around allied units within a certain radius.
 /// </summary>
-public class ProtectiveSpell : BaseSpell
+public class BarrierSpell : BaseSpell
 {
     [SerializeField] float _duration = 5f;
     [SerializeField] float _barrierHealth = 100f;

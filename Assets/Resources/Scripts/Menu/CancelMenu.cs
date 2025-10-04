@@ -19,9 +19,9 @@ public class CancelMenu : BaseMenu
     /// </summary>
     public override void OpenMenu()
     {
-        if (_state == MenuState.Opened) return;
+        if (_state == MenuState.Open) return;
 
-        _state = MenuState.Opened;
+        _state = MenuState.Open;
         _menuTransform.DOLocalMove(Vector3.zero, _animationDuration).SetEase(Ease.OutBack);
     }
 

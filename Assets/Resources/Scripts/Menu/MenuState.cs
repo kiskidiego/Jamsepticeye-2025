@@ -1,6 +1,6 @@
 public enum MenuState
 {
     Closed,
-    Opened,
-    SuperOpened
+    Open,
+    SuperOpen
 }

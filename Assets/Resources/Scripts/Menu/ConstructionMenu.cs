@@ -77,13 +77,13 @@ public class ConstructionMenu : BaseMenu
 
     public void SuperOpen()
     {
-        if (_state == MenuState.SuperOpened)
+        if (_state == MenuState.SuperOpen)
         {
             OpenMenu();
             return;
         }
 
-        _state = MenuState.SuperOpened;
+        _state = MenuState.SuperOpen;
         _menuTransform.DOLocalMove(new Vector3(0, _superOpenOffset, 0), _animationDuration).SetEase(Ease.OutBack);
     }
 
@@ -118,9 +118,9 @@ public class ConstructionMenu : BaseMenu
     /// </summary>
     public override void OpenMenu()
     {
-        if (_state == MenuState.Opened) return;
+        if (_state == MenuState.Open) return;
 
-        _state = MenuState.Opened;
+        _state = MenuState.Open;
         _menuTransform.DOLocalMove(Vector3.zero, _animationDuration).SetEase(Ease.OutBack);
     }
 }

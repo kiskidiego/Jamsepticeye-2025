@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 1475278558778764101}
   - component: {fileID: 1831992240381999757}
   - component: {fileID: 2515614556416957703}
-  - component: {fileID: 2792381513889195958}
+  - component: {fileID: 9047792337331519980}
+  - component: {fileID: 5154879161126856799}
   m_Layer: 0
   m_Name: Bone Tower
   m_TagString: Untagged
@@ -91,7 +92,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2792381513889195958
+--- !u!114 &9047792337331519980
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -100,17 +101,63 @@ MonoBehaviour:
   m_GameObject: {fileID: 3029632354338462985}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c90f0ce1eee83bb46a004dfefb9158f0, type: 3}
+  m_Script: {fileID: 11500000, guid: 5679241017aafa345842c0a25fbc8210, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BoneTower
-  _maxHealth: 50
+  m_EditorClassIdentifier: Assembly-CSharp::AttackingTower
+  _maxHealth: 10
   _size: 0.5
+  _deathSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   _targetingPriority: 0
-  _bodiesPrice: 10
-  _canAttack: 1
-  _damage: 4
-  _attackCooldown: 5
-  _projectilePrefab: {fileID: -6575079870067616868, guid: 54b2b814ed41d634fb9b00046da5fd50, type: 3}
+  _bodiesPrice: 0
+  _placeSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  _interactSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  _cooldownBetweenAttacks: 0
+--- !u!114 &5154879161126856799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3029632354338462985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14f3f682d3cf67e4a81b20a30aff1b91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RangedAttack
+  _slowMultiplier: 1
+  _hastenMultiplier: 1
+  paused: 1
+  isAlly: 0
+  _damage: 20
+  _attackCooldown: 3
+  _range: 1000
+  _targetingPriority: 0
+  _attackSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  _projectilePrefab: {fileID: -6575079870067616868, guid: 1e29fce6cfbf29446b66dc45b9e9c497, type: 3}
   _projectileSpawnPoint: {fileID: 7202520186880782380}
 --- !u!1 &6641396162422633720
 GameObject:

@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1077892207273947160
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1738877687765385208}
+  m_Layer: 0
+  m_Name: SpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1738877687765385208
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1077892207273947160}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.35944, y: 1.146, z: 0.58731}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1946720606818000417}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4592449965501199778
 GameObject:
   m_ObjectHideFlags: 0
@@ -11,7 +42,8 @@ GameObject:
   - component: {fileID: 1946720606818000417}
   - component: {fileID: 346740759914689276}
   - component: {fileID: 8485806065333296103}
-  - component: {fileID: 7478559690119817917}
+  - component: {fileID: 6955597548649379628}
+  - component: {fileID: 4915377090042301215}
   m_Layer: 0
   m_Name: Lightning Tower
   m_TagString: Untagged
@@ -31,7 +63,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1738877687765385208}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &346740759914689276
@@ -90,7 +123,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7478559690119817917
+--- !u!114 &6955597548649379628
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -99,13 +132,60 @@ MonoBehaviour:
   m_GameObject: {fileID: 4592449965501199778}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 349927db355bcf04881b97258c540a41, type: 3}
+  m_Script: {fileID: 11500000, guid: 5679241017aafa345842c0a25fbc8210, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LightningTower
-  _maxHealth: 50
+  m_EditorClassIdentifier: Assembly-CSharp::AttackingTower
+  _maxHealth: 10
   _size: 0.5
+  _deathSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  _bodiesPrice: 0
+  _placeSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  _interactSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  _cooldownBetweenAttacks: 0
+--- !u!114 &4915377090042301215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4592449965501199778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14f3f682d3cf67e4a81b20a30aff1b91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RangedAttack
+  _slowMultiplier: 1
+  _hastenMultiplier: 1
+  paused: 1
+  isAlly: 0
+  _damage: 50
+  _attackCooldown: 3
+  _range: 10000
   _targetingPriority: 3
-  _bodiesPrice: 15
-  _canAttack: 1
-  _damage: 5
-  _attackCooldown: 1.5
+  _attackSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  _projectilePrefab: {fileID: 3519205912370290149, guid: 41190176e076b24449e141ba6dca4be1, type: 3}
+  _projectileSpawnPoint: {fileID: 1738877687765385208}
